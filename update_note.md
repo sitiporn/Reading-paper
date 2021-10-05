@@ -19,13 +19,10 @@
 
 3) method and proposal and coding talking on this thrusday
 
-4) Habit of implementing papers
            
 
 5) focused on intent classification, intent detection, intent recognition 
     
         L may be specific on joint filling and intent detection  
 
-* guess joint filling can improve intent classification 
-
-
+* guess joint filling can improve dialouge system tasks 

@@ -292,7 +292,8 @@ Task-Oriented Dialogue
 
 
         2) Task adaptive pretain models 
-              L utilizing self-supervised contrasive pretaining to discrimate semantically similar uterances with label on intents dataset 
+              L utilizing self-supervised contrasive pretaining to discrimate semantically similar uterances without label on intents dataset 
+
               
               L then, supervised-contrasive learning  and fewshot intent detection
                 they used self-supervised to pull the similar intent together but diff far apart
