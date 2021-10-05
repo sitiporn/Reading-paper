@@ -1,4 +1,4 @@
-#summarize what I am talking with prof.
+# Summarize what I am talking with prof.
 
 1) comparison and find good combination for 
    things  specfic case.
