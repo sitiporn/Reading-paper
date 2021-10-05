@@ -53,6 +53,8 @@
  ID-OOS: in-domain OOS, out-of-scope which are more related to in-scope intents <- challenge ! 
  eg. requesting a banking serviced that is not supported by the banking system. 
 
+## Datasets
+
  :CLINIC dataset:
   - 10 domain select 15 intent for each
   - randomly select 2 domain from 10 domain to evaluate
@@ -275,6 +277,8 @@ Task-Oriented Dialogue
     ---
 
     * what did authors try to accomplish ?        
+        
+       - They aim to enhance the abilities to models discriminate  by inspired by the recent succuess of contrasive 
 
     *  what did authors do ?        
         
