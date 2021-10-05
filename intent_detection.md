@@ -308,9 +308,22 @@ Task-Oriented Dialogue
         
         - their  model outperforms all datasets CLINIC150, BANKING77, HWU64
       and variance also low
+     
 
+     * their reseach question 
+
+           1) Is contrasive pre-training beneficial to the target intent datasets ?
+                 - improve under 5-shot and 10-shot , contrasive learning help for transfer knowledge  to new datasets.
+
+                 - but performance still drop compared to data included target datasets
+                 during self-supervised contrasive learning 
+
+           2) Is the trainning sensitive to hyper-parameters ? 
+                 - fewshot shot supervised consive learning loss is sesnsistive to hyperparameters when there are limited trainning exameples. 
 
     * what can you use yourself ? 
+        
+            they leave whether self-supervised contrasive pre-trainning only on the target intent datasets  benefits as a future study
 
 
 
