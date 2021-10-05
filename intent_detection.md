@@ -274,7 +274,9 @@ Task-Oriented Dialogue
       2) **especially semantics similar intents
     ---
 
-    *  what did authors try to accomplish ?        
+    * what did authors try to accomplish ?        
+
+    *  what did authors do ?        
         
         1) self-supervised Contrasive Pretrainning models to discriminate the semantically similar utraunes 
         
@@ -296,8 +298,11 @@ Task-Oriented Dialogue
                 they used self-supervised to pull the similar intent together but diff far apart
 
         
-
-
+        
+    * Experiment result
+        
+        - their  model outperforms all datasets CLINIC150, BANKING77, HWU64
+      and variance also low
 
 
     * what can you use yourself ? 
