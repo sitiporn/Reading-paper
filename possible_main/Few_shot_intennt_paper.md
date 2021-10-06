@@ -63,7 +63,19 @@
             
            lamda = weight hyperparamter 
 
+4.2 Model Training and Baseline 
+     
+     Pretrainning stage 
 
+       - 15 epochs
+       - batch = 64 
 
+     Fine-tunning 
+       - 5 shot -> 5 examples per intents
+       - set batch size to 16 
+       - do parameters search T and lamda 
+       - apply label smoothing to intent classification loss 
+
+      
 
 
