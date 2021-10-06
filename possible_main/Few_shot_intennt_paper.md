@@ -1,9 +1,7 @@
 # Few-shot Intent Detection via Contrasive Pre-trainning and Fine-Tuning 
 
 
-   * Methodology 
-
-    CPFT methodology
+- CPFT methodology
    - C intents
    - they sets balance K-shot for each intents 
    - each intents K samples 
@@ -41,3 +39,31 @@
 
        M - the total number of masked tokens in each batch
         
+
+       Lstage1 = Luns_cl + lamda * Lmlm
+
+ 3.2 Supervised Fine-tunning 
+          
+       positive pair  = two samples from same intents or classes 
+       negative pair  = two samples from across different intents classes 
+
+       * in previous work they only use positive pair which make representation different according to dropout in BERT  (possitive pair -> single encoder)        
+
+       guess -> they use both positive and negative pair  to single encoder 
+
+       eq3: 
+         T = from the same class in batch
+
+       eq4:
+
+         predicted probability of i-th sentence  to be in class j 
+
+       - they jointly train two losses together at each batch
+           :Lstage2 = Ls_cl + lamda * Lintent   
+            
+           lamda = weight hyperparamter 
+
+
+
+
+
