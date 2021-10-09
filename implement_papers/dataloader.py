@@ -23,20 +23,30 @@ def load_intent_examples(file_path, do_lower_case=True):
 
 def sample(N, examples):
     labels = {} # unique classes
-
+    
+    # check whether example's labels already exist or not 
+     
     for e in examples:
+        # if they have label in list append sample into the class 
         if e.label in labels:
             labels[e.label].append(e.text)
+        # if they dont have lable create new one
         else:
             labels[e.label] = [e.text]
-
+    
     sampled_examples = []
+    # lables -> the number of intents
+    # loop all labels
     for l in labels:
+        # shuffle text in each label
         random.shuffle(labels[l])
+        ## just slicing the numbers of sample
+        ## in each label
         if l == 'oos':
             examples = labels[l][:N]
         else:
             examples = labels[l][:N]
+        # each intent would be appendend N examples 
         sampled_examples.append({'task': l, 'examples': examples})
 
     return sampled_examples
