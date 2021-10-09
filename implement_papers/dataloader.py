@@ -1,4 +1,4 @@
-
+import random
 
 class IntentExample(object):
 
@@ -20,3 +20,23 @@ def load_intent_examples(file_path, do_lower_case=True):
             examples.append(e)
 
     return examples
+
+def sample(N, examples):
+    labels = {} # unique classes
+
+    for e in examples:
+        if e.label in labels:
+            labels[e.label].append(e.text)
+        else:
+            labels[e.label] = [e.text]
+
+    sampled_examples = []
+    for l in labels:
+        random.shuffle(labels[l])
+        if l == 'oos':
+            examples = labels[l][:N]
+        else:
+            examples = labels[l][:N]
+        sampled_examples.append({'task': l, 'examples': examples})
+
+    return sampled_examples
