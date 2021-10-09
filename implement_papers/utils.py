@@ -43,10 +43,4 @@ class loss(object):
         return self.l1
 
 
-a = np.random.rand(3,2)
-b = np.random.rand(3,2)
 
-l1 = loss(a,b,0)
-
-
-print(l1.self_supervised_cl())
