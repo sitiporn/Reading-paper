@@ -9,6 +9,14 @@ class IntentExample(object):
 
         if do_lower_case:
             self.text = self.text.lower()
+
+
+class InputExample(object):
+
+    def __init__(self, text_a, text_b, label = None):
+        self.text_a = text_a
+        self.text_b = text_b
+        self.label = label
         
 def load_intent_examples(file_path, do_lower_case=True):
   
