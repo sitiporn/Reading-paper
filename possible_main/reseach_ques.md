@@ -43,3 +43,16 @@
 
       
   *ref- https://monkeylearn.com/blog/intent-classification/
+
+
+# Research question of literater review 
+  
+   OOS: the users request are not be supported by testing daiglog system  
+    
+    L OOS rately over-lap eg. requesting Tv shows in banking systems
+    L separating ID-OOS  eg. requesting banking services that support by banking systems
+    
+     
+
+    1) Are pretrannning Transformers robust in the intent classification transformers ? 
+    2) 
