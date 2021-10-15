@@ -55,4 +55,6 @@
      
 
     1) Are pretrannning Transformers robust in the intent classification transformers ? 
-    2) 
+    2) Is the schema with both stages necessary?
+    3) Is the training sensitive to hyper-parameters?  
+    4) * whether self-supervised contrasive pre-trainning only target intent datasets benefits 
