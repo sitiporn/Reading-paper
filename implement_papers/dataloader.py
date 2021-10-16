@@ -5,7 +5,9 @@ from transformers import AutoModel, AutoTokenizer
 import random
 import torch.nn as nn
 import torch.nn.functional as F
+from numpy import ndarray
 from typing import List, Dict, Tuple, Type, Union
+from torch import Tensor
 
 class IntentExample(object):
 
@@ -90,17 +92,18 @@ class SimCSE(object):
         self.tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
         self.device = device
 
-    def encode(self,sentence:Union[str, List[str]],batch_size : int = 64,max_length:int = 128):
+    def encode(self,sentence:Union[str, List[str]],batch_size : int = 64, keepdim: bool = False,max_length:int = 128)-> Union[ndarray, Tensor]:
         
 
         target_device = self.device 
         self.model = self.model.to(target_device)
         
+        single_sentence = False
         if isinstance(sentence,str):
             sentence = [sentence]
             single_sentence = True 
-
-
+       
+        print(single_sentence)
         embedding_list = []
 
         with torch.no_grad():
@@ -112,18 +115,37 @@ class SimCSE(object):
             print(type(sentence))
             print(dir(self.tokenizer))
             """
-            assert str == type(sentence[0])
-            inputs = self.tokenizer(sentence[0],padding=True,truncation=True,max_length=max_length,return_tensors="pt")
-            print("Input1:")
-            print(inputs)
+            #assert str == type(sentence[0])
+            print("Before tokenize",sentence)
+            ## Todo 
+            # 1. make tokenization fix length vectors-> preprocessing problem
+            inputs = self.tokenizer(sentence,padding=True,truncation=True,return_tensors="pt")
+           # print("Input1:")
+           # print(inputs)
             # move tensor value to cuda device  
             inputs = {k: v.to(target_device) for k, v in inputs.items()}
             print("Input2:",inputs)
             # Encode to get hi the representation of ui  
-            outputs = self.model(**inputs, return_dict=True)
+            outputs = self.model(**inputs, output_hidden_states=True,return_dict=True)
+
             # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
             print("outputs:",outputs.last_hidden_state)
 
             print("outputs:",outputs.last_hidden_state.shape)
+
+            embeddings = outputs.last_hidden_state[:, 0]
+            print("embeddings.shpape",embeddings.shape) 
+            #print(self.model.eval())
             
-                
+            embedding_list.append(embeddings.cpu()) 
+            
+        embeddings = torch.cat(embedding_list, 0)
+        
+        if single_sentence and not keepdim:
+            embeddings = embeddings[0]
+            print("single sentence")
+
+
+
+        return embeddings
+

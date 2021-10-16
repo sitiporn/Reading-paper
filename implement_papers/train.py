@@ -34,7 +34,11 @@ embedding = SimCSE('cuda')
 # Testing fist example 
 sentence = sampled_tasks[0][0]['examples']
 
+#sentence = ["what's local slang for goodbye in hawaii"] 
+sentence = [
+    "There's a kid on a skateboard.",
+    "A kid is skateboarding.",
+    "A kid is inside the house."
+]
 
-
-
-embedding.encode(sentence[0])
+embedding.encode(sentence)
