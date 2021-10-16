@@ -80,7 +80,7 @@ class Similarity(nn.Module):
         self.cos = nn.CosineSimilarity(dim=-1)
 
     def forward(self, x, y):
-        return self.cos(x, y) / self.temp
+        return self.cos(x, y) #/ self.temp
 
 class SimCSE(object):
     """

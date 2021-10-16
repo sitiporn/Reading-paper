@@ -1,6 +1,5 @@
 # Contrastive Representation Learning for Electroencephalogram Classification
 
-
    what is the key idea of this paper ?
       
       - On pretext tasks they adopted SimCLR (self-supervised contrasive leanring) 
@@ -54,3 +53,5 @@
     # Alabation study 
        
         - Removing the process of scaling and masking signal effect is effect on accuracy the most 
+
+ref - http://proceedings.mlr.press/v136/mohsenvand20a/mohsenvand20a.pdf

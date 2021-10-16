@@ -17,7 +17,7 @@ from dataloader import Similarity
 train_file_path = '../../dataset/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
 N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
-
+temperature = 0.1
 
 # 
 train_examples = load_intent_examples(train_file_path)
@@ -30,6 +30,8 @@ sampled_tasks = [sample(N, train_examples) for i in range(T)]
 
 #print(sampled_tasks[0][0])
 embedding = SimCSE('cuda') 
+sim = Similarity(temperature)
+
 
 # Testing fist example 
 sentence = sampled_tasks[0][0]['examples']
@@ -41,4 +43,10 @@ sentence = [
     "A kid is inside the house."
 ]
 
-embedding.encode(sentence)
+embed = embedding.encode(sentence)
+print("Training:",embed)
+print(sim(embed[0],embed[1]))
+print(sim(embed[0],embed[2]))
+
+
+
