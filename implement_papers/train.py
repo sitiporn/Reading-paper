@@ -10,7 +10,9 @@ from dataloader import InputExample
 from dataloader import SimCSE
 from dataloader import Similarity
 
-
+# Todo: making a batch that should be able to train 
+# 1.) feed all data in batch twice through encoder
+# 2.) create lstage1 = self_cl_loss + lamda * mlm_loss
 
 # config
 
@@ -28,14 +30,30 @@ every dict -> {'task':'lable name','examples':[text1,text2,..,textN]}
 """
 sampled_tasks = [sample(N, train_examples) for i in range(T)]
 
+
 #print(sampled_tasks[0][0])
 embedding = SimCSE('cuda') 
 sim = Similarity(temperature)
 
-
 # Testing fist example 
-sentence = sampled_tasks[0][0]['examples']
+pos_sentence = sampled_tasks[0][0]['examples']
 
+neg_sentence = sampled_tasks[0][1]['examples']
+
+"""
+print("positive pair :")
+print(pos_sentence[:10])
+print("negative pair :")
+print(neg_sentence[:10])
+
+print(type(pos_sentence))
+"""
+sentence = pos_sentence[:5] + neg_sentence[:5] 
+
+print(sentence)
+
+
+"""
 #sentence = ["what's local slang for goodbye in hawaii"] 
 sentence = [
     "There's a kid on a skateboard.",
@@ -43,10 +61,14 @@ sentence = [
     "A kid is inside the house."
 ]
 
-embed = embedding.encode(sentence)
-print("Training:",embed)
-print(sim(embed[0],embed[1]))
-print(sim(embed[0],embed[2]))
+"""
 
+embed = embedding.encode(sentence)
+
+print("Training:",embed)
+# Note : same intent sim higher than different intents
+# but the diff one not quite well yet
+print(sim(embed[0],embed[1]))
+print(sim(embed[0],embed[9]))
 
 
