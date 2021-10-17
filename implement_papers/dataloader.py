@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from numpy import ndarray
 from typing import List, Dict, Tuple, Type, Union
 from torch import Tensor
-
+from torch.utils.data import Dataset, DataLoader
 class IntentExample(object):
 
     def __init__(self, text, label, do_lower_case):
@@ -157,7 +157,7 @@ class SimCSE(object):
 
         return embeddings
 
-class SenLoader(torch.utils.data.Dataset):
+class SenLoader(Dataset):
     def __init__(self,sentence,T:int=1):
 
         #params
@@ -166,7 +166,8 @@ class SenLoader(torch.utils.data.Dataset):
         # number of trials
         self.T = T
         self.sample_task = sentence
-    def get_data(self):
+
+    def get_data(self,trial:int=0):
 
         for idx in range(self.T):
 
@@ -177,16 +178,41 @@ class SenLoader(torch.utils.data.Dataset):
             
             for task in tasks:
                  label= task['task']
-                 print(label)
+                 #print(label)
                  examples = task['examples']
                  self.label_list[-1].append(label)
 
                  for j in range(len(examples)):
                      
                      self.intent_examples[-1].append(InputExample(examples[j],None, label))
+        return self.intent_examples[trial]
+
+# create custom dataset class
+class CustomTextDataset(Dataset):
+    def __init__(self,labels,text):
+        self.labels = labels
+        self.text = text
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        label = self.labels[idx]
+        data = self.text[idx]
+        sample = {"Class": label,"Text": data}
+    
+        return sample
 
 
-        return self.intent_examples
+
+
+
+
+
+
+
+
+
 
 
 

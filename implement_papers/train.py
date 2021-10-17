@@ -10,6 +10,9 @@ from dataloader import InputExample
 from dataloader import SimCSE
 from dataloader import Similarity
 from dataloader import SenLoader 
+from dataloader import CustomTextDataset
+from torch.utils.data import Dataset, DataLoader
+
 # Todo: making a batch that should be able to train 
 # 1.) feed all data in batch twice through encoder
 # 2.) create lstage1 = self_cl_loss + lamda * mlm_loss
@@ -43,7 +46,7 @@ neg_sentence = sampled_tasks[0][1]['examples']
 
 
 
-"""
+"""y
 #sentence = ["what's local slang for goodbye in hawaii"] 
 sentence = [
     "There's a kid on a skateboard.",
@@ -52,11 +55,41 @@ sentence = [
 ]
 
 """
-training_data = train_loader.get_data()
+data  = train_loader.get_data()
 
-print(dir(training_data))
+print(data[0])
+print(dir(data[0]))
+labels = []
+samples = []
+
+for i in range(len(data)):
+   samples.append(data[i].text_a)
+   labels.append(data[i].label)
+
+batch_size = 2
+train_data = CustomTextDataset(labels,samples)  
+train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
+
+for (idx, batch) in enumerate(train_loader):
+
+    # Print the 'text' data of the batch
+    print(idx, 'data: ', batch, '\n')
+
+ 
+
+
+
+
+"""
+print("== 1 ==")
+print(len(training_data[0]))
+print("== 2 ==")
+print(training_data[0][0])
+print(dir(training_data[0][0]))
+
+#print(dir(training_data))
 #embed = embedding.encode(sentence)
-
+"""
 """
 print("Training:",embed)
 # Note : same intent sim higher than different intents
@@ -65,3 +98,11 @@ print(sim(embed[0],embed[1]))
 print(sim(embed[0],embed[9]))
 
 """
+# Todo : Trainning  
+# 1.) making dataloader
+# 2.) iterate batch
+# 3.) create pos_example
+# 4.) create neg_example
+# 5.) calculate cost of each examples
+# 6.) calculate loss summarize       
+
