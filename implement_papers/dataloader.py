@@ -92,7 +92,7 @@ class SimCSE(object):
         self.tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
         self.device = device
 
-    def encode(self,sentence:Union[str, List[str]],batch_size : int = 64, keepdim: bool = False,max_length:int = 128)-> Union[ndarray, Tensor]:
+    def encode(self,sentence:Union[str, List[str]],batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False)-> Union[ndarray, Tensor]:
         
 
         target_device = self.device 
@@ -102,8 +102,8 @@ class SimCSE(object):
         if isinstance(sentence,str):
             sentence = [sentence]
             single_sentence = True 
-       
-        print(single_sentence)
+        if debug== True: 
+            print(single_sentence)
         embedding_list = []
 
         with torch.no_grad():
@@ -116,7 +116,9 @@ class SimCSE(object):
             print(dir(self.tokenizer))
             """
             #assert str == type(sentence[0])
-            print("Before tokenize",sentence)
+            if debug == True:
+                print("Before tokenize",sentence)
+
             ## Todo 
             # 1. make tokenization fix length vectors-> preprocessing problem
             inputs = self.tokenizer(sentence,padding=True,truncation=True,return_tensors="pt")
@@ -124,17 +126,23 @@ class SimCSE(object):
            # print(inputs)
             # move tensor value to cuda device  
             inputs = {k: v.to(target_device) for k, v in inputs.items()}
-            print("Input2:",inputs)
+
+            if debug== True: 
+                print("Input2:",inputs)
             # Encode to get hi the representation of ui  
             outputs = self.model(**inputs, output_hidden_states=True,return_dict=True)
 
             # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
-            print("outputs:",outputs.last_hidden_state)
 
-            print("outputs:",outputs.last_hidden_state.shape)
+            if debug== True: 
+                print("outputs:",outputs.last_hidden_state)
+
+                print("outputs:",outputs.last_hidden_state.shape)
 
             embeddings = outputs.last_hidden_state[:, 0]
-            print("embeddings.shpape",embeddings.shape) 
+
+            if debug== True: 
+                print("embeddings.shpape",embeddings.shape) 
             #print(self.model.eval())
             
             embedding_list.append(embeddings.cpu()) 
@@ -143,9 +151,48 @@ class SimCSE(object):
         
         if single_sentence and not keepdim:
             embeddings = embeddings[0]
-            print("single sentence")
+            #print("single sentence")
 
 
 
         return embeddings
+
+class SenLoader(torch.utils.data.Dataset):
+    def __init__(self,sentence,T:int=1):
+
+        #params
+        self.label_list = []
+        self.intent_examples = []
+        # number of trials
+        self.T = T
+        self.sample_task = sentence
+    def get_data(self):
+
+        for idx in range(self.T):
+
+            tasks = self.sample_task[idx]
+            print(type(tasks))
+            self.label_list.append([])
+            self.intent_examples.append([])
+            
+            for task in tasks:
+                 label= task['task']
+                 print(label)
+                 examples = task['examples']
+                 self.label_list[-1].append(label)
+
+                 for j in range(len(examples)):
+                     
+                     self.intent_examples[-1].append(InputExample(examples[j],None, label))
+
+
+        return self.intent_expamples
+
+
+
+
+
+
+
+
 

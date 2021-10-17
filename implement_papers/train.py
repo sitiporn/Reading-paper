@@ -9,7 +9,7 @@ from dataloader import sample
 from dataloader import InputExample
 from dataloader import SimCSE
 from dataloader import Similarity
-
+from dataloader import SenLoader 
 # Todo: making a batch that should be able to train 
 # 1.) feed all data in batch twice through encoder
 # 2.) create lstage1 = self_cl_loss + lamda * mlm_loss
@@ -34,23 +34,13 @@ sampled_tasks = [sample(N, train_examples) for i in range(T)]
 #print(sampled_tasks[0][0])
 embedding = SimCSE('cuda') 
 sim = Similarity(temperature)
-
+train_loader = SenLoader(sampled_tasks)
 # Testing fist example 
 pos_sentence = sampled_tasks[0][0]['examples']
 
 neg_sentence = sampled_tasks[0][1]['examples']
 
-"""
-print("positive pair :")
-print(pos_sentence[:10])
-print("negative pair :")
-print(neg_sentence[:10])
 
-print(type(pos_sentence))
-"""
-sentence = pos_sentence[:5] + neg_sentence[:5] 
-
-print(sentence)
 
 
 """
@@ -62,13 +52,16 @@ sentence = [
 ]
 
 """
+training_data = train_loader.get_data()
 
-embed = embedding.encode(sentence)
+print(dir(training_data))
+#embed = embedding.encode(sentence)
 
+"""
 print("Training:",embed)
 # Note : same intent sim higher than different intents
 # but the diff one not quite well yet
 print(sim(embed[0],embed[1]))
 print(sim(embed[0],embed[9]))
 
-
+"""
