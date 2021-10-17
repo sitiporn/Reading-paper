@@ -186,7 +186,7 @@ class SenLoader(torch.utils.data.Dataset):
                      self.intent_examples[-1].append(InputExample(examples[j],None, label))
 
 
-        return self.intent_expamples
+        return self.intent_examples
 
 
 
