@@ -7,8 +7,8 @@ from dataloader import IntentExample
 from dataloader import load_intent_examples
 from dataloader import sample
 from dataloader import InputExample
-from dataloader import SimCSE
-from dataloader import Similarity
+from loss import SimCSE
+from loss import Similarity
 from dataloader import SenLoader 
 from dataloader import CustomTextDataset
 from torch.utils.data import Dataset, DataLoader
@@ -67,7 +67,7 @@ for i in range(len(data)):
    samples.append(data[i].text_a)
    labels.append(data[i].label)
 
-batch_size = 7
+batch_size = 64 
 train_data = CustomTextDataset(labels,samples)  
 train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
 """
@@ -90,9 +90,9 @@ for (idx, batch) in enumerate(train_loader):
     # get hidden representation from ui
     # Todo : proof of emebedding
     h = embedding.encode(batch['Text'],debug=False)
-    h_bar = embedding.encode(batch['Text'],debug=False,masking=True)
+    h_bar = embedding.encode(batch['Text'],debug=False,masking=False)
     print(h_bar.shape)
-    hj_bar = create_pair_sample(h_bar,debug=False)    
+    hj_bar = create_pair_sample(h_bar,debug=True)    
     
     
 
