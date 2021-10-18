@@ -22,7 +22,7 @@ class Similarity(nn.Module):
         self.cos = nn.CosineSimilarity(dim=-1)
 
     def forward(self, x, y):
-        return self.cos(x, y) #/ self.temp
+        return self.cos(x, y) / self.temp
 
 
 class SimCSE(object):
@@ -34,6 +34,9 @@ class SimCSE(object):
         self.model = AutoModel.from_pretrained('bert-base-uncased')
         self.tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
         self.device = device
+    
+    def parameters(self):
+        return self.model.parameters()
 
     def encode(self,sentence:Union[str, List[str]],batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False,masking:bool=True)-> Union[ndarray, Tensor]:
         
@@ -115,3 +118,31 @@ class SimCSE(object):
 
 
         return embeddings
+
+class contrasive_loss(object):
+    def __init__(self,temperature,N):
+       
+        #params
+        self.temp = temperature
+        self.N = N 
+
+
+    def self_con_loss(self,h,h_bar,hj_bar):
+        self.h  = h 
+        self.h_bar = h_bar
+        self.hj_bar = hj_bar
+        
+        sim = Similarity(self.temp)
+        pos_sim = sim(h,h_bar) 
+        neg_sim = sim(h,hj_bar)
+        
+        print("find similiarty")
+        print(pos.shape)
+        print(neg_sim.shape)
+        
+        cost = pos / neg_sim
+
+        return torch.sum(cost) 
+
+
+       
