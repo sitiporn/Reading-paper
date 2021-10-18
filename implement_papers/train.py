@@ -76,15 +76,17 @@ for (idx, batch) in enumerate(train_loader):
     h_bar = embedding.encode(batch['Text'],debug=False,masking=False)
     print(h_bar.shape)
     hj_bar = create_pair_sample(h_bar,debug=False)    
-    hj_bar = [ torch.tensor(tensor) for tensor in hj_bar]
+    hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
     hj_bar = torch.stack(hj_bar)
     
     print("hj_bar:",hj_bar.shape)
-    print(type(h),type(h_bar),type(hj_bar))
-    print(h.shape,h_bar.shape)
+    h_3d = h.unsqueeze(1)
+    #print(hj_bar.shape,h_bar3d.shape)
    # print(len(hj_bar),len(hj_bar[0]),len(hj_bar[0][0]))
     print("Contrasive loss:")
-    loss_cl = loss.self_con_loss(h,h_bar,hj_bar) 
+    loss_cl = loss.self_con_loss(h,h_bar,hj_bar,h_3d) 
+    loss_cl.requres_grad(True)
+    print(loss_cl)
     loss_cl.backward() 
     optim.step()
     # print statistics

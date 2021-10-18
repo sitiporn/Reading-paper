@@ -127,20 +127,22 @@ class contrasive_loss(object):
         self.N = N 
 
 
-    def self_con_loss(self,h,h_bar,hj_bar):
-        self.h  = h 
-        self.h_bar = h_bar
-        self.hj_bar = hj_bar
+    def self_con_loss(self,h,h_bar,hj_bar,h_3d):
         
         sim = Similarity(self.temp)
         pos_sim = sim(h,h_bar) 
-        neg_sim = sim(h,hj_bar)
-        
+        neg_sim = sim(h_3d,hj_bar)
+
+        # sum of each neg samples of each 
+        neg_sim = torch.sum(neg_sim,1) 
         print("find similiarty")
-        print(pos.shape)
+        print(pos_sim.shape)
         print(neg_sim.shape)
-        
-        cost = pos / neg_sim
+
+        cost = pos_sim / neg_sim
+
+        print("cost:")
+        print(cost.shape)
 
         return torch.sum(cost) 
 
