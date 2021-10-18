@@ -69,11 +69,31 @@ for i in range(len(data)):
 batch_size = 2
 train_data = CustomTextDataset(labels,samples)  
 train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
+"""
+ Todo : Trainning  
+ 1.) making dataloader
+ 2.) iterate batch
+ 3.) create pos_example
+ 4.) create neg_example
+ 5.) calculate cost of each examples
+ 6.) calculate loss summarize    
 
+"""
 for (idx, batch) in enumerate(train_loader):
 
     # Print the 'text' data of the batch
     print(idx, 'data: ', batch, '\n')
+    
+    
+    #print(dir(batch))
+    # get hidden representation from ui
+    hi = embedding.encode(batch['Text'],debug=True)
+    hi_bar = embedding.encode(batch['Text'],debug=True,masking=True)
+    
+    #hi_bar = embedding
+
+
+    break
 
  
 
@@ -87,10 +107,15 @@ print("== 2 ==")
 print(training_data[0][0])
 print(dir(training_data[0][0]))
 
+"""
+
+"""
+sentence = ["get an uber to take me to my brother's house in mineola",'i need to transfer from this account to that one']
+
+embed = embedding.encode(sentence,debug=False)
+print(embed)
 #print(dir(training_data))
-#embed = embedding.encode(sentence)
-"""
-"""
+
 print("Training:",embed)
 # Note : same intent sim higher than different intents
 # but the diff one not quite well yet
@@ -98,11 +123,5 @@ print(sim(embed[0],embed[1]))
 print(sim(embed[0],embed[9]))
 
 """
-# Todo : Trainning  
-# 1.) making dataloader
-# 2.) iterate batch
-# 3.) create pos_example
-# 4.) create neg_example
-# 5.) calculate cost of each examples
-# 6.) calculate loss summarize       
+   
 
