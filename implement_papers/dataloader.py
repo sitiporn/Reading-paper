@@ -9,7 +9,7 @@ from numpy import ndarray
 from typing import List, Dict, Tuple, Type, Union
 from torch import Tensor
 from torch.utils.data import Dataset, DataLoader
-
+import numpy as np
 
 class IntentExample(object):
 
@@ -221,8 +221,47 @@ class CustomTextDataset(Dataset):
     
         return sample
 
+def create_pair_sample(h_bar,debug:bool=False):
+    """
+    h ->  a , b, c, a
+    h'->  a', b',c',a'
+    intent_idx -> (0,1,2,0)
+    h   ->      [a, b, c, a ] for all i batch
+    h_pos_bar = [a',b',c',a'] for all i batch 
+    h_neg_bar = [[b',c',a'],[a',c',a'],[a',b',a'],[a',b',c']] 
+              
+    """
+    h_neg_bar = []
+
+    for idx in range(h_bar.shape[0]):
+        
+        mask = np.arange(h_bar.shape[0])
+       
+        if debug == True:
+            print("===== Masking neg samples")
+            print(mask.shape)
+        #select neg pair hj in papers Simcse
+        masking = (mask != idx)
+        
+        if debug == True:
+            print(masking)
+            print(h_bar[masking,:].shape)
+            print("checking slice masking:")
+            print(h_bar[masking,:3])
+            print("check hidden bar without slicing")
+            print(h_bar[:,:3])
+        h_neg_bar.append(h_bar[masking,:])
+        
+        return h_neg_bar
 
 
+        
+        """
+        print("=== masking operation==")
+        print(mask) 
+        print(hi_bar)
+        print(h_bar)
+        """
 
 
 

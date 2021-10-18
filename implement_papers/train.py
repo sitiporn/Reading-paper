@@ -12,7 +12,7 @@ from dataloader import Similarity
 from dataloader import SenLoader 
 from dataloader import CustomTextDataset
 from torch.utils.data import Dataset, DataLoader
-
+from dataloader import create_pair_sample
 # Todo: making a batch that should be able to train 
 # 1.) feed all data in batch twice through encoder
 # 2.) create lstage1 = self_cl_loss + lamda * mlm_loss
@@ -55,6 +55,7 @@ sentence = [
 ]
 
 """
+
 data  = train_loader.get_data()
 
 print(data[0])
@@ -66,14 +67,14 @@ for i in range(len(data)):
    samples.append(data[i].text_a)
    labels.append(data[i].label)
 
-batch_size = 2
+batch_size = 7
 train_data = CustomTextDataset(labels,samples)  
 train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
 """
  Todo : Trainning  
- 1.) making dataloader
- 2.) iterate batch
- 3.) create pos_example
+ 1.) making dataloader X
+ 2.) iterate batch     X
+ 3.) create pos_example X 
  4.) create neg_example
  5.) calculate cost of each examples
  6.) calculate loss summarize    
@@ -87,9 +88,24 @@ for (idx, batch) in enumerate(train_loader):
     
     #print(dir(batch))
     # get hidden representation from ui
-    hi = embedding.encode(batch['Text'],debug=True)
-    hi_bar = embedding.encode(batch['Text'],debug=True,masking=True)
+    # Todo : proof of emebedding
+    h = embedding.encode(batch['Text'],debug=False)
+    h_bar = embedding.encode(batch['Text'],debug=False,masking=True)
+    print(h_bar.shape)
+    hj_bar = create_pair_sample(h_bar,debug=False)    
     
+    
+
+
+    """
+    print("h:",h)  
+    print("h:",h.shape)
+    print("h_bar",h_bar)
+    print("h_bar",h_bar.shape)
+    print(batch['Class'])
+    """
+    # create pos samples h , h_bar -> same class 
+     
     #hi_bar = embedding
 
 
