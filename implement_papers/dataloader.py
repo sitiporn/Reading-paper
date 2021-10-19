@@ -86,7 +86,7 @@ class SenLoader(Dataset):
         for idx in range(self.T):
 
             tasks = self.sample_task[idx]
-            print(type(tasks))
+            #print(type(tasks))
             self.label_list.append([])
             self.intent_examples.append([])
             

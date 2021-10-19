@@ -23,13 +23,14 @@ from torch.autograd import Variable
 
 # config
 train_file_path = '../../dataset/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
+PATH_to_save = './encoder_net.pth'
 N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 temperature = 0.1
-batch_size = 64 
+batch_size = 32 
 labels = []
 samples = []
-
+epochs = 15
 
 # 
 train_examples = load_intent_examples(train_file_path)
@@ -56,76 +57,54 @@ optimizer= AdamW(embedding.parameters(), lr=1e-4)
 train_data = CustomTextDataset(labels,samples)  
 train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
 """
- Todo : Trainning  
- 1.) making dataloader X
- 2.) iterate batch     X
- 3.) create pos_example X 
- 4.) create neg_example X
- 5.) calculate cost of each examples
- 6.) calculate loss summarize    
-
+ Todo : Programming:  Training 
+  1) combined all datasets of intents
+  2) drop sentence that less than one sentences 
+  3) Trainnig BERT from scatch -> pretrain
+  4) create mask language loss  
 """
-for (idx, batch) in enumerate(train_loader):
-
-    # Print the 'text' data of the batch
-    #print(idx, 'data: ', batch, '\n')
+for epoch in range(epochs):
     
-    
-    #print(dir(batch))
-    # get hidden representation from ui
-    # Todo : proof of emebedding
-    # Zero parameter gradients
-    optimizer.zero_grad()
-    # foward
-    h = embedding.encode(batch['Text'],debug=False)
-    h_bar = embedding.encode(batch['Text'],debug=False,masking=False)
-    print(h_bar.shape)
-    hj_bar = create_pair_sample(h_bar,debug=False)    
-    hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
-    hj_bar = torch.stack(hj_bar)
-    
-    h_3d = h.unsqueeze(1)
-    #print(hj_bar.shape,h_bar3d.shape)
-   # print(len(hj_bar),len(hj_bar[0]),len(hj_bar[0][0]))
-    print("Contrasive loss:")
-    # change it to be to taking grad
-    
-    loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size) 
-    print(loss_cl)
-    print(loss_cl.shape)
-    print(type(loss_cl))
-    loss_cl.backward() 
-    optimizer.step()
-    # print statistics
-    running_loss += loss_cl.item()
+    running_loss = 0.0
 
-    print(loss_cl.item())
-    break
-    
+    for (idx, batch) in enumerate(train_loader):
 
+        # Print the 'text' data of the batch
+        #print(idx, 'data: ', batch, '\n')
+        
+        
+        #print(dir(batch))
+        # get hidden representation from ui
+        # Todo : proof of emebedding
+        # Zero parameter gradients
+        optimizer.zero_grad()
+        # foward
+        h = embedding.encode(batch['Text'],debug=False)
+        h_bar = embedding.encode(batch['Text'],debug=False,masking=False)
+        hj_bar = create_pair_sample(h_bar,debug=False)    
+        hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
+        hj_bar = torch.stack(hj_bar)
+        
+        h_3d = h.unsqueeze(1)
+        # print(hj_bar.shape,h_bar3d.shape)
+        # print(len(hj_bar),len(hj_bar[0]),len(hj_bar[0][0]))
+        # change it to be to taking grad
+        
+        loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size) 
+        optimizer.step()
+        # print statistics
+        running_loss += loss_cl.item()
 
-    """
-    print("h:",h)  
-    print("h:",h.shape)
-    print("h_bar",h_bar)
-    print("h_bar",h_bar.shape)
-    print(batch['Class'])
-    """
-    
+        if idx % 100  == 99: # print every 50 mini-batches
+           
+            print('[%d, %5d] loss: %.3f' %(epoch+1,idx+1,running_loss/100))
+            running_loss = 0.0
 
- 
+        
 
+print('Finished Training')
+#torch.save(embedding.state_dict(),PATH_to_save)
 
-
-
-"""
-print("== 1 ==")
-print(len(training_data[0]))
-print("== 2 ==")
-print(training_data[0][0])
-print(dir(training_data[0][0]))
-
-"""
 
 """
 sentence = ["get an uber to take me to my brother's house in mineola",'i need to transfer from this account to that one']

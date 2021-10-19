@@ -73,8 +73,8 @@ class SimCSE(object):
             print("Input2:",inputs)
         
         if masking == True:
-            print("shape of input_ids:")
-            print(inputs['input_ids'].shape[1])
+            #print("shape of input_ids:")
+            #print(inputs['input_ids'].shape[1])
             rand = torch.rand(inputs['input_ids'].shape).to(target_device)
             # we random arr less than 0.10
             mask_arr = (rand < 0.10) * (inputs['input_ids'] !=101) * (inputs['input_ids'] != 102)
@@ -86,10 +86,7 @@ class SimCSE(object):
             #create selection from mask
             inputs['input_ids'][mask_arr] = 103
             #selection = torch.flatten((mask_arr).nonzero()).tolist()
-            print("after masking")
-            print(inputs['input_ids'])
-
-
+            
 
         # Encode to get hi the representation of ui  
         outputs = self.model(**inputs, output_hidden_states=True,return_dict=True)
@@ -122,23 +119,27 @@ class SimCSE(object):
 def contrasive_loss(h,h_bar,hj_bar,h_3d,temp,N):
 
         
-        sim = Similarity(temp)
-        pos_sim = torch.exp(sim(h,h_bar))
-        neg_sim = torch.exp(sim(h_3d,hj_bar))
+    sim = Similarity(temp)
+    pos_sim = torch.exp(sim(h,h_bar))
+    neg_sim = torch.exp(sim(h_3d,hj_bar))
 
 
-        # sum of each neg samples of each *sum over j
-        neg_sim = torch.sum(neg_sim,1) 
-        print("find similiarty")
-        print(pos_sim.shape)
-        print(neg_sim.shape)
+    # sum of each neg samples of each *sum over j
+    neg_sim = torch.sum(neg_sim,1) 
 
-        cost = -1 * torch.log(pos_sim / neg_sim)
+    cost = -1 * torch.log(pos_sim / neg_sim)
 
-        print("cost:")
-        print(cost.shape)
+    return torch.sum(cost)/N 
 
-        return torch.sum(cost)/N 
+def mask_langauge_loss(M):
+    
+    """
+    P(xm) - Predicted probability of mask token xm over total vocabulary
 
+    M - number of masked tokens in each batch 
+    """
+    
+    #cost = 
 
-       
+    return -1 * torch.sum(cost)/M
+
