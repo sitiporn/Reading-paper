@@ -15,6 +15,7 @@ from torch.utils.data import Dataset, DataLoader
 from dataloader import create_pair_sample
 from loss import contrasive_loss
 from transformers import AdamW
+from torch.autograd import Variable
 
 # Todo: making a batch that should be able to train 
 # 1.) feed all data in batch twice through encoder
@@ -48,9 +49,10 @@ for i in range(len(data)):
    samples.append(data[i].text_a)
    labels.append(data[i].label)
 
+for param in embedding.parameters():
+    param.requires_grad = True 
 
-optim = AdamW(embedding.parameters(), lr=1e-4)
-loss = contrasive_loss(temperature,batch_size)
+optimizer= AdamW(embedding.parameters(), lr=1e-4)
 train_data = CustomTextDataset(labels,samples)  
 train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
 """
@@ -66,12 +68,15 @@ train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
 for (idx, batch) in enumerate(train_loader):
 
     # Print the 'text' data of the batch
-    print(idx, 'data: ', batch, '\n')
+    #print(idx, 'data: ', batch, '\n')
     
     
     #print(dir(batch))
     # get hidden representation from ui
     # Todo : proof of emebedding
+    # Zero parameter gradients
+    optimizer.zero_grad()
+    # foward
     h = embedding.encode(batch['Text'],debug=False)
     h_bar = embedding.encode(batch['Text'],debug=False,masking=False)
     print(h_bar.shape)
@@ -79,16 +84,18 @@ for (idx, batch) in enumerate(train_loader):
     hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
     hj_bar = torch.stack(hj_bar)
     
-    print("hj_bar:",hj_bar.shape)
     h_3d = h.unsqueeze(1)
     #print(hj_bar.shape,h_bar3d.shape)
    # print(len(hj_bar),len(hj_bar[0]),len(hj_bar[0][0]))
     print("Contrasive loss:")
-    loss_cl = loss.self_con_loss(h,h_bar,hj_bar,h_3d) 
-    loss_cl.requres_grad(True)
+    # change it to be to taking grad
+    
+    loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size) 
     print(loss_cl)
+    print(loss_cl.shape)
+    print(type(loss_cl))
     loss_cl.backward() 
-    optim.step()
+    optimizer.step()
     # print statistics
     running_loss += loss_cl.item()
 

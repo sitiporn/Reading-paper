@@ -9,7 +9,7 @@ from typing import List, Dict, Tuple, Type, Union
 from torch import Tensor
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
-
+from torch.autograd import Variable
 
 class Similarity(nn.Module):
     """
@@ -52,62 +52,62 @@ class SimCSE(object):
             print(single_sentence)
         embedding_list = []
 
-        with torch.no_grad():
-            total_batch = len(sentence) // batch_size + (1 if len(sentence) % batch_size > 0 else 0)
+       #with torch.no_grad():
+        total_batch = len(sentence) // batch_size + (1 if len(sentence) % batch_size > 0 else 0)
 
-            """
-            print(total_batch)
-            print(sentence)
-            print(type(sentence))
-            print(dir(self.tokenizer))
-            """
-            #assert str == type(sentence[0])
-            if debug == True:
-                print("Before tokenize",sentence)
+        """
+        print(total_batch)
+        print(sentence)
+        print(type(sentence))
+        print(dir(self.tokenizer))
+        """
+        #assert str == type(sentence[0])
+        if debug == True:
+            print("Before tokenize",sentence)
 
-            inputs = self.tokenizer(sentence,padding=True,truncation=True,return_tensors="pt")
-          
-            inputs = {k: v.to(target_device) for k, v in inputs.items()}
+        inputs = self.tokenizer(sentence,padding=True,truncation=True,return_tensors="pt")
+       
+        inputs = {k: v.to(target_device) for k, v in inputs.items()}
+        
+        if debug== True: 
+            print("Input2:",inputs)
+        
+        if masking == True:
+            print("shape of input_ids:")
+            print(inputs['input_ids'].shape[1])
+            rand = torch.rand(inputs['input_ids'].shape).to(target_device)
+            # we random arr less than 0.10
+            mask_arr = (rand < 0.10) * (inputs['input_ids'] !=101) * (inputs['input_ids'] != 102)
             
-            if debug== True: 
-                print("Input2:",inputs)
+            if debug== True:
+                print("Masking step:")
+                print(mask_arr)
             
-            if masking == True:
-                print("shape of input_ids:")
-                print(inputs['input_ids'].shape[1])
-                rand = torch.rand(inputs['input_ids'].shape).to(target_device)
-                # we random arr less than 0.10
-                mask_arr = (rand < 0.10) * (inputs['input_ids'] !=101) * (inputs['input_ids'] != 102)
-                
-                if debug== True:
-                    print("Masking step:")
-                    print(mask_arr)
-                
-                #create selection from mask
-                inputs['input_ids'][mask_arr] = 103
-                #selection = torch.flatten((mask_arr).nonzero()).tolist()
-                print("after masking")
-                print(inputs['input_ids'])
+            #create selection from mask
+            inputs['input_ids'][mask_arr] = 103
+            #selection = torch.flatten((mask_arr).nonzero()).tolist()
+            print("after masking")
+            print(inputs['input_ids'])
 
 
 
-            # Encode to get hi the representation of ui  
-            outputs = self.model(**inputs, output_hidden_states=True,return_dict=True)
+        # Encode to get hi the representation of ui  
+        outputs = self.model(**inputs, output_hidden_states=True,return_dict=True)
 
-            # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
+        # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
 
-            if debug== True: 
-                print("outputs:",outputs.last_hidden_state)
+        if debug== True: 
+            print("outputs:",outputs.last_hidden_state)
 
-                print("outputs:",outputs.last_hidden_state.shape)
+            print("outputs:",outputs.last_hidden_state.shape)
 
-            embeddings = outputs.last_hidden_state[:, 0]
+        embeddings = outputs.last_hidden_state[:, 0]
 
-            if debug== True: 
-                print("embeddings.shpape",embeddings.shape) 
-            #print(self.model.eval())
-            
-            embedding_list.append(embeddings.cpu()) 
+        if debug== True: 
+            print("embeddings.shpape",embeddings.shape) 
+        #print(self.model.eval())
+        
+        embedding_list.append(embeddings.cpu()) 
             
         embeddings = torch.cat(embedding_list, 0)
         
@@ -119,32 +119,26 @@ class SimCSE(object):
 
         return embeddings
 
-class contrasive_loss(object):
-    def __init__(self,temperature,N):
-       
-        #params
-        self.temp = temperature
-        self.N = N 
+def contrasive_loss(h,h_bar,hj_bar,h_3d,temp,N):
 
-
-    def self_con_loss(self,h,h_bar,hj_bar,h_3d):
         
-        sim = Similarity(self.temp)
-        pos_sim = sim(h,h_bar) 
-        neg_sim = sim(h_3d,hj_bar)
+        sim = Similarity(temp)
+        pos_sim = torch.exp(sim(h,h_bar))
+        neg_sim = torch.exp(sim(h_3d,hj_bar))
 
-        # sum of each neg samples of each 
+
+        # sum of each neg samples of each *sum over j
         neg_sim = torch.sum(neg_sim,1) 
         print("find similiarty")
         print(pos_sim.shape)
         print(neg_sim.shape)
 
-        cost = pos_sim / neg_sim
+        cost = -1 * torch.log(pos_sim / neg_sim)
 
         print("cost:")
         print(cost.shape)
 
-        return torch.sum(cost) 
+        return torch.sum(cost)/N 
 
 
        
