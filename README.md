@@ -1,22 +1,23 @@
-# Reading-papers
+## Reading-papers
 
   This will cover the several state of art papaers in NLP field 
 
 
-# Implementation 
+## Implementation 
 
-## Todo list
-   - [] Pre-train Process
-     - [] Preprocess 
-       - [] combined intent datasets without test sets in the contrastive pre-training
-       - [] remove utterances with less than five tokens
+#### Todo 
+   - [ ] Pre-train Process
+     - [ ] Preprocess 
+       - [ ] combined intent datasets without test sets in the contrastive pre-training
+       - [ ] remove utterances with less than five tokens
+       - [x] create positive and negative pairs 
        
-     - [] create loss stage 1
-       - [] self supervised contrastive loss
-       - [] mask language modeling loss 
+     - [ ] create loss stage 1
+       - [x] self supervised contrastive loss
+       - [ ] mask language modeling loss 
 
-   - [] Fine Tunning 
-     - [] 5 shot 
-     - [] 10 shot
+   - [ ] Fine Tunning 
+     - [ ] 5 shot 
+     - [ ] 10 shot
 
  
