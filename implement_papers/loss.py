@@ -11,6 +11,7 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 from torch.autograd import Variable
 from transformers import BertModel, BertConfig
+from transformers import BertTokenizer, BertForMaskedLM
 
 class Similarity(nn.Module):
     """
@@ -37,22 +38,21 @@ class SimCSE(object):
             self.model = AutoModel.from_pretrained('bert-base-uncased')
         else:
             self.config = BertConfig()
-            self.model = BertModel(self.config)
+            self.model = BertForMaskedLM(self.config)
 
 
         self.tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
         self.device = device
+        self.model = self.model.to(self.device)
+        self.model.train()
     
     def parameters(self):
         return self.model.parameters()
 
     def encode(self,sentence:Union[str, List[str]],batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False,masking:bool=True)-> Union[ndarray, Tensor]:
         
-
-        target_device = self.device 
-        self.model = self.model.to(target_device)
-        
         single_sentence = False
+
         if isinstance(sentence,str):
             sentence = [sentence]
             single_sentence = True 
@@ -74,16 +74,18 @@ class SimCSE(object):
             print("Before tokenize",sentence)
 
         inputs = self.tokenizer(sentence,padding=True,truncation=True,return_tensors="pt")
-       
-        inputs = {k: v.to(target_device) for k, v in inputs.items()}
+        inputs['labels'] = inputs.input_ids.detach().clone()
+        
+        inputs = {k: v.to(self.device) for k, v in inputs.items()}
         
         if debug== True: 
             print("Input2:",inputs)
+            print("inputs.keys()",inputs.keys())
         
         if masking == True:
             #print("shape of input_ids:")
             #print(inputs['input_ids'].shape[1])
-            rand = torch.rand(inputs['input_ids'].shape).to(target_device)
+            rand = torch.rand(inputs['input_ids'].shape).to(self.device)
             # we random arr less than 0.10
             mask_arr = (rand < 0.10) * (inputs['input_ids'] !=101) * (inputs['input_ids'] != 102)
             
@@ -94,10 +96,10 @@ class SimCSE(object):
             #create selection from mask
             inputs['input_ids'][mask_arr] = 103
             #selection = torch.flatten((mask_arr).nonzero()).tolist()
-            
+             
 
         # Encode to get hi the representation of ui  
-        outputs = self.model(**inputs, output_hidden_states=True,return_dict=True)
+        outputs = self.model(inputs['input_ids'],attention_mask=inputs['attention_mask'],labels=inputs['labels'])
 
         # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
 
@@ -149,5 +151,5 @@ def mask_langauge_loss(M):
     
     #cost = 
 
-    return -1 * torch.sum(cost)/M
+    return -1 * torch.sum(cost)/ M
 

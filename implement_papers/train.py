@@ -30,7 +30,7 @@ temperature = 0.1
 batch_size = 16 
 labels = []
 samples = []
-epochs = 15
+epochs = 1
 
 # 
 train_examples = load_intent_examples(train_file_path)
@@ -79,7 +79,7 @@ for epoch in range(epochs):
         # Zero parameter gradients
         optimizer.zero_grad()
         # foward
-        h = embedding.encode(batch['Text'],debug=False)
+        h = embedding.encode(batch['Text'],debug=True)
         h_bar = embedding.encode(batch['Text'],debug=False,masking=False)
         hj_bar = create_pair_sample(h_bar,debug=False)    
         hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
@@ -94,7 +94,7 @@ for epoch in range(epochs):
         optimizer.step()
         # print statistics
         running_loss += loss_cl.item()
-
+        break
         if idx % 100  == 99: # print every 50 mini-batches
            
             print('[%d, %5d] loss: %.3f' %(epoch+1,idx+1,running_loss/100))
