@@ -10,6 +10,7 @@ from torch import Tensor
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
 from torch.autograd import Variable
+from transformers import BertModel, BertConfig
 
 class Similarity(nn.Module):
     """
@@ -30,8 +31,15 @@ class SimCSE(object):
     class for embeddings sentence by using BERT 
 
     """
-    def __init__(self,device):
-        self.model = AutoModel.from_pretrained('bert-base-uncased')
+    def __init__(self,device,pretrain:bool=False):
+
+        if pretrain == True: 
+            self.model = AutoModel.from_pretrained('bert-base-uncased')
+        else:
+            self.config = BertConfig()
+            self.model = BertModel(self.config)
+
+
         self.tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
         self.device = device
     
