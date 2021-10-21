@@ -14,10 +14,10 @@
        
      - [ ] create loss stage 1
        - [x] self supervised contrastive loss
-       - [ ] mask language modeling loss 
+       - [x] mask language modeling loss 
 
    - [ ] Fine Tunning 
      - [ ] 5 shot 
      - [ ] 10 shot
 
- 
+   - [ ] Training on Containner 
