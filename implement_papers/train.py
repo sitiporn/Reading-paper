@@ -27,10 +27,12 @@ PATH_to_save = './encoder_net.pth'
 N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 temperature = 0.1
-batch_size = 16 
+batch_size = 2 
 labels = []
 samples = []
 epochs = 1
+lamda = 1.0
+running_times = 10
 
 # 
 train_examples = load_intent_examples(train_file_path)
@@ -50,9 +52,6 @@ for i in range(len(data)):
    samples.append(data[i].text_a)
    labels.append(data[i].label)
 
-for param in embedding.parameters():
-    param.requires_grad = True 
-
 optimizer= AdamW(embedding.parameters(), lr=1e-4)
 train_data = CustomTextDataset(labels,samples)  
 train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
@@ -66,6 +65,8 @@ train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
 for epoch in range(epochs):
     
     running_loss = 0.0
+    running_loss_1 = 0.0
+    running_loss_2 = 0.0
 
     for (idx, batch) in enumerate(train_loader):
 
@@ -79,8 +80,8 @@ for epoch in range(epochs):
         # Zero parameter gradients
         optimizer.zero_grad()
         # foward
-        h = embedding.encode(batch['Text'],debug=True)
-        h_bar = embedding.encode(batch['Text'],debug=False,masking=False)
+        h, _ = embedding.encode(batch['Text'])
+        h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True)
         hj_bar = create_pair_sample(h_bar,debug=False)    
         hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
         hj_bar = torch.stack(hj_bar)
@@ -91,14 +92,26 @@ for epoch in range(epochs):
         # change it to be to taking grad
         
         loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size) 
+        loss_lml = outputs.loss
+
+        # loss of pretrain model 
+        loss_stage1 = loss_cl + (lamda*loss_lml)
+        
+        loss_stage1.backward()
         optimizer.step()
+
         # print statistics
-        running_loss += loss_cl.item()
-        break
-        if idx % 100  == 99: # print every 50 mini-batches
+        running_loss += loss_stage1
+        running_loss_1 += loss_cl
+        running_loss_2 += loss_lml
+
+        if idx % running_times == running_times-1: # print every 50 mini-batches
            
-            print('[%d, %5d] loss: %.3f' %(epoch+1,idx+1,running_loss/100))
+            print('[%d, %5d] loss_total: %.3f loss_contrasive:  %.3f loss_language: %.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_1/running_times,running_loss_2/running_times))
             running_loss = 0.0
+            running_loss_1 = 0.0 
+            running_loss_2 = 0.0
+
 
         
 

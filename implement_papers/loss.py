@@ -32,7 +32,7 @@ class SimCSE(object):
     class for embeddings sentence by using BERT 
 
     """
-    def __init__(self,device,pretrain:bool=False):
+    def __init__(self,device,pretrain:bool = False,hidden_state:bool = True):
 
         if pretrain == True: 
             self.model = AutoModel.from_pretrained('bert-base-uncased')
@@ -45,6 +45,7 @@ class SimCSE(object):
         self.device = device
         self.model = self.model.to(self.device)
         self.model.train()
+        self.hidden_state = hidden_state
     
     def parameters(self):
         return self.model.parameters()
@@ -99,19 +100,35 @@ class SimCSE(object):
              
 
         # Encode to get hi the representation of ui  
-        outputs = self.model(inputs['input_ids'],attention_mask=inputs['attention_mask'],labels=inputs['labels'])
+        outputs = self.model(inputs['input_ids'],attention_mask=inputs['attention_mask'],labels=inputs['labels'],output_hidden_states = self.hidden_state)
 
         # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
+        
+        hidden_state = outputs[2]
+        hidden_state = hidden_state[12]
+       
+        # (batch_size, sequence_length, hidden_size)
+        embeddings = hidden_state
+ 
 
         if debug== True: 
-            print("outputs:",outputs.last_hidden_state)
 
-            print("outputs:",outputs.last_hidden_state.shape)
-
-        embeddings = outputs.last_hidden_state[:, 0]
+            print("outputs:",len(outputs))
+            
+            print("hidden states:",embeddings.shape)
+             
+                   
+        # output of the embeddings + one for the output of each layer)
+        # (batch_size, sequence_length, hidden_size)
+        # initial embedding -> index 0 of turple hidden state
+        
+        
+        print(type(hidden_state))
+        print(type(embeddings))
+        #print(embeddings)
 
         if debug== True: 
-            print("embeddings.shpape",embeddings.shape) 
+            print("embeddings.shape",embeddings.shape) 
         #print(self.model.eval())
         
         embedding_list.append(embeddings.cpu()) 
@@ -124,7 +141,7 @@ class SimCSE(object):
 
 
 
-        return embeddings
+        return embeddings, outputs
 
 def contrasive_loss(h,h_bar,hj_bar,h_3d,temp,N):
 
