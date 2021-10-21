@@ -123,9 +123,8 @@ class SimCSE(object):
         # initial embedding -> index 0 of turple hidden state
         
         
-        print(type(hidden_state))
-        print(type(embeddings))
-        #print(embeddings)
+       
+      
 
         if debug== True: 
             print("embeddings.shape",embeddings.shape) 

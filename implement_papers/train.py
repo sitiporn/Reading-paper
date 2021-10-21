@@ -22,7 +22,7 @@ from torch.autograd import Variable
 # 2.) create lstage1 = self_cl_loss + lamda * mlm_loss
 
 # config
-train_file_path = '../../dataset/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
+train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
 PATH_to_save = './encoder_net.pth'
 N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
@@ -43,7 +43,7 @@ every dict -> {'task':'lable name','examples':[text1,text2,..,textN]}
 """
 sampled_tasks = [sample(N, train_examples) for i in range(T)]
 
-embedding = SimCSE('cuda') 
+embedding = SimCSE('cuda:3') 
 sim = Similarity(temperature)
 train_loader = SenLoader(sampled_tasks)
 data  = train_loader.get_data()
