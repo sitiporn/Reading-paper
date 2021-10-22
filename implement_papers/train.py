@@ -69,6 +69,8 @@ train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
   3) Trainnig BERT from scatch -> pretrain
   4) create mask language loss  
 """
+running_time = 0
+
 for epoch in range(epochs):
     
     running_loss = 0.0
@@ -113,7 +115,8 @@ for epoch in range(epochs):
         running_loss_2 += loss_lml
         
         if idx % running_times == running_times-1: # print every 50 mini-batches
-              
+            running_time += 1
+            writer.add_scalar('Loss/train', running_loss,running_time)
             print('[%d, %5d] loss_total: %.3f loss_contrasive:  %.3f loss_language: %.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_1/running_times,running_loss_2/running_times))
             running_loss = 0.0
             running_loss_1 = 0.0 
@@ -121,6 +124,7 @@ for epoch in range(epochs):
 
 
         
+writer.close()
 model = embedding.get_model()  
 print('Finished Training')
 torch.save(model.state_dict(),PATH_to_save)
