@@ -1,4 +1,7 @@
 import torch
+import urllib
+import os 
+from torch.utils.tensorboard import SummaryWriter 
 from pytorch_pretrained_bert import BertTokenizer, BertModel, BertForMaskedLM
 import numpy as np
 
@@ -33,6 +36,10 @@ samples = []
 epochs = 15 
 lamda = 1.0
 running_times = 10
+
+
+# Tensorboard
+writer = SummaryWriter()
 
 # load datasets 
 train_examples = load_intent_examples(train_file_path)
@@ -106,7 +113,7 @@ for epoch in range(epochs):
         running_loss_2 += loss_lml
         
         if idx % running_times == running_times-1: # print every 50 mini-batches
-           
+              
             print('[%d, %5d] loss_total: %.3f loss_contrasive:  %.3f loss_language: %.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_1/running_times,running_loss_2/running_times))
             running_loss = 0.0
             running_loss_1 = 0.0 
