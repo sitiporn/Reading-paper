@@ -22,3 +22,41 @@
 
    - [x] Training on Containner 
    - [ ] push trainning history to tensorboard
+
+## Running on Remote Server container
+
+
+ 1. map the remote port to a local port run on local machine
+
+```bash
+  sh -L 6006:localhost:6006 hostname_on_containner
+```
+ 2. runs in the container where your runs file is 
+
+```bash
+  pip3 install tensorboard
+```
+```bash
+  tensorboard --logdir ./runs 
+```
+
+ 3. Usage
+    ```python
+     from torch.utils.tensorboard import SummaryWriter
+     
+     #Writer will output to ./runs/ directory by default
+     #can add comment eg. SummaryWriter(comment="LR_0.1_BATCH_16")
+     writer = SummaryWriter()  
+     # tag of graph    
+     # y-axis value <- running_loss
+     # x-axis value <- running_time
+
+     writer.add_scalar('Loss/train', running_loss,running_time)
+
+     writer.close()
+ 
+     ```
+
+
+### example of readme 
+  - ref - https://www.makeareadme.com/
