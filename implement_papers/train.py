@@ -27,14 +27,14 @@ PATH_to_save = './encoder_net.pth'
 N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 temperature = 0.1
-batch_size = 1 
+batch_size = 64 
 labels = []
 samples = []
-epochs = 1
+epochs = 15 
 lamda = 1.0
 running_times = 10
 
-# 
+# load datasets 
 train_examples = load_intent_examples(train_file_path)
 """
 structure of this data  [trials] 
@@ -104,7 +104,7 @@ for epoch in range(epochs):
         running_loss += loss_stage1
         running_loss_1 += loss_cl
         running_loss_2 += loss_lml
-
+        
         if idx % running_times == running_times-1: # print every 50 mini-batches
            
             print('[%d, %5d] loss_total: %.3f loss_contrasive:  %.3f loss_language: %.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_1/running_times,running_loss_2/running_times))
@@ -114,9 +114,10 @@ for epoch in range(epochs):
 
 
         
-
+model = embedding.get_model()  
 print('Finished Training')
-#torch.save(embedding.state_dict(),PATH_to_save)
+torch.save(model.state_dict(),PATH_to_save)
+print("Saving Done !")
 
 
 """

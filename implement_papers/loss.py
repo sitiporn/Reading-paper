@@ -50,6 +50,9 @@ class SimCSE(object):
     def parameters(self):
         return self.model.parameters()
 
+    def get_model(self):
+        return self.model
+
     def encode(self,sentence:Union[str, List[str]],batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False,masking:bool=True)-> Union[ndarray, Tensor]:
         
         single_sentence = False
