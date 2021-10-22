@@ -20,4 +20,5 @@
      - [ ] 5 shot 
      - [ ] 10 shot
 
-   - [ ] Training on Containner 
+   - [x] Training on Containner 
+   - [ ] push trainning history to tensorboard
