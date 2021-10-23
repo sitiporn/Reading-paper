@@ -19,7 +19,7 @@ from dataloader import create_pair_sample
 from loss import contrasive_loss
 from transformers import AdamW
 from torch.autograd import Variable
-
+from logger import Log
 # Todo: making a batch that should be able to train 
 # 1.) feed all data in batch twice through encoder
 # 2.) create lstage1 = self_cl_loss + lamda * mlm_loss
@@ -36,10 +36,10 @@ samples = []
 epochs = 15 
 lamda = 1.0
 running_times = 10
-
+lr=1e-4
 
 # Tensorboard
-writer = SummaryWriter()
+logger = Log(experiment_name='Pretrain','self_con',batch_size=batch_size,lr=lr)
 
 # load datasets 
 train_examples = load_intent_examples(train_file_path)
@@ -59,7 +59,7 @@ for i in range(len(data)):
    samples.append(data[i].text_a)
    labels.append(data[i].label)
 
-optimizer= AdamW(embedding.parameters(), lr=1e-4)
+optimizer= AdamW(embedding.parameters(), lr=lr)
 train_data = CustomTextDataset(labels,samples)  
 train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
 """
@@ -116,15 +116,15 @@ for epoch in range(epochs):
         
         if idx % running_times == running_times-1: # print every 50 mini-batches
             running_time += 1
-            writer.add_scalar('Loss/train', running_loss,running_time)
+            logger.logging(running_loss,running_time)
             print('[%d, %5d] loss_total: %.3f loss_contrasive:  %.3f loss_language: %.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_1/running_times,running_loss_2/running_times))
             running_loss = 0.0
             running_loss_1 = 0.0 
             running_loss_2 = 0.0
-
+            logger.flush()
 
         
-writer.close()
+logger.close()
 model = embedding.get_model()  
 print('Finished Training')
 torch.save(model.state_dict(),PATH_to_save)
