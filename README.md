@@ -29,7 +29,7 @@
  1. map the remote port to a local port run on local machine
 
 ```bash
-ssh -L 6006:localhost:6006 hostname_on_containner
+ssh -L 6006:localhost:6006 containner_name
 ```
  2. runs in the container where your runs file is 
 
