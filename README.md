@@ -21,7 +21,7 @@
      - [ ] 10 shot
 
    - [x] Training on Containner 
-   - [ ] push trainning history to tensorboard
+   - [x] push trainning history to tensorboard
 
 ## Running on Remote Server container
 
@@ -29,15 +29,15 @@
  1. map the remote port to a local port run on local machine
 
 ```bash
-  sh -L 6006:localhost:6006 hostname_on_containner
+sh -L 6006:localhost:6006 hostname_on_containner
 ```
  2. runs in the container where your runs file is 
 
 ```bash
-  pip3 install tensorboard
+pip3 install tensorboard
 ```
 ```bash
-  tensorboard --logdir ./runs 
+tensorboard dev upload --logdir runs
 ```
 
  3. Usage
