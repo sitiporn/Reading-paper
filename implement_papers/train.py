@@ -1,10 +1,11 @@
 import torch
 import urllib
+
 import os 
 from torch.utils.tensorboard import SummaryWriter 
 from pytorch_pretrained_bert import BertTokenizer, BertModel, BertForMaskedLM
 import numpy as np
-
+from datetime import datetime
 from utils import loss
 from dataloader import IntentExample
 from dataloader import load_intent_examples
@@ -24,22 +25,28 @@ from logger import Log
 # 1.) feed all data in batch twice through encoder
 # 2.) create lstage1 = self_cl_loss + lamda * mlm_loss
 
+
+# get time 
+now = datetime.now()
+dt_str = now.strftime("%d_%m_%Y_%H:%M")
+
 # config
 train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
-PATH_to_save = './encoder_net.pth'
+PATH_to_save = f'/../../models/encoder_net{dt_str}.pth'
 N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 temperature = 0.1
 batch_size = 64 
 labels = []
 samples = []
-epochs = 15 
+epochs = 1 
 lamda = 1.0
 running_times = 10
 lr=1e-4
 
+print(PATH_to_save)
 # Tensorboard
-logger = Log(experiment_name='Pretrain','self_con',batch_size=batch_size,lr=lr)
+logger = Log(experiment_name='Pretrain',model_name='self_con',batch_size=batch_size,lr=lr)
 
 # load datasets 
 train_examples = load_intent_examples(train_file_path)
@@ -116,12 +123,11 @@ for epoch in range(epochs):
         
         if idx % running_times == running_times-1: # print every 50 mini-batches
             running_time += 1
-            logger.logging(running_loss,running_time)
+            logger.logging('Loss/Train',running_loss,running_time)
             print('[%d, %5d] loss_total: %.3f loss_contrasive:  %.3f loss_language: %.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_1/running_times,running_loss_2/running_times))
             running_loss = 0.0
             running_loss_1 = 0.0 
             running_loss_2 = 0.0
-            logger.flush()
 
         
 logger.close()
