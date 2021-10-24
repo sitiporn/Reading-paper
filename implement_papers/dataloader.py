@@ -151,9 +151,36 @@ def create_pair_sample(h_bar,debug:bool=False):
         
     return h_neg_bar
 
+class combine:
+
+    def __init__(self):
+      
+        #params
+        self.datasets = ['ATIS','BANKING77','CLINC150','HWU64','SNIPS']
+        
+        
+    def get_examples(self): 
+
+        combine = [] 
+        for data in self.datasets:
+            train_file_path = f'../../datasets/Few-Shot-Intent-Detection/Datasets/{data}/train/'
+            train_examples = load_intent_examples(train_file_path)
+            print(len(train_examples))
+            print(type(train_examples))
+            combine.append(train_examples)
 
         
+        
+        print(len(combine))
+        print(len(combine[0]))
+        print(len(combine[1]))         
+        print(len(combine[2]))         
+        print(len(combine[3]))         
+        flat_combine_list = [item for sublist in combine for item in sublist]
+        assert len(flat_list) == len(combine[0]) + len(combine[1]) + len(combine[2]) + len(combine[3]) + len(combine[4])
+        print(len(flat_list))
 
+        return flat_combine_list
 
 
 
