@@ -32,7 +32,9 @@ dt_str = now.strftime("%d_%m_%Y_%H:%M")
 
 # config
 train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
-PATH_to_save = f'/../../models/encoder_net{dt_str}.pth'
+
+PATH_to_save = f'../../models/encoder_net{dt_str}.pth'
+
 N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 temperature = 0.1
@@ -128,14 +130,14 @@ for epoch in range(epochs):
             running_loss = 0.0
             running_loss_1 = 0.0 
             running_loss_2 = 0.0
+            logger.close()
+            model = embedding.get_model()  
+            print('Finished Training')
+            torch.save(model.state_dict(),PATH_to_save)
+            print("Saving Done !")
+
 
         
-logger.close()
-model = embedding.get_model()  
-print('Finished Training')
-torch.save(model.state_dict(),PATH_to_save)
-print("Saving Done !")
-
 
 """
 sentence = ["get an uber to take me to my brother's house in mineola",'i need to transfer from this account to that one']
