@@ -12,6 +12,8 @@ import numpy as np
 from torch.autograd import Variable
 from transformers import BertModel, BertConfig
 from transformers import BertTokenizer, BertForMaskedLM
+from transformers import RobertaConfig, RobertaModel
+from transformers import RobertaTokenizer
 
 class Similarity(nn.Module):
     """
@@ -35,13 +37,13 @@ class SimCSE(object):
     def __init__(self,device,pretrain:bool = False,hidden_state:bool = True):
 
         if pretrain == True: 
-            self.model = AutoModel.from_pretrained('bert-base-uncased')
+            self.model = AutoModel.from_pretrained('roberta-base')
         else:
-            self.config = BertConfig()
-            self.model = BertForMaskedLM(self.config)
+            self.config = RobertaConfig()
+            self.model = RobertaModel(self.config)
 
 
-        self.tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+        self.tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
         self.device = device
         self.model = self.model.to(self.device)
         self.model.train()
@@ -78,9 +80,10 @@ class SimCSE(object):
             print("Before tokenize",sentence)
 
         inputs = self.tokenizer(sentence,padding=True,truncation=True,return_tensors="pt")
-        inputs['labels'] = inputs.input_ids.detach().clone()
+        labels = inputs.input_ids.detach().clone()
         
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
+        labels = {k: v.to(self.device) for k, v in labels.items()}
         
         if debug== True: 
             print("Input2:",inputs)
@@ -103,11 +106,11 @@ class SimCSE(object):
              
 
         # Encode to get hi the representation of ui  
-        outputs = self.model(inputs['input_ids'],attention_mask=inputs['attention_mask'],labels=inputs['labels'],output_hidden_states = self.hidden_state)
+        outputs = self.model(**inputs,labels=labels)
 
         # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
         
-        hidden_state = outputs[2]
+        hidden_state = outputs.hidden_state
         hidden_state = hidden_state[12]
        
         # (batch_size, sequence_length, hidden_size)

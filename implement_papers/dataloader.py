@@ -10,6 +10,7 @@ from typing import List, Dict, Tuple, Type, Union
 from torch import Tensor
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
+from transformers import RobertaTokenizer
 
 class IntentExample(object):
 
@@ -43,16 +44,22 @@ def load_intent_examples(file_path, do_lower_case=True):
 def sample(N, examples):
     labels = {} # unique classes
     
+
+    tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
     # check whether example's labels already exist or not 
      
     for e in examples:
         # if they have label in list append sample into the class 
+
+        if len(tokenizer(e.text)['input_ids']) <=7:
+            print(e.text)  
+            
         if e.label in labels:
             labels[e.label].append(e.text)
         # if they dont have lable create new one
         else:
             labels[e.label] = [e.text]
-    
+        
     sampled_examples = []
     # lables -> the number of intents
     # loop all labels
@@ -165,25 +172,22 @@ class combine:
         for data in self.datasets:
             train_file_path = f'../../datasets/Few-Shot-Intent-Detection/Datasets/{data}/train/'
             train_examples = load_intent_examples(train_file_path)
-            print(len(train_examples))
-            print(type(train_examples))
+            #print(len(train_examples))
+            #print(type(train_examples))
             combine.append(train_examples)
 
         
         
-        print(len(combine))
-        print(len(combine[0]))
-        print(len(combine[1]))         
-        print(len(combine[2]))         
-        print(len(combine[3]))         
+        #print(len(combine))
+        #print(len(combine[0]))
+        #print(len(combine[1]))         
+        #print(len(combine[2]))         
+        #print(len(combine[3]))         
         flat_combine_list = [item for sublist in combine for item in sublist]
-        assert len(flat_list) == len(combine[0]) + len(combine[1]) + len(combine[2]) + len(combine[3]) + len(combine[4])
-        print(len(flat_list))
+        assert len(flat_combine_list) == len(combine[0]) + len(combine[1]) + len(combine[2]) + len(combine[3]) + len(combine[4])
+       # print(len(flat_combine_list))
 
-        return flat_combine_list
-
-
-
+        return flat_combine_list 
 
 
 

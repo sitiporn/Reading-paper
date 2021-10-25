@@ -21,6 +21,7 @@ from loss import contrasive_loss
 from transformers import AdamW
 from torch.autograd import Variable
 from logger import Log
+from dataloader import combine
 # Todo: making a batch that should be able to train 
 # 1.) feed all data in batch twice through encoder
 # 2.) create lstage1 = self_cl_loss + lamda * mlm_loss
@@ -35,13 +36,15 @@ train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/tr
 
 PATH_to_save = f'../../models/encoder_net{dt_str}.pth'
 
+print("Read path to read and path to safe done !")
+
 N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 temperature = 0.1
 batch_size = 64 
 labels = []
 samples = []
-epochs = 1 
+epochs = 15 
 lamda = 1.0
 running_times = 10
 lr=1e-4
@@ -50,8 +53,12 @@ print(PATH_to_save)
 # Tensorboard
 logger = Log(experiment_name='Pretrain',model_name='self_con',batch_size=batch_size,lr=lr)
 
-# load datasets 
-train_examples = load_intent_examples(train_file_path)
+# combine all dataset
+data = combine() 
+print("Combine dataset done !:",len(data.get_examples()))
+
+# load all datasets 
+train_examples = data.get_examples()
 """
 structure of this data  [trials] 
 trail -> [dict1,dict2,...,dict#intents]
@@ -59,7 +66,7 @@ every dict -> {'task':'lable name','examples':[text1,text2,..,textN]}
 """
 sampled_tasks = [sample(N, train_examples) for i in range(T)]
 
-embedding = SimCSE('cuda:3') 
+embedding = SimCSE('cuda:1') 
 sim = Similarity(temperature)
 train_loader = SenLoader(sampled_tasks)
 data  = train_loader.get_data()
@@ -71,6 +78,9 @@ for i in range(len(data)):
 optimizer= AdamW(embedding.parameters(), lr=lr)
 train_data = CustomTextDataset(labels,samples)  
 train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
+
+print("DataLoader Done !")
+
 """
  Todo : Programming:  Training 
   1) combined all datasets of intents
@@ -132,9 +142,10 @@ for epoch in range(epochs):
             running_loss_2 = 0.0
             logger.close()
             model = embedding.get_model()  
-            print('Finished Training')
-            torch.save(model.state_dict(),PATH_to_save)
-            print("Saving Done !")
+           
+print('Finished Training')
+torch.save(model.state_dict(),PATH_to_save)
+print("Saving Done !")
 
 
         
