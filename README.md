@@ -7,9 +7,9 @@
 
 #### Todo 
    - [ ] Pre-train Process
-     - [ ] Preprocess 
-       - [ ] combined intent datasets without test sets in the contrastive pre-training
-       - [ ] remove utterances with less than five tokens
+     - [x ] Preprocess 
+       - [x] combined intent datasets without test sets in the contrastive pre-training
+       - [x] remove utterances with less than five tokens
        - [x] create positive and negative pairs 
        
      - [ ] create loss stage 1
