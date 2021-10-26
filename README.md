@@ -7,7 +7,7 @@
 
 #### Todo 
    - [ ] Pre-train Process
-     - [x ] Preprocess 
+     - [x] Preprocess 
        - [x] combined intent datasets without test sets in the contrastive pre-training
        - [x] remove utterances with less than five tokens
        - [x] create positive and negative pairs 
@@ -23,7 +23,7 @@
    - [x] Training on Containner 
    - [x] push trainning history to tensorboard
 
-## Running on Remote Server container
+## Using Tensorboard on Remote Server container
 
 
  1. map the remote port to a local port run on local machine
@@ -56,6 +56,28 @@ tensorboard dev upload --logdir runs
      writer.close()
  
      ```
+## Build container on exist image
+
+1. build container
+
+```bash
+docker run --name containner_name -d -v /home/corse/st121xxx/thesis:/root/thesis  -it --shm-size=2G -p 2008:22 -p 2021:8888 --gpus all docker_img_name 
+```
+
+2. Go from remote server to container directly
+
+```bash
+docker exec -it [container name] bash
+```
+
+3. change authorize_keys
+
+4. testing foward port 
+
+```bash
+ssh root@localhost -p [port]
+```
+
 
 
 ### example of readme 

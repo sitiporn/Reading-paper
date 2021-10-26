@@ -65,8 +65,8 @@ trail -> [dict1,dict2,...,dict#intents]
 every dict -> {'task':'lable name','examples':[text1,text2,..,textN]}
 """
 sampled_tasks = [sample(N, train_examples) for i in range(T)]
-
-embedding = SimCSE('cuda:1') 
+print("len of examples",len(sampled_tasks[0]))
+embedding = SimCSE('cuda:2') 
 sim = Similarity(temperature)
 train_loader = SenLoader(sampled_tasks)
 data  = train_loader.get_data()

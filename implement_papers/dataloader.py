@@ -52,7 +52,8 @@ def sample(N, examples):
         # if they have label in list append sample into the class 
 
         if len(tokenizer(e.text)['input_ids']) <=7:
-            print(e.text)  
+            #print(e.text)  
+            continue
             
         if e.label in labels:
             labels[e.label].append(e.text)
