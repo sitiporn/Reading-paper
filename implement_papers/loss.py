@@ -13,7 +13,7 @@ from torch.autograd import Variable
 from transformers import BertModel, BertConfig
 from transformers import BertTokenizer, BertForMaskedLM
 from transformers import RobertaConfig, RobertaModel
-from transformers import RobertaTokenizer
+from transformers import RobertaTokenizer, RobertaForMaskedLM
 
 class Similarity(nn.Module):
     """
@@ -40,7 +40,7 @@ class SimCSE(object):
             self.model = AutoModel.from_pretrained('roberta-base')
         else:
             self.config = RobertaConfig()
-            self.model = RobertaModel(self.config)
+            self.model = RobertaForMaskedLM(self.config)
 
 
         self.tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
@@ -80,11 +80,15 @@ class SimCSE(object):
             print("Before tokenize",sentence)
 
         inputs = self.tokenizer(sentence,padding=True,truncation=True,return_tensors="pt")
-        labels = inputs.input_ids.detach().clone()
-        
+       
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
-        labels = {k: v.to(self.device) for k, v in labels.items()}
         
+        labels = inputs['input_ids'].detach().clone()
+        labels = labels.to(self.device)
+        
+
+       
+                
         if debug== True: 
             print("Input2:",inputs)
             print("inputs.keys()",inputs.keys())
@@ -106,7 +110,9 @@ class SimCSE(object):
              
 
         # Encode to get hi the representation of ui  
-        outputs = self.model(**inputs,labels=labels)
+        print("inputs :",inputs["input_ids"].shape)
+        print("labels :",labels.shape)
+        outputs = self.model(**inputs,labels=labels,output_hidden_states=True)
 
         # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
         

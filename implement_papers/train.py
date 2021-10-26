@@ -50,6 +50,7 @@ running_times = 10
 lr=1e-4
 
 print(PATH_to_save)
+
 # Tensorboard
 logger = Log(experiment_name='Pretrain',model_name='self_con',batch_size=batch_size,lr=lr)
 
@@ -66,7 +67,7 @@ every dict -> {'task':'lable name','examples':[text1,text2,..,textN]}
 """
 sampled_tasks = [sample(N, train_examples) for i in range(T)]
 print("len of examples",len(sampled_tasks[0]))
-embedding = SimCSE('cuda:2') 
+embedding = SimCSE('cuda:0') 
 sim = Similarity(temperature)
 train_loader = SenLoader(sampled_tasks)
 data  = train_loader.get_data()
@@ -142,7 +143,9 @@ for epoch in range(epochs):
             running_loss_2 = 0.0
             logger.close()
             model = embedding.get_model()  
-           
+          
+
+
 print('Finished Training')
 torch.save(model.state_dict(),PATH_to_save)
 print("Saving Done !")
