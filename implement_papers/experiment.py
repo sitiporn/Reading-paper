@@ -7,25 +7,43 @@ from transformers import RobertaTokenizer, RobertaForMaskedLM
 from transformers import RobertaConfig
 
 
+# config
 T = 1
 N = 100
+device = 'cuda:1'
+batch_size = 64
+
+
+# collectors
 labels = []
 samples = []
+
+
 # combine all datasets
 data = combine()
-batch_size = 64
 training_examples = data.get_examples()
-#print(type(training_examples))
-#print(len(training_examples))
-#print(type(training_examples[0]))
-
 sample_tasks = [sample(N,training_examples) for i in range(T)]
 
+# Load sentence
 train_loader = SenLoader(sample_tasks)
 data = train_loader.get_data()
+
+
+# Load model
 tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
 config = RobertaConfig()
+config.vocab_size = 50265 
+print("config.vocab_size:",config.vocab_size)
+print(dir(config.vocab_size))
 model = RobertaForMaskedLM(config) 
+#model = model.to(device)
+#print(dir(tokenizer))
+# change vocab size input of Architecture
+'''
+model.roberta.embeddings.word_embeddings = nn.Embedding(50265, 768, padding_idx=1)
+model.lm_head.decoder = nn.Linear(in_features=768, out_features=50265, bias=True)
+'''
+# Training 
 
 for i in range(len(data)):
     samples.append(data[i].text_a)
@@ -38,61 +56,25 @@ for (idx,batch) in enumerate(train_loader):
 
      print(len(batch['Class']))
      print(len(batch['Text']))
-    
-     #outputs = model(**inputs,labels=labels,output_hidden_states=True)
-
-
-
-
-'''
-print(type(data))
-print("len(data):",len(data))
-print(type(data[0]))
-
-for i in range(len(data)):
-     print(data[i].text_a)
-     print(data[i].label)
-
-     if i == 5:
-         break
-
-print(type(sample_tasks))
- 
-print(len(sample_tasks[0][0]))
-print(len(sample_tasks[0][1]))
-print(type(sample_tasks[0][0]))
-print(
-#print(type(sample_tasks[0]))
-
-
-device = 'cuda:1' 
-
-
-
-
-
-model = RobertaForMaskedLM.from_pretrained('roberta-base')
-inputs = tokenizer("The capital of France is Paris", return_tensors="pt")
-
-model = model.to(device)
-
-
-labels = inputs.input_ids.detach().clone()
-inputs = {k: v.to(device) for k, v in inputs.items()}
-labels = labels.to(device)
-    
-
-
-print(inputs.items())
-print(inputs.keys())
-print(dir(inputs))
-outputs = model(**inputs, labels=labels,output_hidden_states=True)
-
-print(len(outputs.hidden_states))
-print(len(outputs.hidden_states[12]))
-prediction_logits = outputs.logits
-
-'''
+     sentence = batch['Text']   
+     inputs = tokenizer(sentence,padding=True,truncation=True,return_tensors="pt")
+     #inputs = {k: v.to(device) for k, v in inputs.items()}
+     labels = inputs['input_ids'].detach().clone()
+     #labels = labels.to(device)
+     print(torch.max(inputs['input_ids']))
+     print(torch.min(inputs['input_ids']))
+     #print(labels)
+     '''
+     bugs : index of ranges
+      L check embedding_dim
+      L input_ids may more than vacab index  
+     '''
+     outputs = model(**inputs,labels=labels,output_hidden_states=True)
+     #print(model.roberta.embeddings.word_embeddings.weight.shape)
+     #print(len(tokenizer))
+     #print(model.eval())
+     
+     break
 
 
 
