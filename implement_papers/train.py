@@ -1,6 +1,5 @@
 import torch
 import urllib
-
 import os 
 from torch.utils.tensorboard import SummaryWriter 
 from pytorch_pretrained_bert import BertTokenizer, BertModel, BertForMaskedLM
@@ -32,27 +31,22 @@ now = datetime.now()
 dt_str = now.strftime("%d_%m_%Y_%H:%M")
 
 # config
-train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
-
-PATH_to_save = f'../../models/encoder_net{dt_str}.pth'
-
-print("Read path to read and path to safe done !")
-
 N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 temperature = 0.1
-batch_size = 64 
+batch_size = 32 
 labels = []
 samples = []
 epochs = 15 
 lamda = 1.0
 running_times = 10
-lr=1e-4
+lr=1e-5
+model_name='roberta-base'
 
-print(PATH_to_save)
+train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
 
 # Tensorboard
-logger = Log(experiment_name='Pretrain',model_name='self_con',batch_size=batch_size,lr=lr)
+logger = Log(experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr)
 
 # combine all dataset
 data = combine() 
@@ -67,7 +61,7 @@ every dict -> {'task':'lable name','examples':[text1,text2,..,textN]}
 """
 sampled_tasks = [sample(N, train_examples) for i in range(T)]
 print("len of examples",len(sampled_tasks[0]))
-embedding = SimCSE('cuda:0') 
+embedding = SimCSE(device='cuda:1',model_name=model_name) 
 sim = Similarity(temperature)
 train_loader = SenLoader(sampled_tasks)
 data  = train_loader.get_data()
@@ -143,7 +137,12 @@ for epoch in range(epochs):
             running_loss_2 = 0.0
             logger.close()
             model = embedding.get_model()  
-          
+
+        
+    
+    PATH_to_save = f'../../models/{model_name}_epoch{epoch}_B={batch_size}_lr={lr}_{dt_str}.pth'
+    torch.save(model.state_dict(),PATH_to_save)    
+    print("save !:",PATH_to_save)
 
 
 print('Finished Training')

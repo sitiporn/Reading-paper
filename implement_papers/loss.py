@@ -11,7 +11,7 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 from torch.autograd import Variable
 from transformers import BertModel, BertConfig
-from transformers import BertTokenizer, BertForMaskedLM
+from transformers import BertTokenizer, BertForMaskedLM, BertConfig
 from transformers import RobertaConfig, RobertaModel
 from transformers import RobertaTokenizer, RobertaForMaskedLM
 
@@ -34,21 +34,34 @@ class SimCSE(object):
     class for embeddings sentence by using BERT 
 
     """
-    def __init__(self,device,pretrain:bool = False,hidden_state:bool = True):
+    def __init__(self,device,pretrain:bool = False,hidden_state_flag:bool = True,model_name:str='roberta-base'):
 
         if pretrain == True: 
-            self.model = AutoModel.from_pretrained('roberta-base')
+            self.model = AutoModel.from_pretrained(model_name)
         else:
-            self.config = RobertaConfig()
-            self.model = RobertaForMaskedLM(self.config)
+            if model_name == 'roberta-base':
+                
+                self.config = RobertaConfig()
+                self.config.vocab_size = 50265 
+                self.model = RobertaForMaskedLM(self.config)
+
+                self.tokenizer = RobertaTokenizer.from_pretrained(model_name)
+             
+            if model_name == 'bert-base':
+                self.config = BertConfig() 
+                self.model = BertForMaskedLM(self.config)
+                self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
 
-        self.tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
+        print("Vocab size:",self.config.vocab_size)
+  
+
         self.device = device
         self.model = self.model.to(self.device)
         self.model.train()
-        self.hidden_state = hidden_state
-    
+        self.hidden_state_flag = hidden_state_flag
+        
+         
     def parameters(self):
         return self.model.parameters()
 
@@ -110,13 +123,11 @@ class SimCSE(object):
              
 
         # Encode to get hi the representation of ui  
-        print("inputs :",inputs["input_ids"].shape)
-        print("labels :",labels.shape)
-        outputs = self.model(**inputs,labels=labels,output_hidden_states=True)
+        outputs = self.model(**inputs,labels=labels,output_hidden_states=self.hidden_state_flag)
 
         # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
         
-        hidden_state = outputs.hidden_state
+        hidden_state = outputs.hidden_states 
         hidden_state = hidden_state[12]
        
         # (batch_size, sequence_length, hidden_size)
@@ -181,3 +192,24 @@ def mask_langauge_loss(M):
 
     return -1 * torch.sum(cost)/ M
 
+def survised_contrasive_loss(h,h_bar,hj_bar,h_3d,temp,T):
+    """
+    5- shot 
+    10 - shot
+    
+    pos_pair - two utterances from the same class
+    neg_pair - two utterances across different class  
+    T - number of pairs from the same classes in batch
+    lamda_p - weight hyperparameters
+
+    loss_stage2 =   
+    """
+    sim = Similarity(temp)
+    pos_sim = torch.exp(sim(h,h_bar))
+    neg_sim = torch.exp(sim(h_3d,hj_bar))
+
+    
+    loss_stage2 = ls_cl + (lamda)* intent_loss
+
+
+    return loss_stage2
