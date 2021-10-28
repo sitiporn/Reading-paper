@@ -192,24 +192,50 @@ def mask_langauge_loss(M):
 
     return -1 * torch.sum(cost)/ M
 
-def survised_contrasive_loss(h,h_bar,hj_bar,h_3d,temp,T):
+def survised_contrasive_loss(h,h_bar,hj_bar,h_3d,temp,T)->Union[ndarray, Tensor]:
     """
     5- shot 
     10 - shot
+   
+    T - number of pairs from the same classes in batch
+   
+    each batch
+    i - class i
+    T = sum_i(N_i-1)
     
     pos_pair - two utterances from the same class
-    neg_pair - two utterances across different class  
-    T - number of pairs from the same classes in batch
-    lamda_p - weight hyperparameters
+    
+    * remark previous work treat the utterance and itself as pos_pair
 
-    loss_stage2 =   
+    neg_pair - two utterances across different class  
+   
+        loss_stage2   
     """
     sim = Similarity(temp)
     pos_sim = torch.exp(sim(h,h_bar))
     neg_sim = torch.exp(sim(h_3d,hj_bar))
 
     
-    loss_stage2 = ls_cl + (lamda)* intent_loss
 
 
-    return loss_stage2
+    return s_cl
+
+
+def intent_classification_loss()->Union[ndarray, Tensor]:
+   
+    """
+    i - ith sentence
+    j - intent classes
+    C - the number of class
+    N - the number of intents
+
+    P(Cj|ui)  -  probability of sentence i-th to be j-th class
+    """
+
+
+
+    intent_loss = None
+    
+
+
+    return intent_loss 

@@ -11,18 +11,24 @@
        - [x] combined intent datasets without test sets in the contrastive pre-training
        - [x] remove utterances with less than five tokens
        - [x] create positive and negative pairs 
+    
+      - [x]  Traning bert base on Container
+      - [ ]  Training roberta base on Container
+      - [x]  push trainning history to tensorboard
+
        
      - [ ] create loss stage 1
        - [x] self supervised contrastive loss
        - [x] mask language modeling loss 
 
    - [ ] Fine Tunning 
-     - [ ] 5 shot 
-     - [ ] 10 shot
+     - [ ] Create positive and negative pairs 
+     - [ ] Create Supervised Contrasive learning loss
+     - [ ] Create Intent Classification loss
+     - [ ] label smoothing 
+     - [ ] Training 5 shot and 10 shot
 
-   - [x] Training on Containner 
-   - [x] push trainning history to tensorboard
-
+   
 ## Using Tensorboard on Remote Server container
 
 
