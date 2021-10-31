@@ -211,7 +211,6 @@ def survised_contrasive_loss(h,h_bar,hj_bar,h_3d,temp,T)->Union[ndarray, Tensor]
    
         loss_stage2   
     """
-    
     sim = Similarity(temp)
     pos_sim = torch.exp(sim(h,h_j))
     neg_sim = torch.exp(sim(h_i,h_n))
@@ -229,21 +228,8 @@ def intent_classification_loss()->Union[ndarray, Tensor]:
     j - intent classes
     C - the number of class
     N - the number of intents
-    
+
     P(Cj|ui)  -  probability of sentence i-th to be j-th class
-    inputs_embeds - (batch_size, sequence_length, hidden_size)  
-    ui - (1,sequence_length,hidden_size)
-    feature x1-xn ; h0 - hn
-    
-    procedure
-     1. each j P(Cj|ui) by i to N = 
-       
-       P(Y|X) = p(x|Y) p(y) / p(x)
-
-       P(Cj|ui) = P(Cj,ui) / P(ui)
-       P(Cj,ui) =    
-
-     2. sum up along class j
     """
 
 

@@ -41,7 +41,7 @@ epochs = 15
 lamda = 1.0
 running_times = 10
 lr=1e-5
-model_name='roberta-base'
+model_name= "roberta-base" 
 
 train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
 
@@ -93,15 +93,8 @@ for epoch in range(epochs):
 
     for (idx, batch) in enumerate(train_loader):
 
-        # Print the 'text' data of the batch
-        #print(idx, 'data: ', batch, '\n')
-        
-        
-        #print(dir(batch))
-        # get hidden representation from ui
-        # Todo : proof of emebedding
-        # Zero parameter gradients
         optimizer.zero_grad()
+        
         # foward
         h, _ = embedding.encode(batch['Text'])
         h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True)
