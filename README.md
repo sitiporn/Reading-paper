@@ -17,15 +17,17 @@
       - [x]  push trainning history to tensorboard
 
        
-     - [ ] create loss stage 1
+     - [x] create loss stage 1
        - [x] self supervised contrastive loss
        - [x] mask language modeling loss 
 
    - [ ] Fine Tunning 
+     - [ ] Convert example to feature  to get label distribution and train feature
+     - [ ] label smoothing 
+     - [ ] Intent Predict probabilty loss
      - [ ] Create positive and negative pairs 
      - [ ] Create Supervised Contrasive learning loss
      - [ ] Create Intent Classification loss
-     - [ ] label smoothing 
      - [ ] Training 5 shot and 10 shot
 
    

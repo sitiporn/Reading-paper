@@ -82,13 +82,6 @@ class SimCSE(object):
        #with torch.no_grad():
         total_batch = len(sentence) // batch_size + (1 if len(sentence) % batch_size > 0 else 0)
 
-        """
-        print(total_batch)
-        print(sentence)
-        print(type(sentence))
-        print(dir(self.tokenizer))
-        """
-        #assert str == type(sentence[0])
         if debug == True:
             print("Before tokenize",sentence)
 
@@ -230,24 +223,21 @@ def intent_classification_loss()->Union[ndarray, Tensor]:
     C - the number of class
     N - the number of intents
     
+    p(c|u) = softmax(W h + b) ∈ R
+    
     P(Cj|ui)  -  probability of sentence i-th to be j-th class
+
     inputs_embeds - (batch_size, sequence_length, hidden_size)  
-    ui - (1,sequence_length,hidden_size)
-    feature x1-xn ; h0 - hn
     
     procedure
-     1. each j P(Cj|ui) by i to N = 
-       
-       P(Y|X) = p(x|Y) p(y) / p(x)
 
-       P(Cj|ui) = P(Cj,ui) / P(ui)
-       P(Cj,ui) =    
-
+     1. each j P(Cj|ui) by i to N 
      2. sum up along class j
+    
     """
 
 
-
+    
     intent_loss = None
     
 
