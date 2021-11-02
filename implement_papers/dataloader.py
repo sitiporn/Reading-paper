@@ -161,7 +161,7 @@ def create_pair_sample(h_bar,debug:bool=False):
 
 class combine:
 
-    def __init__(self,dataset_name=None):
+    def __init__(self,dataset_name:str=None,few_shot:str=None):
       
         #params
         self.single_dataset = False
@@ -177,14 +177,19 @@ class combine:
             self.datasets = ['ATIS','BANKING77','CLINC150','HWU64','SNIPS']
 
 
+        if few_shot is not None: 
 
+            self.num_shot = few_shot
         
+        else:
+            
+            self.num_shot = 'train'
         
     def get_examples(self): 
 
         combine = [] 
         for data in self.datasets:
-            train_file_path = f'../../datasets/Few-Shot-Intent-Detection/Datasets/{data}/train/'
+            train_file_path = f'../../datasets/Few-Shot-Intent-Detection/Datasets/{data}/{self.num_shot}/'
             train_examples = load_intent_examples(train_file_path)
             combine.append(train_examples)
 

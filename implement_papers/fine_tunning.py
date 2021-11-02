@@ -29,7 +29,7 @@ now = datetime.now()
 dt_str = now.strftime("%d_%m_%Y_%H:%M")
 
 # config
-N = 10  # number of samples per class (100 full-shot)
+N = 5  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 temperature = 0.1
 batch_size = 32 
@@ -57,7 +57,7 @@ print("Loading Pretain Model done!")
 logger = Log(experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr)
 
 # get single dataset  
-data = combine('CLINC150') 
+data = combine('CLINC150','train_5') 
 
 print("len of datasets! :",len(data.get_examples()))
 
@@ -65,7 +65,12 @@ print("len of datasets! :",len(data.get_examples()))
 train_examples = data.get_examples()
 
 sampled_tasks = [sample(N, train_examples) for i in range(T)]
+
 print("the numbers of intents",len(sampled_tasks[0]))
+print(sampled_tasks[0][0])
+print(sampled_tasks[0][1]['examples']) 
+print("Number of examples per class: ",len(sampled_tasks[0][1]['examples']))
+
 train_loader = SenLoader(sampled_tasks)
 data = train_loader.get_data()
 
@@ -92,14 +97,10 @@ for epoch in range(epochs):
         print(len(batch['Class']))
         print(len(batch['Text']))
         # foward
-        #h, _ = embedding.encode(batch['Text'])
+        h, _ = embedding.encode(batch['Text'])
 
-        print("break")
-        break
-        """ 
         h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True)
         hj_bar = create_pair_sample(h_bar,debug=False)    
         hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
         hj_bar = torch.stack(hj_bar)
 
-        """
