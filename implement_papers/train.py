@@ -76,13 +76,7 @@ train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True,num_work
 
 print("DataLoader Done !")
 
-"""
- Todo : Programming:  Training 
-  1) combined all datasets of intents
-  2) drop sentence that less than one sentences 
-  3) Trainnig BERT from scatch -> pretrain
-  4) create mask language loss  
-"""
+
 running_time = 0
 
 for epoch in range(epochs):

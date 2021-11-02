@@ -35,7 +35,7 @@ class SimCSE(nn.Module):
 
     """
     def __init__(self,device,pretrain:bool = False,hidden_state_flag:bool = True,model_name:str='roberta-base'): 
-        super(SimCSE,self).__init__()
+        super(SimCSE, self).__init__()
         if pretrain == True: 
             self.model = AutoModel.from_pretrained(model_name)
         else:
