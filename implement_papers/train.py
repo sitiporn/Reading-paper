@@ -34,13 +34,13 @@ dt_str = now.strftime("%d_%m_%Y_%H:%M")
 N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 temperature = 0.1
-batch_size = 32 
+batch_size = 16
 labels = []
 samples = []
 epochs = 15 
 lamda = 1.0
 running_times = 10
-lr=1e-5
+lr=5e-6
 model_name= "roberta-base" 
 
 train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
@@ -61,7 +61,7 @@ every dict -> {'task':'lable name','examples':[text1,text2,..,textN]}
 """
 sampled_tasks = [sample(N, train_examples) for i in range(T)]
 print("len of examples",len(sampled_tasks[0]))
-embedding = SimCSE(device='cuda:1',model_name=model_name) 
+embedding = SimCSE(device='cuda:2',model_name=model_name) 
 sim = Similarity(temperature)
 train_loader = SenLoader(sampled_tasks)
 data  = train_loader.get_data()
@@ -72,7 +72,7 @@ for i in range(len(data)):
 
 optimizer= AdamW(embedding.parameters(), lr=lr)
 train_data = CustomTextDataset(labels,samples)  
-train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
+train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True,num_workers=8)
 
 print("DataLoader Done !")
 
@@ -117,17 +117,17 @@ for epoch in range(epochs):
         optimizer.step()
 
         # print statistics
-        running_loss += loss_stage1
-        running_loss_1 += loss_cl
-        running_loss_2 += loss_lml
-        
+        running_loss += loss_stage1.item()
+       # running_loss_1 += loss_cl.item()
+       # running_loss_2 += loss_lml.item()
+        torch.cuda.empty_cache() 
+         
         if idx % running_times == running_times-1: # print every 50 mini-batches
             running_time += 1
             logger.logging('Loss/Train',running_loss,running_time)
-            print('[%d, %5d] loss_total: %.3f loss_contrasive:  %.3f loss_language: %.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_1/running_times,running_loss_2/running_times))
+            #print('[%d, %5d] loss_total: %.3f loss_contrasive:  %.3f loss_language: %.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_1/running_times,running_loss_2/running_times))
+            print('[%d, %5d] loss_total: %.3f' %(epoch+1,idx+1,running_loss/running_times))
             running_loss = 0.0
-            running_loss_1 = 0.0 
-            running_loss_2 = 0.0
             logger.close()
             model = embedding.get_model()  
 

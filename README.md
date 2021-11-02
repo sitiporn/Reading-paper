@@ -6,14 +6,14 @@
 ## Implementation 
 
 #### Todo 
-   - [ ] Pre-train Process
+   - [x] Pre-train Process
      - [x] Preprocess 
        - [x] combined intent datasets without test sets in the contrastive pre-training
        - [x] remove utterances with less than five tokens
        - [x] create positive and negative pairs 
     
       - [x]  Traning bert base on Container
-      - [ ]  Training roberta base on Container
+      - [x]  Training roberta base on Container
       - [x]  push trainning history to tensorboard
 
        
