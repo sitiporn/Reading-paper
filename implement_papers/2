@@ -189,13 +189,9 @@ def create_supervised_pair(h,labels,debug:bool=False):
     skip -> [12, 24, 13, 25]
     
     """
-    # params
-    h_j = []
     h_j = []
     skips = []
-    # the numbers of pairs sample
-    T = 0
-    
+    T = 
     for idx, label in enumerate(labels): 
 
         if idx in skips:
@@ -208,15 +204,12 @@ def create_supervised_pair(h,labels,debug:bool=False):
         if np.count_nonzero(mask) >= 1:
             
             idxs_arr = np.arange(len(labels))
-            h_i.append(h[idx,:,:])
             h_j.append(h[mask,:,:])
-
 
             for val in idxs_arr[mask]: 
                 skips.append(val)
-            # add pair numbers of samples 
-
-            T+= np.count_nonzero(mask)
+        
+        
             
             if debug == True:
                 
@@ -236,7 +229,7 @@ def create_supervised_pair(h,labels,debug:bool=False):
                 print("----------------")
        
 
-    return T, h_i, h_j
+    return pos_pair
 
 
 class combine:

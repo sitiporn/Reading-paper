@@ -105,7 +105,8 @@ for epoch in range(epochs):
         # (batch_size, seq_len, hidhen_dim) 
 
         h, _ = embedding.encode(batch['Text'])
-        create_supervised_pair(h,batch['Class'],debug=True)
+        
+        T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=True)
 
         
 
