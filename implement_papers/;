@@ -21,7 +21,7 @@ from transformers import AdamW
 from torch.autograd import Variable
 from logger import Log
 from dataloader import combine
-from dataloader import create_supervised_pair
+
 
 
 # get time 
@@ -94,22 +94,11 @@ for epoch in range(epochs):
     
 
         optimizer.zero_grad()
-        """
-        print("size of all data :",len(batch['Text']))
-        print("the number of unique class: ",len(np.unique(batch['Class'])))
+        print(len(batch['Class']))
+        print(len(np.unique(batch['Class'])))
         #print(len(batch['Text']))
         # foward
-        """
-    
-
-        # (batch_size, seq_len, hidhen_dim) 
-
         h, _ = embedding.encode(batch['Text'])
-        create_supervised_pair(h,batch['Class'],debug=True)
-
-        
-
-
         # Todo
         # create positive pair 
         # hi, hj

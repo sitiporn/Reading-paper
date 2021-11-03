@@ -159,6 +159,78 @@ def create_pair_sample(h_bar,debug:bool=False):
         
     return h_neg_bar
 
+def create_supervised_pair(h,labels,debug:bool=False):
+    
+
+    """
+     h - (batch_size, seq_len, hidden_dim)
+     label - (batch_size) 
+     create possitive pair 
+     eg.  a, b, c, d, e
+         
+         0 : a, b 
+         1 : c
+         2 : d,e
+
+
+     check tags
+     2 tensor 
+     [a,b,c,d,e] -> masking [[b],[0],[0],[e],[0]]
+    idx 0: 
+       [0,  0] 
+       [12, 24] -> same class 
+
+    skip -> 12, 24  
+    
+    idx 2:
+       [2, 2]
+       [13, 25] -> same class
+    
+    skip -> [12, 24, 13, 25]
+    
+    """
+    pos_pair = []
+    skips = []
+    for idx, label in enumerate(labels): 
+
+        if idx in skips:
+            continue
+
+        mask = label == np.array(labels)
+        mask[idx] = False 
+        
+        # check is they have pos pair 
+        if np.count_nonzero(mask) >= 1:
+            
+            idxs_arr = np.arange(len(labels))
+            pos_pair.append(h[mask,:,:])
+
+            for val in idxs_arr[mask]: 
+                skips.append(val)
+        
+        
+            
+            if debug == True:
+                
+                #if np.count_nonzero(mask) >= 2:
+                print("idx:",idx)
+                print("current skips :",idxs_arr[mask])
+                print("current labels :",label)
+
+                label_arr = np.array(labels)
+
+                print("pair class :",label_arr[mask])
+                print("mask:", mask)
+                print("count:",len(mask))
+                print("numbers of pairs:",np.count_nonzero(mask))
+                
+               # pos_pair.append(h[mask,:,:])
+                print("----------------")
+       
+
+    return pos_pair
+
+
 class combine:
 
     def __init__(self,dataset_name:str=None,few_shot:str=None):
