@@ -167,6 +167,9 @@ def contrasive_loss(h,h_bar,hj_bar,h_3d,temp,N):
 
     return torch.sum(cost)/N 
 
+
+
+
 def mask_langauge_loss(M):
     
     """
@@ -179,7 +182,7 @@ def mask_langauge_loss(M):
 
     return -1 * torch.sum(cost)/ M
 
-def survised_contrasive_loss(h,h_bar,hj_bar,h_3d,temp,T)->Union[ndarray, Tensor]:
+def supervised_contrasive_loss(h_i,h_j,h_n,T,temp)->Union[ndarray, Tensor]:
     """
     5- shot 
     10 - shot
@@ -200,13 +203,16 @@ def survised_contrasive_loss(h,h_bar,hj_bar,h_3d,temp,T)->Union[ndarray, Tensor]
     """
     
     sim = Similarity(temp)
-    pos_sim = torch.exp(sim(h,h_j))
+    
+    
+    pos_sim = torch.exp(sim(h_i,h_j))
     neg_sim = torch.exp(sim(h_i,h_n))
-    
-    
+   
+    print(pos_sim) 
+    print(neg_sim)
+   
+    return pos_sim
 
-
-    return s_cl
 
 
 def intent_classification_loss()->Union[ndarray, Tensor]:

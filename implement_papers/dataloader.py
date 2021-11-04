@@ -190,11 +190,10 @@ def create_supervised_pair(h,labels,debug:bool=False):
     
     """
     # params
-    h_j = []
+    h_i = []
     h_j = []
     skips = []
-    # the numbers of pairs sample
-    T = 0
+    T = 0 # the numbers of pairs sample
     
     for idx, label in enumerate(labels): 
 
@@ -208,7 +207,15 @@ def create_supervised_pair(h,labels,debug:bool=False):
         if np.count_nonzero(mask) >= 1:
             
             idxs_arr = np.arange(len(labels))
-            h_i.append(h[idx,:,:])
+            # each h_i and h_j :  (seq_len, hidden_dim)
+            
+            h_i_tensor = h[idx,:,:]
+            h_i_tensor = h_i_tensor[None,:,:]
+            #h_i_tensor = h_i_tensor.repeat(np.count_nonzero(mask),1,1)
+            print("h_i idx :",h_i_tensor.shape)
+            print("h_j idx :",h[mask,:,:].shape)
+            # (seq_len,hidden_dim) , (#pairs,seq_len, hidden_dim)
+            h_i.append(h_i_tensor)
             h_j.append(h[mask,:,:])
 
 
@@ -231,14 +238,21 @@ def create_supervised_pair(h,labels,debug:bool=False):
                 print("mask:", mask)
                 print("count:",len(mask))
                 print("numbers of pairs:",np.count_nonzero(mask))
-                
-               # pos_pair.append(h[mask,:,:])
-                print("----------------")
-       
+           
 
-    return T, h_i, h_j
+    
+    if h_i:
+        
+        h_i = torch.cat(h_i,dim=0)
+        h_j = torch.cat(h_j,dim=0) 
+        print("concat list of h_i:",h_i.shape)
+        print("concat list of h_j:",h_j.shape)
 
+        return T, h_i, h_j
+    else:
 
+        return T, None, None
+        
 class combine:
 
     def __init__(self,dataset_name:str=None,few_shot:str=None):

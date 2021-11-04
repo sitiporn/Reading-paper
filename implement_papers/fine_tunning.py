@@ -22,6 +22,7 @@ from torch.autograd import Variable
 from logger import Log
 from dataloader import combine
 from dataloader import create_supervised_pair
+from loss import supervised_contrasive_loss 
 
 
 # get time 
@@ -40,13 +41,14 @@ lamda = 1.0
 running_times = 10
 lr=1e-5
 model_name='roberta-base'
+run_on = 'cuda:1'
 
 
-embedding = SimCSE(device='cuda:2',model_name=model_name) 
+embedding = SimCSE(device=run_on,model_name=model_name) 
 # loading model 
 select_model = 'roberta-base_epoch14_B=16_lr=5e-06_01_11_2021_17:17.pth'
 PATH = '../../models/'+ select_model
-checkpoint = torch.load(PATH)
+checkpoint = torch.load(PATH,map_location=run_on)
 #print(checkpoint.keys())
 #print(dir(checkpoint))
 embedding.load_state_dict(checkpoint,strict=False)
@@ -94,24 +96,27 @@ for epoch in range(epochs):
     
 
         optimizer.zero_grad()
-        """
-        print("size of all data :",len(batch['Text']))
-        print("the number of unique class: ",len(np.unique(batch['Class'])))
-        #print(len(batch['Text']))
-        # foward
-        """
     
 
         # (batch_size, seq_len, hidhen_dim) 
 
+        print("batch_id:",idx)
+
         h, _ = embedding.encode(batch['Text'])
         
-        T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=True)
-
+        T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
         
+       #loss_s_cl = 
+        if h_i is not None:
+          
+          print("there is a pair")
+          # loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, temperature) 
+
+        else:
+           print("No pairs:",idx)
+
 
 
         # Todo
         # create positive pair 
         # hi, hj
-        break
