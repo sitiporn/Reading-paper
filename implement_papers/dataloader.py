@@ -211,7 +211,7 @@ def create_supervised_pair(h,labels,debug:bool=False):
             
             h_i_tensor = h[idx,:,:]
             h_i_tensor = h_i_tensor[None,:,:]
-            #h_i_tensor = h_i_tensor.repeat(np.count_nonzero(mask),1,1)
+            h_i_tensor = h_i_tensor.repeat(np.count_nonzero(mask),1,1)
             print("h_i idx :",h_i_tensor.shape)
             print("h_j idx :",h[mask,:,:].shape)
             # (seq_len,hidden_dim) , (#pairs,seq_len, hidden_dim)
