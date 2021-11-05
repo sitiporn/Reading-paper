@@ -241,9 +241,35 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,debug=False)->Union[ndarray, T
    
     return loss_s_cl 
 
+def get_label_dist(samples, train_examples,train=False):
+    
+    """
+    label_list - list of label texts
 
+    """
+    label_map = {samples[0][i]['task']: i for i in range(len(samples[0]))}
 
-def intent_classification_loss()->Union[ndarray, Tensor]:
+    label_map['cancel'] = 149 
+     
+    label_distribution = torch.FloatTensor(len(label_map)).zero_()
+    
+    for i in range(len(train_examples)):
+        
+        if train_examples[i].label is None:
+            label_id = -1
+        else:
+            print(train_examples[i].label)
+            label_id = label_map[train_examples[i].label]
+
+        if train:
+            label_distribution[label_id] += 1.0 
+
+        if train:
+            label_distribution = label_distribution / label_distribution.sum()
+     
+    return label_distribution
+
+def intent_classification_loss(label_ids, logits, label_distribution, coeff, device)->Union[ndarray, Tensor]:
    
     """
     i - ith sentence
@@ -263,6 +289,7 @@ def intent_classification_loss()->Union[ndarray, Tensor]:
     target_distribution = torch.FloatTensor(logits.size()).zero_()
     for i in range(label_ids.size(0)):
         target_distribution[i, label_ids[i]] = 1.0
+
     target_distribution = coeff * label_distribution.unsqueeze(0) + (1.0 - coeff) * target_distribution
     target_distribution = target_distribution.to(device)
 

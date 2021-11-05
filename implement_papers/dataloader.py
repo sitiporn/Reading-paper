@@ -49,10 +49,9 @@ def sample(N, examples):
     # check whether example's labels already exist or not 
      
     for e in examples:
-        # if they have label in list append sample into the class 
-
+        
+        # remove less than five token from sample
         if len(tokenizer(e.text)['input_ids']) <=7:
-            #print(e.text)  
             continue
             
         if e.label in labels:

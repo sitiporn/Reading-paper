@@ -23,7 +23,7 @@ from logger import Log
 from dataloader import combine
 from dataloader import create_supervised_pair
 from loss import supervised_contrasive_loss 
-
+from loss import get_label_dist
 
 # get time 
 now = datetime.now()
@@ -73,6 +73,11 @@ print(sampled_tasks[0][0])
 print(sampled_tasks[0][1]['examples']) 
 print("Number of examples per class: ",len(sampled_tasks[0][1]['examples']))
 
+label_distribution = get_label_dist(sampled_tasks,train_examples,train=True)
+
+#print("label_distribution:",label_distribution)
+
+
 train_loader = SenLoader(sampled_tasks)
 data = train_loader.get_data()
 
@@ -116,6 +121,7 @@ for epoch in range(epochs):
 
           loss_stage2 += loss_s_cl.item()
           
+        loss_intent = intent_classification_loss(logits,label_distribution) 
          
         loss_stage2.backward()
         optimizer.step()
