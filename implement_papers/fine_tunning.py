@@ -24,6 +24,7 @@ from dataloader import combine
 from dataloader import create_supervised_pair
 from loss import supervised_contrasive_loss 
 from loss import get_label_dist
+from loss import intent_classification_loss
 
 # get time 
 now = datetime.now()
@@ -42,7 +43,7 @@ running_times = 10
 lr=1e-5
 model_name='roberta-base'
 run_on = 'cuda:1'
-
+coeff = 0.7
 
 embedding = SimCSE(device=run_on,model_name=model_name) 
 # loading model 
@@ -69,9 +70,6 @@ train_examples = data.get_examples()
 sampled_tasks = [sample(N, train_examples) for i in range(T)]
 
 print("the numbers of intents",len(sampled_tasks[0]))
-print(sampled_tasks[0][0])
-print(sampled_tasks[0][1]['examples']) 
-print("Number of examples per class: ",len(sampled_tasks[0][1]['examples']))
 
 label_distribution = get_label_dist(sampled_tasks,train_examples,train=True)
 
@@ -113,16 +111,19 @@ for epoch in range(epochs):
         
         T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
         
-        logits = outputs[0]
-
+        logits = outputs.logits
+        #print("in fine tune logits:",logits.shape)
+        loss_stage2 = 0 
         if h_i is not None:
           
           loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, temperature,debug=False) 
 
           loss_stage2 += loss_s_cl.item()
-          
-        loss_intent = intent_classification_loss(logits,label_distribution) 
-         
+              
+        label_ids = embedding.get_label()
+        loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=coeff, device=run_on)
+        
+        print(loss_intent)          
         loss_stage2.backward()
         optimizer.step()
         running_loss += loss_stage2.item()

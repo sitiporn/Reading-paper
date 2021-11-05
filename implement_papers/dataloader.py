@@ -211,8 +211,8 @@ def create_supervised_pair(h,labels,debug:bool=False):
             h_i_tensor = h[idx,:,:]
             h_i_tensor = h_i_tensor[None,:,:]
             h_i_tensor = h_i_tensor.repeat(np.count_nonzero(mask),1,1)
-            print("h_i idx :",h_i_tensor.shape)
-            print("h_j idx :",h[mask,:,:].shape)
+            #print("h_i idx :",h_i_tensor.shape)
+            #print("h_j idx :",h[mask,:,:].shape)
             # (seq_len,hidden_dim) , (#pairs,seq_len, hidden_dim)
             h_i.append(h_i_tensor)
             h_j.append(h[mask,:,:])
@@ -244,8 +244,6 @@ def create_supervised_pair(h,labels,debug:bool=False):
         
         h_i = torch.cat(h_i,dim=0)
         h_j = torch.cat(h_j,dim=0) 
-        print("concat list of h_i:",h_i.shape)
-        print("concat list of h_j:",h_j.shape)
 
         return T, h_i, h_j
     else:

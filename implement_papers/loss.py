@@ -60,7 +60,7 @@ class SimCSE(nn.Module):
         self.model = self.model.to(self.device)
         self.model.train()
         self.hidden_state_flag = hidden_state_flag
-        
+        self.labels = None  
          
     def parameters(self):
         return self.model.parameters()
@@ -68,6 +68,11 @@ class SimCSE(nn.Module):
     def get_model(self):
         return self.model
 
+    def get_label(self):
+        if self.labels is None:
+            print("is None")
+
+        return self.labels
     def encode(self,sentence:Union[str, List[str]],batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False,masking:bool=True)-> Union[ndarray, Tensor]:
         
         single_sentence = False
@@ -89,8 +94,8 @@ class SimCSE(nn.Module):
        
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
         
-        labels = inputs['input_ids'].detach().clone()
-        labels = labels.to(self.device)
+        self.labels = inputs['input_ids'].detach().clone()
+        self.labels = self.labels.to(self.device)
         
 
        
@@ -116,7 +121,7 @@ class SimCSE(nn.Module):
              
 
         # Encode to get hi the representation of ui  
-        outputs = self.model(**inputs,labels=labels,output_hidden_states=self.hidden_state_flag)
+        outputs = self.model(**inputs,labels=self.labels,output_hidden_states=self.hidden_state_flag)
 
         # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
         
@@ -248,7 +253,8 @@ def get_label_dist(samples, train_examples,train=False):
 
     """
     label_map = {samples[0][i]['task']: i for i in range(len(samples[0]))}
-
+    
+    # Hard code -> refactor later 
     label_map['cancel'] = 149 
      
     label_distribution = torch.FloatTensor(len(label_map)).zero_()
@@ -258,7 +264,7 @@ def get_label_dist(samples, train_examples,train=False):
         if train_examples[i].label is None:
             label_id = -1
         else:
-            print(train_examples[i].label)
+            #print(train_examples[i].label)
             label_id = label_map[train_examples[i].label]
 
         if train:
@@ -285,9 +291,19 @@ def intent_classification_loss(label_ids, logits, label_distribution, coeff, dev
    
     """
     # label smoothing
+     
+    print("label_ids :",label_ids.shape)
+    print("logits:",logits.shape)
+    print("label_distribution",label_distribution.shape)
+
     label_ids = label_ids.cpu()
     target_distribution = torch.FloatTensor(logits.size()).zero_()
+    print("label_ids.size :",label_ids.size())
+    print("target_distribution.shape: ",target_distribution.shape)    
+    
+    # loop through batch_size  
     for i in range(label_ids.size(0)):
+        # shape - (batch_size, seq_len, vocab_size)
         target_distribution[i, label_ids[i]] = 1.0
 
     target_distribution = coeff * label_distribution.unsqueeze(0) + (1.0 - coeff) * target_distribution

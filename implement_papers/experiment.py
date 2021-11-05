@@ -1,11 +1,5 @@
-import numpy as np
+from transformers import RobertaTokenizer
 
-a = np.array([9,7,8,5])
-b = np.arange(a.shape[0])
+tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
+print(tokenizer("Hello world"))
 
-mask = [False, True, False, True]
-
-idx = b[mask]
-
-print("index list :",idx)
-print("value :",a[idx])
