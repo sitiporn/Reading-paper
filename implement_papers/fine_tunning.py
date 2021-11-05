@@ -44,6 +44,10 @@ lr=1e-5
 model_name='roberta-base'
 run_on = 'cuda:1'
 coeff = 0.7
+running_time = 0.0
+
+
+
 
 embedding = SimCSE(device=run_on,model_name=model_name) 
 # loading model 
@@ -57,7 +61,7 @@ print("Loading Pretain Model done!")
 
 #print(dir(embedding))
 # Tensorboard
-logger = Log(experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr)
+logger = Log(experiment_name='FineTune',model_name=model_name,batch_size=batch_size,lr=lr)
 
 # get single dataset  
 data = combine('CLINC150','train_5') 
@@ -105,27 +109,39 @@ for epoch in range(epochs):
 
         # (batch_size, seq_len, hidhen_dim) 
 
-        print("batch_id:",idx)
 
         h, outputs = embedding.encode(batch['Text'])
         
         T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
-        
+        # (batch_size, seq_len, vocab_size) 
         logits = outputs.logits
-        #print("in fine tune logits:",logits.shape)
-        loss_stage2 = 0 
+        logits = logits[:,0,:] 
+        
+        loss_s_cl = 0.0
+       
         if h_i is not None:
           
           loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, temperature,debug=False) 
 
-          loss_stage2 += loss_s_cl.item()
-              
+                       
         label_ids = embedding.get_label()
+       
         loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=coeff, device=run_on)
+       
+        loss_stage2 =   loss_s_cl + (1.0 * loss_intent)
         
-        print(loss_intent)          
+        
+
         loss_stage2.backward()
         optimizer.step()
         running_loss += loss_stage2.item()
 
-
+                
+        if idx % running_times == running_times-1: # print every 50 mini-batches
+            running_time += 1
+            logger.logging('Loss/Train',running_loss,running_time)
+            #print('[%d, %5d] loss_total: %.3f loss_contrasive:  %.3f loss_language: %.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_1/running_times,running_loss_2/running_times))
+            print('[%d, %5d] loss_total: %.3f' %(epoch+1,idx+1,running_loss/running_times))
+            running_loss = 0.0
+            logger.close()
+            model = embedding.get_model()   

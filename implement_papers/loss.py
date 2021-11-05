@@ -292,21 +292,21 @@ def intent_classification_loss(label_ids, logits, label_distribution, coeff, dev
     """
     # label smoothing
      
-    print("label_ids :",label_ids.shape)
-    print("logits:",logits.shape)
-    print("label_distribution",label_distribution.shape)
+    #print("label_ids :",label_ids.shape)
+    #print("logits:",logits.shape)
+    #print("label_distribution",label_distribution.shape)
 
     label_ids = label_ids.cpu()
     target_distribution = torch.FloatTensor(logits.size()).zero_()
-    print("label_ids.size :",label_ids.size())
-    print("target_distribution.shape: ",target_distribution.shape)    
+    #print("label_ids.size :",label_ids.size())
+    #print("target_distribution.shape: ",target_distribution.shape)    
     
     # loop through batch_size  
     for i in range(label_ids.size(0)):
         # shape - (batch_size, seq_len, vocab_size)
         target_distribution[i, label_ids[i]] = 1.0
 
-    target_distribution = coeff * label_distribution.unsqueeze(0) + (1.0 - coeff) * target_distribution
+    #target_distribution = coeff * label_distribution.unsqueeze(0) + (1.0 - coeff) * target_distribution
     target_distribution = target_distribution.to(device)
 
     # KL-div loss
