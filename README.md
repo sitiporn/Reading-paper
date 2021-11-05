@@ -26,7 +26,7 @@
      - [ ] label smoothing 
      - [ ] Intent Predict probabilty loss
      - [x] Create positive and negative pairs 
-     - [ ] Create Supervised Contrasive learning loss
+     - [x] Create Supervised Contrasive learning loss
      - [ ] Create Intent Classification loss
      - [ ] Training 5 shot and 10 shot
 

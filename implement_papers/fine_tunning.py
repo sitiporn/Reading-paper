@@ -110,7 +110,9 @@ for epoch in range(epochs):
         if h_i is not None:
           
           print("there is a pair")
-          loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, temperature) 
+          loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, temperature,debug=False) 
+
+          print("loss_s_cl :",loss_s_cl)
 
         else:
            print("No pairs:",idx)
