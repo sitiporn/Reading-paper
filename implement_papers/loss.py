@@ -209,12 +209,22 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp)->Union[ndarray, Tensor]:
     
     neg_sim  = []
     
-    for idx in range(len(h_i.shape[0]):
+    for idx in range(h_i.shape[0]):
 
-        res = sim(h_i.repeat(h_n.shape[0],1,1),h_n)
+        res = sim(h_i[idx].repeat(h_n.shape[0],1,1),h_n)
+        print("res.shape :",res.shape)
         res = torch.sum(torch.exp(res)) 
+        print("after summing res.shape :",res.shape)
         neg_sim.append(res)
-    
+
+    neg_sim = torch.Tensor(neg_sim)
+    loss_s_cl = torch.log(torch.sum(pos_sim/neg_sim))
+    loss_s_cl = -loss_s_cl / T   
+
+    print("len(neg) :",len(neg_sim))
+    print("pos_sim :",pos_sim.shape)
+    print("loss_s_cl:", loss_s_cl)
+
     
 
    
