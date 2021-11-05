@@ -33,10 +33,10 @@ dt_str = now.strftime("%d_%m_%Y_%H:%M")
 N = 5  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 temperature = 0.1
-batch_size = 32 
+batch_size = 16  
 labels = []
 samples = []
-epochs = 15 
+epochs = 30 
 lamda = 1.0
 running_times = 10
 lr=1e-5
@@ -91,6 +91,8 @@ print("DataLoader Done !")
 for epoch in range(epochs):
 
     running_loss = 0.0
+    running_loss_s_cl = 0.0
+    running_loss_intent = 0.0 
 
     for (idx, batch) in enumerate(train_loader): 
     
@@ -102,23 +104,21 @@ for epoch in range(epochs):
 
         print("batch_id:",idx)
 
-        h, _ = embedding.encode(batch['Text'])
+        h, outputs = embedding.encode(batch['Text'])
         
         T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
         
-       #loss_s_cl = 
+        logits = outputs[0]
+
         if h_i is not None:
           
-          print("there is a pair")
           loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, temperature,debug=False) 
 
-          print("loss_s_cl :",loss_s_cl)
+          loss_stage2 += loss_s_cl.item()
+          
+         
+        loss_stage2.backward()
+        optimizer.step()
+        running_loss += loss_stage2.item()
 
-        else:
-           print("No pairs:",idx)
 
-
-
-        # Todo
-        # create positive pair 
-        # hi, hj

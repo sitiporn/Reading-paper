@@ -257,15 +257,22 @@ def intent_classification_loss()->Union[ndarray, Tensor]:
 
     inputs_embeds - (batch_size, sequence_length, hidden_size)  
    
-     
-    
-    
     """
+    # label smoothing
+    label_ids = label_ids.cpu()
+    target_distribution = torch.FloatTensor(logits.size()).zero_()
+    for i in range(label_ids.size(0)):
+        target_distribution[i, label_ids[i]] = 1.0
+    target_distribution = coeff * label_distribution.unsqueeze(0) + (1.0 - coeff) * target_distribution
+    target_distribution = target_distribution.to(device)
 
+    # KL-div loss
+    prediction = torch.log(torch.softmax(logits, dim=1))
+    loss = F.kl_div(prediction, target_distribution, reduction='mean')
+
+    return loss 
 
     
-    intent_loss = None
     
 
 
-    return intent_loss 
