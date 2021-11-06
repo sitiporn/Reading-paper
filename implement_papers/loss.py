@@ -27,12 +27,7 @@ class Similarity(nn.Module):
 
     def forward(self, x, y):
         
-        print("X:", x.shape)
-        print("Y:", y.shape)
-        res = self.cos(x, y)
-        print("cosine :", res.shape)
-        print("cosine max,min :",res.max(),res.min())
-        return  res #/ self.temp
+        return  self.cos(x, y) #/ self.temp
 
 
 class SimCSE(nn.Module):
@@ -239,8 +234,8 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,debug=False)->Union[ndarray, T
     if debug:
         print("neg_sim.shape :",neg_sim.shape)
         print("pos_sim.shape :",pos_sim.shape)     
-        print("pos_sim : ",pos_sim)
-        print("neg_sim : ",neg_sim)
+    print("pos_sim : ",pos_sim.max(),pos_sim.min())
+    print("neg_sim : ",neg_sim.max(),neg_sim.min())
 
 
     loss_s_cl = torch.log(torch.sum(pos_sim/neg_sim))
