@@ -30,6 +30,13 @@
      - [ ] Create Intent Classification loss
      - [ ] Training 5 shot and 10 shot
 
+### Bug To fix
+   
+   1. check simility value dim on feature of text 
+   2. feed pos and negative pair to proof encoder from Pretrain models
+   3. check gradient of each layer of encoder if loss not decrease
+   4. check J1 : Supervised contrasive loss 
+   5. check J2 : Predict probabilty looss
    
 ## Using Tensorboard on Remote Server container
 

@@ -121,7 +121,7 @@ for epoch in range(epochs):
        
         if h_i is not None:
           
-          loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, temperature,debug=False) 
+          loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, temperature,debug=True) 
 
                        
         label_ids = embedding.get_label()
@@ -145,3 +145,4 @@ for epoch in range(epochs):
             running_loss = 0.0
             logger.close()
             model = embedding.get_model()   
+            break
