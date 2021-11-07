@@ -61,14 +61,31 @@ checkpoint = torch.load(PATH,map_location=run_on)
 embedding.load_state_dict(checkpoint,strict=False)
 print("Loading Pretain Model done!")
 
-s1 = 'how do you say hi in french'
-s2 = 'translate hello in french' 
-s3 = 'set a timer for me' 
+s1 = 'that would be yes' # yes
+s2 = 'that is not false' # yes 
+s3 = 'i would like to know who programmed this ai' # who_made_you 
 
-h1, _ = embedding.encode(s1)
-h2, _ = embedding.encode(s2)
-h3, _ = embedding.encode(s3)
+u = [s1,s2,s3]
+
+h1, _ = embedding.encode(u)
+
+"""
+-Roberata based 
+   L Pretrain model(Encoder)  could not maximize sim even same class and lower sim on diff class 
+-Bert based
+   
+"""
 
 sim = Similarity()
+pos1 = sim(h1[0,:,:],h1[0,:,:])
+neg1 = sim(h1[0,:,:],h1[1,:,:])
+neg2 = sim(h1[0,:,:],h1[2,:,:]) 
 
+print("h1 :",h1.shape)
+print("h[0,:,:] :",h1[0,:,:].shape)
+print("shape:",pos1.shape)
+
+print("Sim of the same uterance  pair:",pos1.max(),pos1.min())
+print("Sim of the same class of uterance :",neg1.max(),neg1.min())
+print("Sim of neg pair:",neg2.max(),neg2.min())
 

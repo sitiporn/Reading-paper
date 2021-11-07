@@ -33,10 +33,11 @@
 ### Bug To fix
    
    1. check simility value dim on feature of text 
-        - compute sim value along last dim quite correct
+        - compute sim value along last dim quite correct(along feature axis)
+        - (batch_size,seq_len,embedding_size) -> cosine sim -> (batch_size, seq_len)
         - norm and without norm dont affect to sim value
    2. feed pos and negative pair to proof encoder from Pretrain models
-        - exploint encoder could not be able to encode well as pos pair quite high and neg pair quite higher even traing till 30 ephocs
+        - exploit encoder could not be able to encode well as pos pair quite high and neg pair quite higher even traing till 30 ephocs
    3. check gradient of each layer of encoder if loss not decrease
    4. check J1 : Supervised contrasive loss 
    5. check J2 : Predict probabilty looss
