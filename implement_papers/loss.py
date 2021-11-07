@@ -14,6 +14,8 @@ from transformers import BertModel, BertConfig
 from transformers import BertTokenizer, BertForMaskedLM, BertConfig
 from transformers import RobertaConfig, RobertaModel
 from transformers import RobertaTokenizer, RobertaForMaskedLM
+from torch import linalg as LA
+
 
 class Similarity(nn.Module):
     """
@@ -188,7 +190,20 @@ def mask_langauge_loss(M):
 
     return -1 * torch.sum(cost)/ M
 
-def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,debug=False)->Union[ndarray, Tensor]:
+def norm_vect(vectors):    
+   
+    norm = torch.linalg.norm(vectors)
+
+    if norm == 0:
+        return vectors
+
+
+    return vectors/norm
+
+
+
+
+def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Union[ndarray, Tensor]:
     """
     5- shot 
     10 - shot
@@ -210,18 +225,33 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,debug=False)->Union[ndarray, T
     
     sim = Similarity(temp)
     
+    if callback != None:
+       
+       h_i = norm_vect(h_i)
+       h_j = norm_vect(h_j)
+       h_n = norm_vect(h_n)
+       
+      
     
-    pos_sim = torch.exp(sim(h_i,h_j))
-    
+    pos_sim = sim(h_i,h_j)
+
+    print("pos_sim max, min :",pos_sim.max(),pos_sim.min())
+
+    #torch.exp(sim(h_i,h_j))
+   
     neg_sim  = []
     
     for idx in range(h_i.shape[0]):
 
         res = sim(h_i[idx].repeat(h_n.shape[0],1,1),h_n)
 
+        print("neg_sim max_min :",res.max(), res.min())
+        
         if debug:
             print("res.shape :",res.shape)
+       
         res = torch.sum(torch.exp(res)) 
+   
         if debug:
             print("after summing res.shape :",res.shape)
 
@@ -234,8 +264,7 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,debug=False)->Union[ndarray, T
     if debug:
         print("neg_sim.shape :",neg_sim.shape)
         print("pos_sim.shape :",pos_sim.shape)     
-    print("pos_sim : ",pos_sim.max(),pos_sim.min())
-    print("neg_sim : ",neg_sim.max(),neg_sim.min())
+    
 
 
     loss_s_cl = torch.log(torch.sum(pos_sim/neg_sim))

@@ -25,6 +25,7 @@ from dataloader import create_supervised_pair
 from loss import supervised_contrasive_loss 
 from loss import get_label_dist
 from loss import intent_classification_loss
+from loss import norm_vect 
 
 # get time 
 now = datetime.now()
