@@ -337,8 +337,10 @@ def intent_classification_loss(label_ids, logits, label_distribution, coeff, dev
     for i in range(label_ids.size(0)):
         # shape - (batch_size, seq_len, vocab_size)
         target_distribution[i, label_ids[i]] = 1.0
-
-    #target_distribution = coeff * label_distribution.unsqueeze(0) + (1.0 - coeff) * target_distribution
+    
+    print(label_distribution.unsqueeze(0).shape)
+    print(target_distribution.shape)
+    target_distribution = coeff * label_distribution.unsqueeze(0) + (1.0 - coeff) * target_distribution
     target_distribution = target_distribution.to(device)
 
     # KL-div loss

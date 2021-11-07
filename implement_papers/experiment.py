@@ -77,15 +77,14 @@ h1, _ = embedding.encode(u)
 """
 
 sim = Similarity()
-pos1 = sim(h1[0,:,:],h1[0,:,:])
-neg1 = sim(h1[0,:,:],h1[1,:,:])
-neg2 = sim(h1[0,:,:],h1[2,:,:]) 
+pos1 = sim(h1[0,0,:],h1[0,0,:])
+neg1 = sim(h1[0,0,:],h1[1,0,:])
+neg2 = sim(h1[0,0,:],h1[2,0,:]) 
 
 print("h1 :",h1.shape)
 print("h[0,:,:] :",h1[0,:,:].shape)
 print("shape:",pos1.shape)
 
-print("Sim of the same uterance  pair:",pos1.max(),pos1.min())
-print("Sim of the same class of uterance :",neg1.max(),neg1.min())
-print("Sim of neg pair:",neg2.max(),neg2.min())
-
+print("Sim of the same uterance  pair:",pos1)
+print("Sim of the same class of uterance :",neg1)
+print("Sim of neg pair:",neg2)

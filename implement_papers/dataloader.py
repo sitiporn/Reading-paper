@@ -208,14 +208,16 @@ def create_supervised_pair(h,labels,debug:bool=False):
             idxs_arr = np.arange(len(labels))
             # each h_i and h_j :  (seq_len, hidden_dim)
             
-            h_i_tensor = h[idx,:,:]
-            h_i_tensor = h_i_tensor[None,:,:]
-            h_i_tensor = h_i_tensor.repeat(np.count_nonzero(mask),1,1)
-            #print("h_i idx :",h_i_tensor.shape)
+
+            h_i_tensor = h[idx,:] # got 1 dim 
+            h_i_tensor = h_i_tensor[None,:] # got 2 dim 
+            # preparing to broadcast batch 
+            h_i_tensor = h_i_tensor.repeat(np.count_nonzero(mask),1)
+            
             #print("h_j idx :",h[mask,:,:].shape)
-            # (seq_len,hidden_dim) , (#pairs,seq_len, hidden_dim)
+            # (seq_len,hidden_dim) , (#pairs, hidden_dim)
             h_i.append(h_i_tensor)
-            h_j.append(h[mask,:,:])
+            h_j.append(h[mask,:])
 
 
             for val in idxs_arr[mask]: 

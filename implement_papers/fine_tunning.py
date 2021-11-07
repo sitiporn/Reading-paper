@@ -113,10 +113,17 @@ for epoch in range(epochs):
 
         h, outputs = embedding.encode(batch['Text'])
         
+        # https://stackoverflow.com/questions/63040954/how-to-extract-and-use-bert-encodings-of-sentences-for-text-similarity-among-sen 
+        # use value of CLS token 
+        h = h[:,0,:]
+        
+
+
         T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
         # (batch_size, seq_len, vocab_size) 
         logits = outputs.logits
-        logits = logits[:,0,:] 
+        logits = logits[:,0,:]
+
         
         loss_s_cl = 0.0
        
