@@ -29,7 +29,7 @@ class Similarity(nn.Module):
 
     def forward(self, x, y):
         
-        return  self.cos(x, y) #/ self.temp
+        return  self.cos(x, y) / self.temp
 
 
 class SimCSE(nn.Module):
@@ -175,9 +175,6 @@ def contrasive_loss(h,h_bar,hj_bar,h_3d,temp,N):
 
     return torch.sum(cost)/N 
 
-
-
-
 def mask_langauge_loss(M):
     
     """
@@ -233,19 +230,15 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
        
       
     
-    pos_sim = sim(h_i,h_j)
+    pos_sim = torch.exp(sim(h_i,h_j))
 
-    print("pos_sim max, min :",pos_sim.max(),pos_sim.min())
-
-    #torch.exp(sim(h_i,h_j))
-   
     neg_sim  = []
     
     for idx in range(h_i.shape[0]):
 
         res = sim(h_i[idx].repeat(h_n.shape[0],1,1),h_n)
 
-        print("neg_sim max_min :",res.max(), res.min())
+        #print("neg_sim max_min :",res.max(), res.min())
         
         if debug:
             print("res.shape :",res.shape)
