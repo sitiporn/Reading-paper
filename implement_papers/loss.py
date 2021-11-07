@@ -22,9 +22,15 @@ class Similarity(nn.Module):
     Dot product or cosine similarity
     """
 
-    def __init__(self, temp):
+    def __init__(self, temp=None):
         super().__init__()
-        self.temp = temp
+
+        if temp !=None:
+            self.temp = temp
+        else: 
+
+            self.temp = 1.0
+
         self.cos = nn.CosineSimilarity(dim=-1)
 
     def forward(self, x, y):
