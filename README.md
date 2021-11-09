@@ -23,11 +23,11 @@
 
    - [ ] Fine Tunning 
      - [x] Convert example to feature  to get label distribution and train feature
-     - [ ] label smoothing 
-     - [ ] Intent Predict probabilty loss
+     - [x] label smoothing 
+     - [x] Intent Predict probabilty loss
      - [x] Create positive and negative pairs 
      - [x] Create Supervised Contrasive learning loss
-     - [ ] Create Intent Classification loss
+     - [x] Create Intent Classification loss
      - [ ] Training 5 shot and 10 shot
 
 ### Bug To fix

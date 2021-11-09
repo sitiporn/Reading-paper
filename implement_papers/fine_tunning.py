@@ -54,8 +54,8 @@ embedding = SimCSE(device=run_on,classify=classify,model_name=model_name)
 select_model = 'roberta-base_epoch14_B=16_lr=5e-06_01_11_2021_17:17.pth'
 PATH = '../../models/'+ select_model
 checkpoint = torch.load(PATH,map_location=run_on)
-#print(checkpoint.keys())
-#print(dir(checkpoint))
+
+
 embedding.load_state_dict(checkpoint,strict=False)
 print("Loading Pretain Model done!")
 
@@ -135,26 +135,33 @@ for epoch in range(epochs):
           
           loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, temperature,debug=False) 
 
+
          
         label_ids = embedding.get_label()
 
        
         loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=coeff, device=run_on)
-       
+
+        running_loss_intent = loss_intent.item() 
+
         loss_stage2 = loss_s_cl + (1.0 * loss_intent)
         
         
 
         loss_stage2.backward()
         optimizer.step()
+
+        # collect for visualize 
         running_loss += loss_stage2.item()
+        running_loss_intent += loss_intent.item() 
+        running_loss_s_cl += loss_s_cl.item() 
 
                 
         if idx % running_times == running_times-1: # print every 50 mini-batches
             running_time += 1
             logger.logging('Loss/Train',running_loss,running_time)
-            #print('[%d, %5d] loss_total: %.3f loss_contrasive:  %.3f loss_language: %.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_1/running_times,running_loss_2/running_times))
-            print('[%d, %5d] loss_total: %.3f' %(epoch+1,idx+1,running_loss/running_times))
+            print('[%d, %5d] loss_total: %.3f loss_supervised_contrasive:  %.3f loss_intent :%.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_s_cl/running_times,running_loss_intent/running_times))
+            #print('[%d, %5d] loss_total: %.3f' %(epoch+1,idx+1,running_loss/running_times))
             running_loss = 0.0
             logger.close()
             model = embedding.get_model()   
