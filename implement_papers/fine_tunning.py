@@ -154,7 +154,7 @@ for epoch in range(epochs):
         # collect for visualize 
         running_loss += loss_stage2.item()
         running_loss_intent += loss_intent.item() 
-        running_loss_s_cl += loss_s_cl.item() 
+        running_loss_s_cl += loss_s_cl
 
                 
         if idx % running_times == running_times-1: # print every 50 mini-batches

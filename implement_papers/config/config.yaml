@@ -1,0 +1,19 @@
+#Acc: 80.31%
+
+#Change n_epochs to 1000, and dropout to 0.15
+model_params:
+    batch_norm: True
+    leaky: True
+    avg_pool: True
+    dropout: True
+    dropout_rate: 0.5
+    weight_decay: 0.01
+    weight_decay_bool: False
+    number_of_conv_layers: 2
+    conv_hidden_dim: 64
+
+training_params:
+    lr: 5e-6
+    batch_size: 16 
+    n_epochs: 30
+

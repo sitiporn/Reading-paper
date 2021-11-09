@@ -30,6 +30,17 @@
      - [x] Create Intent Classification loss
      - [ ] Training 5 shot and 10 shot
 
+### Experiment settings
+    
+     -  under 5-shot (5 training examples per intents) 
+     -  10-shot settings (10 training examples per intents)
+
+     -  batch size to 16, and
+     -  τ ∈ {0.1, 0.3, 0.5}
+     -  λ′ ∈ {0.01, 0.03, 0.05};  
+     -  fine-tuning takes 30 epochs
+     -  label smoothing to the intent classification loss Zhang et al. (2020a).
+
 ### Bug To fix
    
    1. check simility value dim on feature of text 
