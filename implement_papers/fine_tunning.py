@@ -75,7 +75,7 @@ sampled_tasks = [sample(N, train_examples) for i in range(T)]
 
 print("the numbers of intents",len(sampled_tasks[0]))
 
-label_distribution = get_label_dist(sampled_tasks,train_examples,train=True)
+label_distribution, label_map = get_label_dist(sampled_tasks,train_examples,train=True)
 
 #print("label_distribution:",label_distribution)
 
@@ -90,6 +90,8 @@ for i in range(len(data)):
    labels.append(data[i].label)
 
 optimizer= AdamW(embedding.parameters(), lr=lr)
+print("labels in finetune :",len(labels))
+
 train_data = CustomTextDataset(labels,samples)  
 train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
 
@@ -105,12 +107,12 @@ for epoch in range(epochs):
     
 
         optimizer.zero_grad()
-    
-
+        
+        
         # (batch_size, seq_len, hidhen_dim) 
 
 
-        h, outputs = embedding.encode(batch['Text'])
+        h, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map)
         
         # https://stackoverflow.com/questions/63040954/how-to-extract-and-use-bert-encodings-of-sentences-for-text-similarity-among-sen 
         # use value of CLS token 
@@ -121,7 +123,10 @@ for epoch in range(epochs):
         T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
         # (batch_size, seq_len, vocab_size) 
         logits = outputs.logits
-        logits = logits[:,0,:]
+        
+        #print(":logits:")
+        #print(logits.shape)
+        #logits = logits[:,0,:]
 
         
         loss_s_cl = 0.0
@@ -130,12 +135,13 @@ for epoch in range(epochs):
           
           loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, temperature,debug=False) 
 
-                       
+         
         label_ids = embedding.get_label()
+
        
         loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=coeff, device=run_on)
        
-        loss_stage2 =   loss_s_cl + (1.0 * loss_intent)
+        loss_stage2 = loss_s_cl + (1.0 * loss_intent)
         
         
 

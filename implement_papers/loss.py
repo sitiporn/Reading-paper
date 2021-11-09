@@ -45,6 +45,10 @@ class SimCSE(nn.Module):
     """
     def __init__(self,device,pretrain:bool = False,hidden_state_flag:bool = True,classify:bool = False,model_name:str='roberta-base'): 
         super(SimCSE,self).__init__()
+        
+        # change head to classify 
+        self.classify = classify
+        
         if pretrain == True: 
             self.model = AutoModel.from_pretrained(model_name)
         else:
@@ -90,7 +94,8 @@ class SimCSE(nn.Module):
             print("is None")
 
         return self.labels
-    def encode(self,sentence:Union[str, List[str]],batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False,masking:bool=True)-> Union[ndarray, Tensor]:
+
+    def encode(self,sentence:Union[str, List[str]],label:Union[str,List[str]],label_maps = None,batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False,masking:bool=True)-> Union[ndarray, Tensor]:
         
         single_sentence = False
 
@@ -101,7 +106,7 @@ class SimCSE(nn.Module):
             print(single_sentence)
         embedding_list = []
 
-       #with torch.no_grad():
+        #with torch.no_grad():
         total_batch = len(sentence) // batch_size + (1 if len(sentence) % batch_size > 0 else 0)
 
         if debug == True:
@@ -111,7 +116,20 @@ class SimCSE(nn.Module):
        
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
         
-        self.labels = inputs['input_ids'].detach().clone()
+
+        if self.classify: 
+            #print("Classify:")
+            if label_maps is not None:
+                #print("Label is not none ")
+                self.labels = [label_maps[stringtoId] for stringtoId in (label)]
+                # convert list to tensor
+                self.labels = torch.tensor(self.labels).unsqueeze(0)
+                #print(self.labels.shape)
+        else:
+
+            self.labels = inputs['input_ids'].detach().clone()
+            
+
         self.labels = self.labels.to(self.device)
         
 
@@ -138,8 +156,6 @@ class SimCSE(nn.Module):
              
 
         # Encode to get hi the representation of ui  
-        print("inputs:",inputs)
-        print("labels:",self.labels)
         outputs = self.model(**inputs,labels=self.labels,output_hidden_states=self.hidden_state_flag)
 
         # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
@@ -288,6 +304,7 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
    
     return loss_s_cl 
 
+
 def get_label_dist(samples, train_examples,train=False):
     
     """
@@ -318,7 +335,7 @@ def get_label_dist(samples, train_examples,train=False):
 
             label_distribution = label_distribution / label_distribution.sum()
      
-    return label_distribution
+    return label_distribution, label_map
 
 def intent_classification_loss(label_ids, logits, label_distribution, coeff, device)->Union[ndarray, Tensor]:
    
@@ -351,14 +368,13 @@ def intent_classification_loss(label_ids, logits, label_distribution, coeff, dev
         # shape - (batch_size, seq_len, vocab_size)
         target_distribution[i, label_ids[i]] = 1.0
     
-    print(label_distribution.unsqueeze(0).shape)
-    print(target_distribution.shape)
     # label_distribution - (1,K) - K #class
     # target_distribution - (batch_size, vocab_size)
     # y_ls = (1 - α) * y_hot + α / K
     target_distribution = coeff * label_distribution.unsqueeze(0) + (1.0 - coeff) * target_distribution
     target_distribution = target_distribution.to(device)
-
+    
+    #print("target_distribution :",target_distribution.shape)
     # KL-div loss
     prediction = torch.log(torch.softmax(logits, dim=1))
     loss = F.kl_div(prediction, target_distribution, reduction='mean')
