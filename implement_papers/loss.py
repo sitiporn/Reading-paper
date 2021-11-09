@@ -13,8 +13,8 @@ from torch.autograd import Variable
 from transformers import BertModel, BertConfig
 from transformers import BertTokenizer, BertForMaskedLM, BertConfig
 from transformers import RobertaConfig, RobertaModel
-from transformers import RobertaTokenizer, RobertaForMaskedLM
 from torch import linalg as LA
+from transformers import RobertaTokenizer, RobertaForSequenceClassification, RobertaForMaskedLM
 
 
 class Similarity(nn.Module):
@@ -43,19 +43,27 @@ class SimCSE(nn.Module):
     class for embeddings sentence by using BERT 
 
     """
-    def __init__(self,device,pretrain:bool = False,hidden_state_flag:bool = True,model_name:str='roberta-base'): 
+    def __init__(self,device,pretrain:bool = False,hidden_state_flag:bool = True,classify:bool = False,model_name:str='roberta-base'): 
         super(SimCSE,self).__init__()
         if pretrain == True: 
             self.model = AutoModel.from_pretrained(model_name)
         else:
             if model_name == 'roberta-base':
-                
+                 
                 self.config = RobertaConfig()
                 self.config.vocab_size = 50265 
-                self.model = RobertaForMaskedLM(self.config)
-
                 self.tokenizer = RobertaTokenizer.from_pretrained(model_name)
-             
+               
+                if classify:
+                   
+                   self.config.num_labels = 150 
+                   self.model = RobertaForSequenceClassification(self.config)
+                   print("Using RobertaForSequenceClassification ...")
+
+                else:
+
+                    self.model = RobertaForMaskedLM(self.config)
+                 
             if model_name == 'bert-base':
                 self.config = BertConfig() 
                 self.model = BertForMaskedLM(self.config)
@@ -130,6 +138,8 @@ class SimCSE(nn.Module):
              
 
         # Encode to get hi the representation of ui  
+        print("inputs:",inputs)
+        print("labels:",self.labels)
         outputs = self.model(**inputs,labels=self.labels,output_hidden_states=self.hidden_state_flag)
 
         # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
@@ -288,7 +298,8 @@ def get_label_dist(samples, train_examples,train=False):
     
     # Hard code -> refactor later 
     label_map['cancel'] = 149 
-     
+    
+
     label_distribution = torch.FloatTensor(len(label_map)).zero_()
     
     for i in range(len(train_examples)):
@@ -303,6 +314,8 @@ def get_label_dist(samples, train_examples,train=False):
             label_distribution[label_id] += 1.0 
 
         if train:
+
+
             label_distribution = label_distribution / label_distribution.sum()
      
     return label_distribution
@@ -340,6 +353,9 @@ def intent_classification_loss(label_ids, logits, label_distribution, coeff, dev
     
     print(label_distribution.unsqueeze(0).shape)
     print(target_distribution.shape)
+    # label_distribution - (1,K) - K #class
+    # target_distribution - (batch_size, vocab_size)
+    # y_ls = (1 - α) * y_hot + α / K
     target_distribution = coeff * label_distribution.unsqueeze(0) + (1.0 - coeff) * target_distribution
     target_distribution = target_distribution.to(device)
 

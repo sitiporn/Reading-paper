@@ -46,11 +46,10 @@ model_name='roberta-base'
 run_on = 'cuda:1'
 coeff = 0.7
 running_time = 0.0
+classify = True
 
 
-
-
-embedding = SimCSE(device=run_on,model_name=model_name) 
+embedding = SimCSE(device=run_on,classify=classify,model_name=model_name) 
 # loading model 
 select_model = 'roberta-base_epoch14_B=16_lr=5e-06_01_11_2021_17:17.pth'
 PATH = '../../models/'+ select_model
@@ -153,4 +152,4 @@ for epoch in range(epochs):
             running_loss = 0.0
             logger.close()
             model = embedding.get_model()   
-            break
+        
