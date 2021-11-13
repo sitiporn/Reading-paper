@@ -254,7 +254,7 @@ def create_supervised_pair(h,labels,debug:bool=False):
         
 class combine:
 
-    def __init__(self,dataset_name:str=None,few_shot:str=None):
+    def __init__(self,dataset_name:str=None,exp_name:str=None,oos_exp:str=None):
       
         #params
         self.single_dataset = False
@@ -269,22 +269,39 @@ class combine:
 
             self.datasets = ['ATIS','BANKING77','CLINC150','HWU64','SNIPS']
 
+        # eg. 5 shot or 10 shot data 
+        if exp_name is not None:
 
-        if few_shot is not None: 
+            self.exp_name = exp_name 
 
-            self.num_shot = few_shot
-        
         else:
+
+            self.exp_name = 'oos'
+            self.oos_exp = oos_exp
+
+            # Todo: can read 
+            # /oos/train or test and valid 
             
-            self.num_shot = 'train'
-        
+
+     
     def get_examples(self): 
 
         combine = [] 
-        for data in self.datasets:
-            train_file_path = f'../../datasets/Few-Shot-Intent-Detection/Datasets/{data}/{self.num_shot}/'
-            train_examples = load_intent_examples(train_file_path)
-            combine.append(train_examples)
+        
+        if self.exp_name != 'oos':
+        
+             for data in self.datasets:
+                train_file_path = f'../../datasets/Few-Shot-Intent-Detection/Datasets/{data}/{self.exp_name}/'
+                train_examples = load_intent_examples(train_file_path)
+                combine.append(train_examples)
+       
+        else: 
+
+             for data in self.datasets:
+                train_file_path = f'../../datasets/Few-Shot-Intent-Detection/Datasets/{data}/{self.exp_name}/{self.oos_exp}'
+                train_examples = load_intent_examples(train_file_path)
+                combine.append(train_examples)
+
 
         
         if self.single_dataset == True: 

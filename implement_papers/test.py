@@ -27,40 +27,56 @@ from loss import get_label_dist
 from loss import intent_classification_loss
 from loss import norm_vect 
 import yaml 
-
+import json
+import re
 
 # get time 
 now = datetime.now()
 dt_str = now.strftime("%d_%m_%Y_%H:%M")
 
-# config
-N = 5  # number of samples per class (100 full-shot)
-T = 1 # number of Trials
-temperature = 0.1
-batch_size = 16  
-labels = []
-samples = []
-epochs = 30 
-lamda = 1.0
-running_times = 10
-lr=1e-5
-model_name='roberta-base'
-run_on = 'cuda:1'
-coeff = 0.7
-running_time = 0.0
-classify = True
+# config using yaml file 
+with open('config/test.yaml') as file:
+
+    yaml_data = yaml.safe_load(file)
+    
+    jAll = json.dumps(yaml_data)
+
+    loader = yaml.SafeLoader
+
+    loader.add_implicit_resolver(
+    u'tag:yaml.org,2002:float',
+    re.compile(u'''^(?:
+     [-+]?(?:[0-9][0-9_]*)\\.[0-9_]*(?:[eE][-+]?[0-9]+)?
+    |[-+]?(?:[0-9][0-9_]*)(?:[eE][-+]?[0-9]+)
+    |\\.[0-9_]+(?:[eE][-+][0-9]+)?
+    |[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\\.[0-9_]*
+    |[-+]?\\.(?:inf|Inf|INF)
+    |\\.(?:nan|NaN|NAN))$''', re.X),
+    list(u'-+0123456789.'))
+
+    yaml_data = yaml.load(jAll, Loader=loader) 
 
 
-embedding = SimCSE(device=run_on,classify=classify,model_name=model_name) 
+embedding = SimCSE(device=yaml_data["testing_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
 
 # loading model 
 select_model = 'roberta-base_B=16_lr=5e-06_12_11_2021_08:05.pth'
 PATH = '../../models/'+ select_model
 
-checkpoint = torch.load(PATH,map_location=run_on)
+checkpoint = torch.load(PATH,map_location=yaml_data["testing_params"]["device"])
+embedding.load_state_dict(checkpoint,strict=False)
 
+# Tensorboard 
+logger = Log(experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["testing_params"]["batch_size"],lr=yaml_data["testing_params"]["lr"])
 
+# get test set  
 
+data = combine('CLINC150','test')
+
+print("Combine dataset done !:",len(data.get_examples()))
+
+# load all datasets 
+test_examples = data.get_examples()
 
 
 

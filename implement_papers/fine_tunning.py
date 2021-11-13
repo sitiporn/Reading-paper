@@ -66,7 +66,6 @@ samples = []
 running_time = 0.0 
 
 
-
 embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
 
 # loading model 
