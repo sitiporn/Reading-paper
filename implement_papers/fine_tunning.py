@@ -26,42 +26,60 @@ from loss import supervised_contrasive_loss
 from loss import get_label_dist
 from loss import intent_classification_loss
 from loss import norm_vect 
+import yaml 
+import ruamel.yaml
+import json
+import re 
+
 
 # get time 
 now = datetime.now()
 dt_str = now.strftime("%d_%m_%Y_%H:%M")
 
-# config
-N = 5  # number of samples per class (100 full-shot)
-T = 1 # number of Trials
-temperature = 0.1
-batch_size = 16  
+# config using yaml file
+with open('config/config.yaml') as file:
+
+    yaml_data = yaml.safe_load(file)
+    
+    jAll = json.dumps(yaml_data)
+
+    loader = yaml.SafeLoader
+
+    loader.add_implicit_resolver(
+    u'tag:yaml.org,2002:float',
+    re.compile(u'''^(?:
+     [-+]?(?:[0-9][0-9_]*)\\.[0-9_]*(?:[eE][-+]?[0-9]+)?
+    |[-+]?(?:[0-9][0-9_]*)(?:[eE][-+]?[0-9]+)
+    |\\.[0-9_]+(?:[eE][-+][0-9]+)?
+    |[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\\.[0-9_]*
+    |[-+]?\\.(?:inf|Inf|INF)
+    |\\.(?:nan|NaN|NAN))$''', re.X),
+    list(u'-+0123456789.'))
+
+    yaml_data = yaml.load(jAll, Loader=loader) 
+
+
+# daclare some variable
+
 labels = []
 samples = []
-epochs = 30 
-lamda = 1.0
-running_times = 10
-lr=1e-5
-model_name='roberta-base'
-run_on = 'cuda:1'
-coeff = 0.7
-running_time = 0.0
-classify = True
+running_time = 0.0 
 
 
-embedding = SimCSE(device=run_on,classify=classify,model_name=model_name) 
+
+embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
+
 # loading model 
 select_model = 'roberta-base_epoch14_B=16_lr=5e-06_01_11_2021_17:17.pth'
 PATH = '../../models/'+ select_model
-checkpoint = torch.load(PATH,map_location=run_on)
+checkpoint = torch.load(PATH,map_location=yaml_data["training_params"]["device"])
 
 
 embedding.load_state_dict(checkpoint,strict=False)
 print("Loading Pretain Model done!")
 
-#print(dir(embedding))
 # Tensorboard
-logger = Log(experiment_name='FineTune',model_name=model_name,batch_size=batch_size,lr=lr)
+logger = Log(experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["training_params"]["batch_size"],lr=yaml_data["training_params"]["lr"])
 
 # get single dataset  
 data = combine('CLINC150','train_5') 
@@ -71,7 +89,7 @@ print("len of datasets! :",len(data.get_examples()))
 # load all datasets 
 train_examples = data.get_examples()
 
-sampled_tasks = [sample(N, train_examples) for i in range(T)]
+sampled_tasks = [sample(yaml_data["training_params"]["N"], train_examples) for i in range(yaml_data["training_params"]["T"])]
 
 print("the numbers of intents",len(sampled_tasks[0]))
 
@@ -89,15 +107,15 @@ for i in range(len(data)):
    samples.append(data[i].text_a)
    labels.append(data[i].label)
 
-optimizer= AdamW(embedding.parameters(), lr=lr)
+optimizer= AdamW(embedding.parameters(), lr=yaml_data["training_params"]["lr"])
 print("labels in finetune :",len(labels))
 
 train_data = CustomTextDataset(labels,samples)  
-train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
+train_loader = DataLoader(train_data,batch_size=yaml_data["training_params"]["batch_size"],shuffle=True)
 
 print("DataLoader Done !")
 
-for epoch in range(epochs):
+for epoch in range(yaml_data["training_params"]["n_epochs"]):
 
     running_loss = 0.0
     running_loss_s_cl = 0.0
@@ -133,14 +151,14 @@ for epoch in range(epochs):
        
         if h_i is not None:
           
-          loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, temperature,debug=False) 
+          loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T, yaml_data["training_params"]["temp"],debug=False) 
 
 
          
         label_ids = embedding.get_label()
 
        
-        loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=coeff, device=run_on)
+        loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=yaml_data["training_params"]["smoothness"], device=yaml_data["training_params"]["device"])
 
         running_loss_intent = loss_intent.item() 
 
@@ -157,12 +175,22 @@ for epoch in range(epochs):
         running_loss_s_cl += loss_s_cl
 
                 
-        if idx % running_times == running_times-1: # print every 50 mini-batches
+        if idx % yaml_data["training_params"]["running_times"] ==  yaml_data["training_params"]["running_times"]-1: # print every 50 mini-batches
             running_time += 1
             logger.logging('Loss/Train',running_loss,running_time)
-            print('[%d, %5d] loss_total: %.3f loss_supervised_contrasive:  %.3f loss_intent :%.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_s_cl/running_times,running_loss_intent/running_times))
+            print('[%d, %5d] loss_total: %.3f loss_supervised_contrasive:  %.3f loss_intent :%.3f ' %(epoch+1,idx+1,running_loss/yaml_data["training_params"]["running_times"] ,running_loss_s_cl/yaml_data["training_params"]["running_times"] ,running_loss_intent/yaml_data["training_params"]["running_times"]))
+            
+
             #print('[%d, %5d] loss_total: %.3f' %(epoch+1,idx+1,running_loss/running_times))
             running_loss = 0.0
             logger.close()
             model = embedding.get_model()   
-        
+
+PATH_to_save = f'../../models/{yaml_data["model_params"]["model"]}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
+
+print(PATH_to_save)
+
+print('Finished Training')
+torch.save(model.state_dict(),PATH_to_save)
+print("Saving Done !")
+
