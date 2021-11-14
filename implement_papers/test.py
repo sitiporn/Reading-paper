@@ -78,5 +78,49 @@ print("Combine dataset done !:",len(data.get_examples()))
 # load all datasets 
 test_examples = data.get_examples()
 
+sampled_tasks = [sample(yaml_data["testing_params"]["N"], test_examples) for i in range(yaml_data["testing_params"]["T"])]
+
+print("len of examples",len(sampled_tasks[0]))
+
+sim = Similarity()
+test_loader = SenLoader(sampled_tasks)
+data  = test_loader.get_data()
+
+samples = []
+labels = [] 
+
+for i in range(len(data)):
+   samples.append(data[i].text_a)
+   labels.append(data[i].label)
+
+optimizer= AdamW(embedding.parameters(), lr=yaml_data["testing_params"]["lr"])
+test_data = CustomTextDataset(labels,samples)  
+test_loader = DataLoader(test_data,batch_size=yaml_data["testing_params"]["batch_size"],shuffle=False,num_workers=2)
+
+print("Test of Dataloader !")
+label_distribution, label_maps = get_label_dist(sampled_tasks,test_examples,train=True)
 
 
+
+correct = 0
+total = 0 
+
+with torch.no_grad():
+    for (idx, batch) in enumerate(test_loader): 
+        
+            _, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_maps)
+
+            logits = outputs.logits
+
+            _, predicted = torch.max(logits, 1)
+
+            if label_maps is not None: 
+                
+                labels = [label_maps[stringtoId] for stringtoId in (batch['Class'])]
+                labels = torch.tensor(labels).unsqueeze(0)               
+                total += labels.size(0)
+                labels = labels.to(yaml_data["testing_params"]["device"])
+                correct += (predicted == labels).sum().item()
+
+print('Accuracy of the network : %d %%' % (
+    100 * correct / total))
