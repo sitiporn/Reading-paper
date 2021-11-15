@@ -29,7 +29,25 @@
      - [x] Create Supervised Contrasive learning loss
      - [x] Create Intent Classification loss
      - [ ] Training 5 shot and 10 shot
-
+### Experiment instruction
+    Dataset
+     - Pretrain Datasets
+       1. combine all dataset 80,782 utterances
+       2. remove less than five tokens
+       3. conduct self-supervised pretrainning on collected utterances without using labels.
+       
+     - Evaluation Datasets
+       
+       1. compare CLINC150 contains 23,700 utteraces 10 domains
+       2. BANKING77 13,083 single banking domain 77 intents
+       3. HWU64 25,716 utterances 64 intents spaning 21 domains follow setup (https://arxiv.org/pdf/2010.08684.pdf) small portion of trainning sets separated as 
+       validation set and test set is unchanged repeat few-shot learning model 5 times and report average accuracy.
+      
+     Training instruction
+     1. Pretrain combine intents without test set  in the contrastive pre-training stage for 15 epochs bach = 64, τ to 0.1, and λ to 1.0
+     2. Fine tune 5-shot, 10-shot, batch = 16, and do hyperparameters seach τ and λ′ 30 epochs and apply label smoothing
+     
+       
 ### Experiment settings
     
      -  under 5-shot (5 training examples per intents) 
