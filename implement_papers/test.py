@@ -122,5 +122,9 @@ with torch.no_grad():
                 labels = labels.to(yaml_data["testing_params"]["device"])
                 correct += (predicted == labels).sum().item()
 
+            print("Predicted:",predicted)
+            print("label :",labels)
+
 print('Accuracy of the network : %d %%' % (
     100 * correct / total))
+

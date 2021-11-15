@@ -350,6 +350,7 @@ def intent_classification_loss(label_ids, logits, label_distribution, coeff, dev
     P(Cj|ui)  -  probability of sentence i-th to be j-th class
 
     inputs_embeds - (batch_size, sequence_length, hidden_size)  
+    logits - (batch_size, num_class) 
    
     """
     # label smoothing
