@@ -44,13 +44,14 @@
        validation set and test set is unchanged repeat few-shot learning model 5 times and report average accuracy.
       
 ### Sub Experiment setup (Example-Driven Intent prediction with Observers)
-   
+ 
    (1) using the full training set and 
    (2) using 10 examples per intent or approximately 10% of the training data. 
        
    - both setting evaluate validation set at the end of each epochs 
    - few-shot experiment are more sensitive to initialization and hyperparameters
-    
+   
+    ref - https://arxiv.org/pdf/2010.08684.pdf
     
 ### Training instruction
      1. Pretrain combine intents without test set  in the contrastive pre-training stage for 15 epochs bach = 64, τ to 0.1, and λ to 1.0
