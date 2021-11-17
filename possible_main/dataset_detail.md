@@ -1,22 +1,19 @@
 # Few-shot intent detection 
 
-- few-shot intent detection with/without Out-of-Scope (OOS) intents. 
+- few-shot intent detection with/without Out-of-Scope (OOS) intents.
 
-     Dataset  |	  Description                                           |   #Train   |    #Valid    |  #Test  	|
-BANKING77     |	one banking domain with 77 intents 	                |   8622     |     1540     |    3080 	|
-CLINC150      | 10 domains and 150 intents 	                        |   15000    |     3000     |    4500 	|
-HWU64 	      | personal assistant with 64 intents and several domains 	|   8954     |     1076     |    1076 	|
-SNIPS         |	snips voice platform with 7 intents 	                |   13084    |     700      |    700    |
-ATIS 	      | airline travel information system 	                |   4478     |     500      |    893    | 	
-
+![image](https://user-images.githubusercontent.com/31414731/141806826-b3f213b6-b6db-480e-87b7-d1c62b51fb9b.png)
 
 What is OOS quries:
-
 
 OOD-OOS: i.e., out-of-domain OOS. General out-of-scope queries which are not supported by the dialog systems, also called out-of-domain OOS. For instance, requesting an online NBA/TV show service in a banking system.
 
 
 ID-OOS: i.e., in-domain OOS. Out-of-scope queries which are more related to the in-scope intents
+
+![image](https://user-images.githubusercontent.com/31414731/141806952-76dc3083-1fe2-4929-9cc0-c51fc253700e.png)
+
+![image](https://user-images.githubusercontent.com/31414731/141807020-66fdc484-8f03-4baf-8a95-558419192739.png)
 
 ref- https://github.com/jianguoz/Few-Shot-Intent-Detection
 
