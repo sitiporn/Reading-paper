@@ -60,14 +60,15 @@ with open('config/test.yaml') as file:
 embedding = SimCSE(device=yaml_data["testing_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
 
 # loading model 
-select_model = 'roberta-base_B=16_lr=5e-06_12_11_2021_08:05.pth'
+# from config
+select_model = 'roberta-base_B=16_lr=5e-06_17_11_2021_09:51.pth'
 PATH = '../../models/'+ select_model
 
 checkpoint = torch.load(PATH,map_location=yaml_data["testing_params"]["device"])
 embedding.load_state_dict(checkpoint,strict=False)
 
 # Tensorboard 
-logger = Log(experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["testing_params"]["batch_size"],lr=yaml_data["testing_params"]["lr"])
+logger = Log(lamb=0.05,temp=0.5,experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["testing_params"]["batch_size"],lr=yaml_data["testing_params"]["lr"])
 
 # get test set  
 

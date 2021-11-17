@@ -1,4 +1,4 @@
-#Acc:
+#Acc:19%
 
 #
 
@@ -11,15 +11,16 @@ model_params:
 training_params:
     N: 5 # the numbers of example per class 
     T: 1 # the numbers of trials
-    temp: 0.1 # τ ∈ {0.1, 0.3, 0.5}
+    temp: 0.3 # τ ∈ {0.1, 0.3, 0.5}
     batch_size: 16 
     n_epochs: 30
-    lamda: 1.0       # λ′∈ {0.01, 0.03, 0.05}
+    lamda: 0.05       # λ′∈ {0.01, 0.03, 0.05}
     running_times: 10
     lr: 0.000005 #5e-6
     device: cuda:1 
     smoothness: 0.7 
     running_times: 10
+    
 
 
 
