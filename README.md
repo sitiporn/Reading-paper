@@ -71,17 +71,16 @@
 
 ### Bug To fix
 
-   1. feed pos and negative pair to proof encoder from Pretrain models
-        - exploit encoder could not be able to encode well as pos pair quite high and neg pair quite higher even traing till 30 ephocs
-   2. check gradient of each layer of encoder if loss not decrease
-   3. check J1 : Supervised contrasive loss 
-   4. check J2 : Predict probabilty looss
+   check gradient of each layer of encoder if loss not decrease
+   check J1 : Supervised contrasive loss 
+   check J2 : Predict probabilty looss
 
 ### Bug report 
    - [x] use [CLS] to represent the whole seq and calculate sim without normalize vectors 
       - the sim same sen around 0.9 and diff 0.7
       - the sentence from the same class and different class encode the sim value 0.9 and 0.7 which is not much different 
- 
+      -  feed pos and negative pair to proof encoder from Pretrain models
+           - exploit encoder could not be able to encode well as pos pair quite high and neg pair quite higher even traing till 30 ephocs
    
 ## Using Tensorboard on Remote Server container
 
