@@ -49,7 +49,7 @@ train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/tr
 logger = Log(experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr)
 
 # combine all dataset
-data = combine() 
+data = combine(exp_name='train') 
 print("Combine dataset done !:",len(data.get_examples()))
 
 # load all datasets 
@@ -90,7 +90,7 @@ for epoch in range(epochs):
         optimizer.zero_grad()
         
         # foward
-        h, _ = embedding.encode(batch['Text'])
+        h, _ = embedding.encode(sentence=batch['Text'])
         h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True)
         hj_bar = create_pair_sample(h_bar,debug=False)    
         hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
@@ -139,19 +139,6 @@ print("Saving Done !")
 
         
 
-"""
-sentence = ["get an uber to take me to my brother's house in mineola",'i need to transfer from this account to that one']
 
-embed = embedding.encode(sentence,debug=False)
-print(embed)
-#print(dir(training_data))
-
-print("Training:",embed)
-# Note : same intent sim higher than different intents
-# but the diff one not quite well yet
-print(sim(embed[0],embed[1]))
-print(sim(embed[0],embed[9]))
-
-"""
    
 

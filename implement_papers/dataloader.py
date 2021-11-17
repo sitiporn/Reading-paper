@@ -274,7 +274,7 @@ class combine:
 
             self.exp_name = exp_name 
 
-        else:
+        elif oos_exp is not None:
 
             self.exp_name = 'oos'
             self.oos_exp = oos_exp

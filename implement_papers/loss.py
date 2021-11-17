@@ -45,8 +45,9 @@ class SimCSE(nn.Module):
     """
     def __init__(self,device,pretrain:bool = False,hidden_state_flag:bool = True,classify:bool = False,model_name:str='roberta-base'): 
         super(SimCSE,self).__init__()
-        
-        # change head to classify 
+
+
+       # change head to classify 
         self.classify = classify
         
         if pretrain == True: 
@@ -95,7 +96,7 @@ class SimCSE(nn.Module):
 
         return self.labels
 
-    def encode(self,sentence:Union[str, List[str]],label:Union[str,List[str]],label_maps = None,batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False,masking:bool=True)-> Union[ndarray, Tensor]:
+    def encode(self,sentence:Union[str, List[str]],label:Union[str,List[str]]=None,label_maps = None,batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False,masking:bool=True)-> Union[ndarray, Tensor]:
         
         single_sentence = False
 
