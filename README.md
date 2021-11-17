@@ -78,7 +78,7 @@
    4. check J2 : Predict probabilty looss
 
 ### Bug report 
-   [x] use [CLS] to represent the whole seq and calculate sim without normalize vectors 
+   - [x] use [CLS] to represent the whole seq and calculate sim without normalize vectors 
       - the sim same sen around 0.9 and diff 0.7
       - the sentence from the same class and different class encode the sim value 0.9 and 0.7 which is not much different 
  
