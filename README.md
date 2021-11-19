@@ -156,7 +156,7 @@ ssh root@localhost -p [port]
 - [ ]  Publication (NeurIPS MAY 21) ?
 
 ## Time Left (1 April)
- - 131 left 
+ - 131 days 
  - 4 month and 11 days
 
 
