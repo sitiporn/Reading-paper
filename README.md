@@ -82,8 +82,9 @@
       -  feed pos and negative pair to proof encoder from Pretrain models
            - exploit encoder could not be able to encode well as pos pair quite high and neg pair quite higher even traing till 30 ephocs
    
-  ref - https://stats.stackexchange.com/questions/352036/what-should-i-do-when-my-neural-network-doesnt-learn
-      - https://dev.to/iggredible/debugging-in-vim-with-vimspector-4n0m
+  references
+  - https://stats.stackexchange.com/questions/352036/what-should-i-do-when-my-neural-network-doesnt-learn
+  - https://dev.to/iggredible/debugging-in-vim-with-vimspector-4n0m
   
 ## Using Tensorboard on Remote Server container
 
@@ -139,8 +140,6 @@ docker exec -it [container name] bash
 ```bash
 ssh root@localhost -p [port]
 ```
-
-
 
 ### example of readme 
   - ref - https://www.makeareadme.com/
