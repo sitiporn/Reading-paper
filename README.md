@@ -153,7 +153,7 @@ ssh root@localhost -p [port]
 - [ ]  Analysis and Review
 - [ ]  Thesis Draft Submssion 
 - [ ]  Final Defense ( 1 May)
-- [ ]  Publication (NeurIPS ?)
+- [ ]  Publication (NeurIPS MAY 21) ?
 
 ### example of readme 
   - ref - https://www.makeareadme.com/
