@@ -145,6 +145,7 @@ Model | %Acc  | Hyperparameter usage  |
 --- | --- | --- | 
 Roberta | %19|  temp:0.3 , lamda:0.05  | 
 Roberta | %8 | temp:0.5 , lamda:0.05 |
+Roberta | %12 | temp:0.5 , lamda:1.0 |
 
 
 ## Tenative plan
