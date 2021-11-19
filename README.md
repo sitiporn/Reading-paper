@@ -139,7 +139,13 @@ docker exec -it [container name] bash
 
 ```bash
 ssh root@localhost -p [port]
+
 ```
+Model | %Acc  | Hyperparameter usage  | 
+--- | --- | --- | 
+Roberta | %19|  temp:0.3 , lamda:0.05  | 
+Roberta | %8 | temp:0.5 , lamda:0.05 |
+
 
 ## Tenative plan
 - [ ]  Literature Review  
