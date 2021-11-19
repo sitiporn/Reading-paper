@@ -141,5 +141,19 @@ docker exec -it [container name] bash
 ssh root@localhost -p [port]
 ```
 
+## Tenative plan
+- [ ]  Literature Review  
+- [x]  draft implement
+- [ ]  Prof of concept 
+- [ ]  Submission of Proposal Draft (30 Dec)
+- [ ]  Proposal Defense (15 june)
+- [x]  Data collection 
+- [ ]  Data Analysis
+- [ ]  progressive Defense ( 20 March)
+- [ ]  Analysis and Review
+- [ ]  Thesis Draft Submssion 
+- [ ]  Final Defense ( 1 May)
+- [ ]  Publication (NeurIPS ?)
+
 ### example of readme 
   - ref - https://www.makeareadme.com/
