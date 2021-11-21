@@ -69,6 +69,8 @@
      -  fine-tuning takes 30 epochs
      -  label smoothing to the intent classification loss Zhang et al. (2020a).
 
+### Likely to be  wrong assumption 
+    - Pretrain from scarch without utilize the weight of Pretrain models <- How do I know that ?
 ### Bug To fix
 
    check gradient of each layer of encoder if loss not decrease
@@ -80,8 +82,9 @@
       - the sim same sen around 0.9 and diff 0.7
       - the sentence from the same class and different class encode the sim value 0.9 and 0.7 which is not much different 
       -  feed pos and negative pair to proof encoder from Pretrain models
-           - exploit encoder could not be able to encode well as pos pair quite high and neg pair quite higher even traing till 30 ephocs
-   
+           - exploit encoder could not be able to encode well as pos pair quite high and neg pair quite higher even traing till 30 
+           - ephocs
+
   references
   - https://stats.stackexchange.com/questions/352036/what-should-i-do-when-my-neural-network-doesnt-learn
   - https://dev.to/iggredible/debugging-in-vim-with-vimspector-4n0m
