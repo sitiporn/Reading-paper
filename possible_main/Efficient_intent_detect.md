@@ -1,6 +1,10 @@
 # Efficient Intent Detection with Dual Sentence Encoders
 
 
+## what I focused 
+ - Tasked dialog system or any tasked conversation system (eg.chatbot) still work on that and still maintain the accuracy 
+ - dialog act prediction or next utterance generation 
+
 1. What they did ?
 
   - leaverage Pretrain and fine-tuning  all entire models 
