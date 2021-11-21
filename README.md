@@ -164,8 +164,8 @@ Roberta | %12 |  |    | temp:0.5 , lamda:1.0 |
 - [ ]  Publication (NeurIPS MAY 21) ?
 
 ## Time Left (Final Defense 1 April)
- - 131 days 
- - 4 month and 11 days
+ - 130 days 
+ - 4 month and 10 days
 
 
 ### example of readme 
