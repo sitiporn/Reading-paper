@@ -158,7 +158,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         h = h[:,0,:]
         
 
-
+        
         T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
         # (batch_size, seq_len, vocab_size) 
         logits = outputs.logits
@@ -191,7 +191,9 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         running_loss_intent += loss_intent.item() 
         running_loss_s_cl += loss_s_cl
 
-                
+
+        
+        break
         if idx % yaml_data["training_params"]["running_times"] ==  yaml_data["training_params"]["running_times"]-1: # print every 50 mini-batches
             running_time += 1
             logger.logging('Loss/Train',running_loss,running_time)
@@ -202,6 +204,10 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
             running_loss = 0.0
             logger.close()
             model = embedding.get_model()   
+
+    print(model.eval())
+    
+    break
 
 del logger    
 print("deleate logger for one combination")

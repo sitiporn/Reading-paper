@@ -1,4 +1,4 @@
-# %Acc 4 
+# %Acc 8 
 model_params:
     exp_name: FineTune
     model: roberta-base

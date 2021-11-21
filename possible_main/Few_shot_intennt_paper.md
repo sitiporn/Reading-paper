@@ -1,12 +1,33 @@
 # Few-shot Intent Detection via Contrasive Pre-trainning and Fine-Tuning 
 
+- intents detection aim to identify intents from user utterances is key component of task oriented dialog systems
+
+- Traditional problem -> expensive to anotate enough samples for exmerginng intents 
+
+- Problem this papers they solve
+   - many intents are semantically similar 
+
+- soln
+   - use self-supervised contrasive pretraining on collected intents 
+
+
+
+# interesting related work problem 
+
+   - they cannot scale on a lot of intents 
+          L emerginng intents and have enough samples   
+          L accurately identify  
+   
+
+      
+    
 
 - CPFT methodology
    - C intents
    - they sets balance K-shot for each intents 
    - each intents K samples 
    - total samples C*K samples
-
+    
 
 
  3.1 Self-supvised Pretrainning 
