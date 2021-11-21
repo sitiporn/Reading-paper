@@ -71,6 +71,10 @@
 
 ### Likely to be  wrong assumption 
     - Pretrain from scarch without utilize the weight of Pretrain models <- How do I know that ?
+### Assumption
+    - use fix pretrain weight encoder
+    - train only head 
+    
 ### Bug To fix
 
    check gradient of each layer of encoder if loss not decrease
