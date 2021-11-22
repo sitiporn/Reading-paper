@@ -1,9 +1,15 @@
 # Research question 
 
+
+## what I focused 
+ - Tasked dialog system or any tasked conversation system (eg.chatbot) still work on that and still maintain the accuracy 
+ - dialog act prediction or next utterance generation 
+
+
 ## Problem statement 
 
 
-1) problem of they are the diffent intent
+1) problem on the diffent intent
    - on OOS dataset -> on diffent intent some have sematically similar utterances -> they cannot classify 
 
 2) what if dialauge system doesn't support 
@@ -12,7 +18,7 @@
    - they dont have intent 
 
 
-# Research question of literater review 
+# Research question from literater review 
   
    OOS: the users request are not be supported by testing daiglog system  
     
