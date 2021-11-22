@@ -32,8 +32,8 @@
 
    - Furthermore work
      - [ ] downloading baseline model to proof that dataset is able to discriminate  on CLINIC150, BANKINK77, HWU64
-     - [ ] fill-in validation acc on Pretrain dataset and fine-tunning dataset
-     - [ ] and test acc off every datasets
+     - [ ] fill-in validation acc on Pretrain dataset and fine-tunning dataset on CLINIC150, BANKINK77, HWU64
+     - [ ] and test acc of every datasets
 
 
 ### Experiment instruction
@@ -178,8 +178,8 @@ Roberta | %12 |  |    | temp:0.5 , lamda:1.0 |
 - [ ]  Publication (NeurIPS MAY 21) ?
 
 ## Time Left (Final Defense 1 April)
- - 129 days 
- - 4 month and 9 days
+ - 128 days 
+ - 4 month and 8 days
 
 
 ### example of readme 
