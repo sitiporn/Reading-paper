@@ -29,6 +29,13 @@
      - [x] Create Supervised Contrasive learning loss
      - [x] Create Intent Classification loss
      - [ ] Training 5 shot and 10 shot
+
+   - Furthermore work
+     - [ ] downloading baseline model to proof that dataset is able to discriminate  on CLINIC150, BANKINK77, HWU64
+     - [ ] fill-in validation acc on Pretrain dataset and fine-tunning dataset
+     - [ ] and test acc off every datasets
+
+
 ### Experiment instruction
     Dataset
      - Pretrain Datasets
