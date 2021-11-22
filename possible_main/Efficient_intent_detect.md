@@ -16,12 +16,20 @@
  
   - stack mulilayer percepton on top of fixed representation, followed by softmax layer for multi-class  
 
-  2.1
+  -  rely on the standard BERT-based fine-tuing for classifcation 
+
+  1.1
         input -> ConverT -> o1
         input -> USE -> o2 
 
-  2.2  concatenate o1 and o2 
-  2.3  feed concatenate to same classificaion architecture 
+  1.2  concatenate o1 and o2 
+  1.3  feed concatenate to same classificaion architecture 
+
+  - they train only classifier without encoders   
+  - use the mean-pooled "sequence o/p"
+  - pool is the sub-word embeddings as sentence representation  
+
+
     
   
 2. what are good at ?
