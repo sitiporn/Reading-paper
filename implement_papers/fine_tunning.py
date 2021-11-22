@@ -146,7 +146,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
     
 
         optimizer.zero_grad()
-        
+         
         
         # (batch_size, seq_len, hidhen_dim) 
 
@@ -193,7 +193,6 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
 
 
         
-        break
         if idx % yaml_data["training_params"]["running_times"] ==  yaml_data["training_params"]["running_times"]-1: # print every 50 mini-batches
             running_time += 1
             logger.logging('Loss/Train',running_loss,running_time)
