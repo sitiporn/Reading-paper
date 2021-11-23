@@ -54,7 +54,7 @@ valid_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/va
 
 
 # Tensorboard
-logger = Log(experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr)
+logger = Log(lamb=1.0,temp=temperature,experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr)
 
 # combine all dataset
 data = combine(exp_name='train') 
@@ -121,9 +121,11 @@ for epoch in range(epochs):
 
         optimizer.zero_grad()
         
-        # foward
+        # foward 2 times
         h, _ = embedding.encode(sentence=batch['Text'])
         h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True)
+
+
         hj_bar = create_pair_sample(h_bar,debug=False)    
         hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
         hj_bar = torch.stack(hj_bar)
@@ -163,9 +165,11 @@ for epoch in range(epochs):
     embedding.eval()
 
     for (idx, batch) in enumerate(valid_loader):
-         
-        h, _ = embedding.encode(sentence=batch['Text'])
-        h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True)
+        
+        # foward 2 times  
+        h, _ = embedding.encode(sentence=batch['Text'],train=False)
+        h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True,train=False)
+
         hj_bar = create_pair_sample(h_bar,debug=False)    
         hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
         hj_bar = torch.stack(hj_bar)
@@ -178,13 +182,27 @@ for epoch in range(epochs):
         loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size) 
         loss_lml = outputs.loss
 
-        # loss of pretrain model 
-        
+        #(batch_size,seq_len,vocab_size) 
+        pretiction = outputs.logits 
+       
+        """
+        Todo
+
+        1. select only mask token
+        2. find softmax along that token
+        3. find the highest prob of mask token   
+        4. compare the label belong to mask pos with predict of mask
+        """
+        prediction = torch.softmax(prediction,dim=-1)
+        predictions = torch.max(prediction,dim=-1)
+        labels = embedding.get_label()
+        print(prediction) 
         valid_loss = loss_cl + (lamda*loss_lml)
 
-
+    
     logger.logging('Loss/Train',loss_stage1,epoch)
-
+    logger.logging('Loss/validate',valid_loss,epoch)
+    print("Logging each epochs:")
          
 
       

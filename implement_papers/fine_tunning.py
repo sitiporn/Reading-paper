@@ -204,9 +204,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
             logger.close()
             model = embedding.get_model()   
 
-    print(model.eval())
     
-    break
 
 del logger    
 print("deleate logger for one combination")
