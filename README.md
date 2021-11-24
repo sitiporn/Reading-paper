@@ -96,6 +96,9 @@
            - exploit encoder could not be able to encode well as pos pair quite high and neg pair quite higher even traing till 30 
            - ephocs
 
+### Bug found
+     - simcse class define token_ids wrong which affects on pretrain and fine-tunning model on roberta-base 
+
   references
   - https://stats.stackexchange.com/questions/352036/what-should-i-do-when-my-neural-network-doesnt-learn
   - https://dev.to/iggredible/debugging-in-vim-with-vimspector-4n0m
