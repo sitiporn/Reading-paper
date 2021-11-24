@@ -29,8 +29,15 @@
      - [x] Create Supervised Contrasive learning loss
      - [x] Create Intent Classification loss
      - [ ] Training 5 shot and 10 shot
-
-   - Furthermore work
+   
+   - Urgent work
+      - [ ] pretrain
+        - [ ] 1. training Pretrain from scartch  validate each epochs
+        - [ ] 2. test RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
+        - [ ] 3. Load Pretrain and train on dataset of this papers validate each epochs
+        - [ ] 4. test from (3.) RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
+        - [ ] 5. compare the validation acc growing both training option and choose the best one.
+  - Furthermore work
      - [ ] downloading baseline model to proof that dataset is able to discriminate  on CLINIC150, BANKINK77, HWU64
      - [ ] fill-in validation acc on Pretrain dataset and fine-tunning dataset on CLINIC150, BANKINK77, HWU64
      - [ ] and test acc of every datasets
