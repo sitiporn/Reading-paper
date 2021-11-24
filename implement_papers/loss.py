@@ -68,11 +68,24 @@ class SimCSE(nn.Module):
                 else:
 
                     self.model = RobertaForMaskedLM(self.config)
-                 
+                    # roberta tokenizer 
+                    # more detail on RobertaConfig()
+                    self.start = 0 
+                    self.end = 2 
+                    self.mask = 50264
+                    self.pad = 1  
+                        
             if model_name == 'bert-base':
                 self.config = BertConfig() 
                 self.model = BertForMaskedLM(self.config)
                 self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+                # token_id for tokenize purpose 
+                # more detail on BertConfig()
+                self.start = 101
+                self.end = 102
+                self.mask = 103
+                self.pad = 0
+             
 
 
         print("Vocab size:",self.config.vocab_size)
@@ -152,18 +165,23 @@ class SimCSE(nn.Module):
             print("inputs.keys()",inputs.keys())
         
         if masking == True:
+            
+
             #print("shape of input_ids:")
             #print(inputs['input_ids'].shape[1])
             rand = torch.rand(inputs['input_ids'].shape).to(self.device)
             # we random arr less than 0.10
-            mask_arr = (rand < 0.10) * (inputs['input_ids'] !=101) * (inputs['input_ids'] != 102)
+            mask_arr = (rand < 0.10) * (inputs['input_ids'] !=self.start) * (inputs['input_ids'] != self.end) * (inputs['input_ids'] != self.pad)
             
             if debug== True:
                 print("Masking step:")
-                print(mask_arr)
+                print(mask_arr.shape)
             
             #create selection from mask
-            inputs['input_ids'][mask_arr] = 103
+            inputs['input_ids'][mask_arr] = self.mask
+            print("Masking checking:")
+            print(self.mask)
+            print(inputs['input_ids'])
             #selection = torch.flatten((mask_arr).nonzero()).tolist()
              
 

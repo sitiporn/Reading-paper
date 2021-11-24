@@ -21,10 +21,6 @@ from transformers import AdamW
 from torch.autograd import Variable
 from logger import Log
 from dataloader import combine
-# Todo: making a batch that should be able to train 
-# 1.) feed all data in batch twice through encoder
-# 2.) create lstage1 = self_cl_loss + lamda * mlm_loss
-
 
 # get time 
 now = datetime.now()
@@ -75,7 +71,8 @@ valid_tasks = [sample(N,valid_examples) for i in range(T)]
 
 print("len of examples",len(sampled_tasks[0]))
 print("len of validation",len(valid_tasks))
-#
+
+
 embedding = SimCSE(device='cuda:2',model_name=model_name) 
 sim = Similarity(temperature)
 
@@ -158,7 +155,8 @@ for epoch in range(epochs):
             logger.close()
 
             model = embedding.get_model()  
-            
+
+        break     
     
     valid_loss = 0.0      
     
@@ -168,8 +166,10 @@ for epoch in range(epochs):
         
         # foward 2 times  
         h, _ = embedding.encode(sentence=batch['Text'],train=False)
-        h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True,train=False)
+        h_bar, outputs = embedding.encode(batch['Text'],debug=True,masking=True,train=False)
+        
 
+       
         hj_bar = create_pair_sample(h_bar,debug=False)    
         hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
         hj_bar = torch.stack(hj_bar)
@@ -183,7 +183,7 @@ for epoch in range(epochs):
         loss_lml = outputs.loss
 
         #(batch_size,seq_len,vocab_size) 
-        pretiction = outputs.logits 
+        prediction = outputs.logits 
        
         """
         Todo
@@ -193,11 +193,14 @@ for epoch in range(epochs):
         3. find the highest prob of mask token   
         4. compare the label belong to mask pos with predict of mask
         """
+
+        
         prediction = torch.softmax(prediction,dim=-1)
-        predictions = torch.max(prediction,dim=-1)
+        prediction = torch.max(prediction,dim=-1)
         labels = embedding.get_label()
-        print(prediction) 
+        
         valid_loss = loss_cl + (lamda*loss_lml)
+
 
     
     logger.logging('Loss/Train',loss_stage1,epoch)
