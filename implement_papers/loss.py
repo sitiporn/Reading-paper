@@ -51,7 +51,15 @@ class SimCSE(nn.Module):
         self.classify = classify
         
         if pretrain == True: 
-            self.model = AutoModel.from_pretrained(model_name)
+            self.model = RobertaForMaskedLM.from_pretrained(model_name)
+            self.tokenizer = RobertaTokenizer.from_pretrained(model_name)
+            print(":using RobertaForMaskedLM :")
+            print("Vocab size :",self.tokenizer.vocab_size)
+            self.start = 0 
+            self.end = 2 
+            self.mask = 50264
+            self.pad = 1  
+
         else:
             if model_name == 'roberta-base':
                  
@@ -86,9 +94,7 @@ class SimCSE(nn.Module):
                 self.mask = 103
                 self.pad = 0
              
-
-
-        print("Vocab size:",self.config.vocab_size)
+            print("Vocab size:",self.config.vocab_size)
   
 
         self.device = device
@@ -96,6 +102,7 @@ class SimCSE(nn.Module):
         self.model.train()
         self.hidden_state_flag = hidden_state_flag
         self.labels = None  
+        self.mask_arr = None 
          
     def parameters(self):
         return self.model.parameters()
@@ -105,9 +112,13 @@ class SimCSE(nn.Module):
 
     def get_label(self):
         if self.labels is None:
-            print("is None")
+            print("label is None !")
 
-        return self.labels
+        if self.mask_arr is None:
+            print("mask_arr is None !")
+            
+
+        return self.labels , self.mask_arr
 
     def encode(self,sentence:Union[str, List[str]],label:Union[str,List[str]]=None,label_maps = None,batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False,masking:bool=True,train:bool=True)-> Union[ndarray, Tensor]:
        
@@ -178,10 +189,12 @@ class SimCSE(nn.Module):
                 print(mask_arr.shape)
             
             #create selection from mask
+            # mask_arr : (batch_size,seq_len)
             inputs['input_ids'][mask_arr] = self.mask
-            print("Masking checking:")
-            print(self.mask)
-            print(inputs['input_ids'])
+            self.mask_arr = mask_arr  
+            #print("Masking checking:")
+            #print(self.mask)
+            #print(inputs['input_ids'])
             #selection = torch.flatten((mask_arr).nonzero()).tolist()
              
 

@@ -43,14 +43,14 @@ lamda = 1.0
 running_times = 10
 lr=5e-6
 model_name= "roberta-base" 
-
+prior_weight = True 
 train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
 
 valid_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/valid/'
 
 
 # Tensorboard
-logger = Log(lamb=1.0,temp=temperature,experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr)
+logger = Log(load_weight=prior_weight,lamb=1.0,temp=temperature,experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr)
 
 # combine all dataset
 data = combine(exp_name='train') 
@@ -70,10 +70,10 @@ sampled_tasks = [sample(N, train_examples) for i in range(T)]
 valid_tasks = [sample(N,valid_examples) for i in range(T)]
 
 print("len of examples",len(sampled_tasks[0]))
-print("len of validation",len(valid_tasks))
+print("len of validation",len(valid_tasks[0]))
 
 
-embedding = SimCSE(device='cuda:2',model_name=model_name) 
+embedding = SimCSE(device='cuda:2',pretrain=prior_weight,model_name=model_name) 
 sim = Similarity(temperature)
 
 train_loader = SenLoader(sampled_tasks)
@@ -119,7 +119,9 @@ for epoch in range(epochs):
         optimizer.zero_grad()
         
         # foward 2 times
+        # get h_i
         h, _ = embedding.encode(sentence=batch['Text'])
+        # get h_bar with random mask 0.10 among sentence in the batch
         h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True)
 
 
@@ -150,23 +152,24 @@ for epoch in range(epochs):
         if idx % running_times == running_times-1: # print every 50 mini-batches
             running_time += 1
             #print('[%d, %5d] loss_total: %.3f loss_contrasive:  %.3f loss_language: %.3f ' %(epoch+1,idx+1,running_loss/running_times,running_loss_1/running_times,running_loss_2/running_times))
+
             print('[%d, %5d] loss_total: %.3f' %(epoch+1,idx+1,running_loss/running_times))
+            logger.logging("Loss/train",(running_loss/running_times),running_time)
             running_loss = 0.0
-            logger.close()
 
             model = embedding.get_model()  
 
-        break     
     
     valid_loss = 0.0      
-    
+    correct = 0
+    total = 0
     embedding.eval()
 
     for (idx, batch) in enumerate(valid_loader):
         
         # foward 2 times  
         h, _ = embedding.encode(sentence=batch['Text'],train=False)
-        h_bar, outputs = embedding.encode(batch['Text'],debug=True,masking=True,train=False)
+        h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True,train=False)
         
 
        
@@ -194,17 +197,44 @@ for epoch in range(epochs):
         4. compare the label belong to mask pos with predict of mask
         """
 
+        labels, mask_arr  = embedding.get_label()
+
+        """
+        prediction shape before mask: (batch_size,seq_len,vocab_size)
+        prediction after masking : (#of masking,vocab_size)
+        labels after masking : (#of masking)
+        """
+        """
+        print("Prediction shape:",prediction.shape) 
+        print("Predicton:",prediction[mask_arr])
+        print("labels :",labels[mask_arr])
+        """ 
+        prediction = prediction[mask_arr]
+        labels = labels[mask_arr]
+       
+        #print("prediction after masking ",prediction.shape)
+        #print("labels after masking :",labels.shape)
         
         prediction = torch.softmax(prediction,dim=-1)
-        prediction = torch.max(prediction,dim=-1)
-        labels = embedding.get_label()
+        prediction = torch.max(prediction,dim=-1)[1]
+
+       
+        correct += (prediction==labels).sum().item()          
         
+        print("prediction:",prediction)
+        print("labels :",labels)
+        total += labels.size(0)
+        print("correct :",correct)
+        print("total :",total)
+
         valid_loss = loss_cl + (lamda*loss_lml)
 
 
-    
+    valid_acc =  100 * (correct/total)   
+    print('Acc of validation: %d'%(valid_acc))
     logger.logging('Loss/Train',loss_stage1,epoch)
     logger.logging('Loss/validate',valid_loss,epoch)
+    logger.logging('Accuracy/validation',valid_acc,epoch)
     print("Logging each epochs:")
          
 
