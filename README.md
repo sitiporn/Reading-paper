@@ -13,7 +13,8 @@
               - Suck on language understanding task cannot predict mask token
               - on Similarity -> pending
           - existed weight
-            - roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_04:23.pth 
+            - roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_04:23.pth
+            - roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth (recently) (validation 31 %) 
               - on language understanding 
               - on similarity 
         - [ ]  2.test RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
