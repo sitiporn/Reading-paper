@@ -5,31 +5,26 @@
 
 ## Implementation 
 
-#### Todo 
-   - [x] Pre-train Process
-     - [x] Preprocess 
-       - [x] combined intent datasets without test sets in the contrastive pre-training
-       - [x] remove utterances with less than five tokens
-       - [x] create positive and negative pairs 
-    
-      - [x]  Traning bert base on Container
-      - [x]  Training roberta base on Container
-      - [x]  push trainning history to tensorboard
-
-       
-     - [x] create loss stage 1
-       - [x] self supervised contrastive loss
-       - [x] mask language modeling loss 
-
-   - [ ] Fine Tunning 
-     - [x] Convert example to feature  to get label distribution and train feature
-     - [x] label smoothing 
-     - [x] Intent Predict probabilty loss
-     - [x] Create positive and negative pairs 
-     - [x] Create Supervised Contrasive learning loss
-     - [x] Create Intent Classification loss
-     - [ ] Training 5 shot and 10 shot
-
+### Urgent Plan
+   - Pretrain(self-supervised)
+        - [ ]  1.training Pretrain validate each epochs
+          - from scartch
+            - roberta-base_epoch14_B=16_lr=5e-06_24_11_2021_11:34.pth  
+              - Suck on language understanding task cannot predict mask token
+              - on Similarity -> pending
+          - existed weight
+            - roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_04:23.pth
+            - roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth (recently) 
+              - on language understanding  (of last epochs validation 31 %) ,( after training session use validation set 41 %)
+              - on similarity 
+        - [ ]  2.test RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
+        - [ ]  3.Load Pretrain and train on dataset of this papers validate each epochs
+        - [ ]  4.test from (3.) RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
+        - [ ]  5.compare the validation acc growing both training option and choose the best one.
+        - [ ]  6.if things go well, the sim of positive pairs should be 0.8 - 0.9 and negative pairs should be negative  and also predict token_ids quite high precision -> to proof pretrain models is not sucked -> go to fine tune state 
+  
+   - Fine Tune
+   
    - Furthermore work
      - [ ] downloading baseline model to proof that dataset is able to discriminate  on CLINIC150, BANKINK77, HWU64
      - [ ] fill-in validation acc on Pretrain dataset and fine-tunning dataset on CLINIC150, BANKINK77, HWU64
@@ -102,6 +97,14 @@
   references
   - https://stats.stackexchange.com/questions/352036/what-should-i-do-when-my-neural-network-doesnt-learn
   - https://dev.to/iggredible/debugging-in-vim-with-vimspector-4n0m
+
+## Result
+Model | %Test Acc  | %Train Acc| %Validation | Hyperparameter usage  | 
+--- | --- | --- | --- | --- |
+Roberta | %19|   |    | temp:0.3 , lamda:0.05  | 
+Roberta | %8 |   |    | temp:0.5 , lamda:0.05 |
+Roberta | %12 |  |    | temp:0.5 , lamda:1.0 |
+
   
 ## Using Tensorboard on Remote Server container
 
@@ -158,13 +161,32 @@ docker exec -it [container name] bash
 ssh root@localhost -p [port]
 
 ```
-## Result
-Model | %Test Acc  | %Train Acc| %Validation | Hyperparameter usage  | 
---- | --- | --- | --- | --- |
-Roberta | %19|   |    | temp:0.3 , lamda:0.05  | 
-Roberta | %8 |   |    | temp:0.5 , lamda:0.05 |
-Roberta | %12 |  |    | temp:0.5 , lamda:1.0 |
 
+#### What I have done
+   - [x] Pre-train Process
+     - [x] Preprocess 
+       - [x] combined intent datasets without test sets in the contrastive pre-training
+       - [x] remove utterances with less than five tokens
+       - [x] create positive and negative pairs 
+    
+      - [x]  Traning bert base on Container
+      - [x]  Training roberta base on Container
+      - [x]  push trainning history to tensorboard
+
+       
+     - [x] create loss stage 1
+       - [x] self supervised contrastive loss
+       - [x] mask language modeling loss 
+
+   - [ ] Fine Tunning 
+     - [x] Convert example to feature  to get label distribution and train feature
+     - [x] label smoothing 
+     - [x] Intent Predict probabilty loss
+     - [x] Create positive and negative pairs 
+     - [x] Create Supervised Contrasive learning loss
+     - [x] Create Intent Classification loss
+     - [ ] Training 5 shot and 10 shot
+   
 
 ## Tenative plan
 - [ ]  Literature Review  
@@ -181,8 +203,8 @@ Roberta | %12 |  |    | temp:0.5 , lamda:1.0 |
 - [ ]  Publication (NeurIPS MAY 21) ?
 
 ## Time Left (Final Defense 1 April)
- - 127 days 
- - 4 month and 7 days
+ - 126 days 
+ - 4 month and 6 days
 
 
 ### example of readme 
