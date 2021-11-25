@@ -195,8 +195,8 @@ ssh root@localhost -p [port]
 - [ ]  Publication (NeurIPS MAY 21) ?
 
 ## Time Left (Final Defense 1 April)
- - 127 days 
- - 4 month and 7 days
+ - 126 days 
+ - 4 month and 6 days
 
 
 ### example of readme 
