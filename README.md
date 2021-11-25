@@ -6,7 +6,7 @@
 ## Implementation 
 
 ### Urgent Plan
-   - Pretrain
+   - Pretrain(self-supervised)
         - [ ]  1.training Pretrain from scartch  validate each epochs
           - roberta-base_epoch14_B=16_lr=5e-06_24_11_2021_11:34.pth
         - [ ]  2.test RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
