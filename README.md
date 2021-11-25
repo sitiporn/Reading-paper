@@ -7,8 +7,15 @@
 
 ### Urgent Plan
    - Pretrain(self-supervised)
-        - [ ]  1.training Pretrain from scartch  validate each epochs
-          - roberta-base_epoch14_B=16_lr=5e-06_24_11_2021_11:34.pth -> Suck
+        - [ ]  1.training Pretrain validate each epochs
+          - from scartch
+            - roberta-base_epoch14_B=16_lr=5e-06_24_11_2021_11:34.pth  
+              - Suck on language understanding task cannot predict mask token
+              - on Similarity -> pending
+          - existed weight
+            - roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_04:23.pth 
+              - on language understanding 
+              - on similarity 
         - [ ]  2.test RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
         - [ ]  3.Load Pretrain and train on dataset of this papers validate each epochs
         - [ ]  4.test from (3.) RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
