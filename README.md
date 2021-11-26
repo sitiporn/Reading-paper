@@ -105,6 +105,10 @@ Roberta | %19|   |    | temp:0.3 , lamda:0.05  |
 Roberta | %8 |   |    | temp:0.5 , lamda:0.05 |
 Roberta | %12 |  |    | temp:0.5 , lamda:1.0 |
 
+- Further result
+  - https://docs.google.com/spreadsheets/d/1eGla8CvHOVMP_I3NML3YlgwF-GE9hDUb-k4FgmJeDrE/edit#gid=975089668                                                                          
+                                                                            
+                                                                            
   
 ## Using Tensorboard on Remote Server container
 
