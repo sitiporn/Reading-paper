@@ -25,6 +25,7 @@
   
    - Fine Tune
      - roberta-base_B=16_lr=5e-06_27_11_2021_07:20.pth (config.yaml)
+     - roberta-base_B=16_lr=0.001_27_11_2021_17:06.pth
    
    - Furthermore work
      - [ ] downloading baseline model to proof that dataset is able to discriminate  on CLINIC150, BANKINK77, HWU64
