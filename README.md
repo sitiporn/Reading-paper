@@ -24,6 +24,7 @@
         - [ ]  6.if things go well, the sim of positive pairs should be 0.8 - 0.9 and negative pairs should be negative  and also predict token_ids quite high precision -> to proof pretrain models is not sucked -> go to fine tune state 
   
    - Fine Tune
+     - roberta-base_B=16_lr=5e-06_27_11_2021_07:20.pth (config.yaml)
    
    - Furthermore work
      - [ ] downloading baseline model to proof that dataset is able to discriminate  on CLINIC150, BANKINK77, HWU64
