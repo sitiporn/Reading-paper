@@ -63,14 +63,17 @@ class SimCSE(nn.Module):
         else:
             if model_name == 'roberta-base':
                  
-                self.config = RobertaConfig()
-                self.config.vocab_size = 50265 
+                # get tokonizer 
                 self.tokenizer = RobertaTokenizer.from_pretrained(model_name)
+                #self.config = RobertaConfig()
+                 
+                # get config from roberta 
+                self.config = RobertaConfig.from_pretrained("roberta-base", output_hidden_states=True)
                
                 if classify:
                    
                    self.config.num_labels = 150 
-                   self.model = RobertaForSequenceClassification(self.config)
+                   self.model = RobertaForSequenceClassification.from_pretrained("roberta-base", config=self.config)
                    print("Using RobertaForSequenceClassification ...")
 
                 else:
@@ -110,13 +113,30 @@ class SimCSE(nn.Module):
     def get_model(self):
         return self.model
 
-    def get_label(self):
-        if self.labels is None:
-            print("label is None !")
+    def load_model(self,select_model,strict:bool=True):
+        
+        #ref - https://pytorch.org/tutorials/beginner/saving_loading_models.html
+        
+        PATH = '../../models/'+ select_model      
 
-        if self.mask_arr is None:
-            print("mask_arr is None !")
-            
+        if strict == True:
+            self.model.load_state_dict(torch.load(PATH))
+            print("Load weight fully match  to model done !")
+        else:
+
+            self.model.load_state_dict(torch.load(PATH),strict=False)
+            print("Load weight patial done !")
+
+
+    def get_label(self,debug:bool=False):
+
+        if debug == True:
+            if self.labels is None:
+                print("label is None !")
+
+            if self.mask_arr is None:
+                print("mask_arr is None !")
+                
 
         return self.labels , self.mask_arr
 
@@ -235,20 +255,36 @@ class SimCSE(nn.Module):
 
         return embeddings, outputs
 
-def contrasive_loss(h,h_bar,hj_bar,h_3d,temp,N):
+def contrasive_loss(h,h_bar,hj_bar,h_3d,temp,N,compute_loss:bool=False):
 
+    if compute_loss:
+
+        sim = Similarity(temp=temp)
+        pos_sim = torch.exp(sim(h,h_bar))
+        neg_sim = torch.exp(sim(h_3d,hj_bar))
+        # sum of each neg samples of each *sum over j
+        neg_sim = torch.sum(neg_sim,dim=1) 
         
-    sim = Similarity(temp)
-    pos_sim = torch.exp(sim(h,h_bar))
-    neg_sim = torch.exp(sim(h_3d,hj_bar))
+        cost = -1 * torch.log(pos_sim / neg_sim)
+ 
+        """
+        hj_bar : eg. i = 1 : ([a,a,a],[b', c', a']) sum along N for each i 
+        hj_bar shape: (batch_size,batch_size-1,embed_size) 
+        hi_3d : (batch_size,batch_size-1,embed_size) 
 
+        h_neg_bar = [[b',c',a'],[a',c',a'],[a',b',a'],[a',b',c']] 
 
-    # sum of each neg samples of each *sum over j
-    neg_sim = torch.sum(neg_sim,1) 
+        """
 
-    cost = -1 * torch.log(pos_sim / neg_sim)
-
-    return torch.sum(cost)/N 
+        return  pos_sim, neg_sim, torch.sum(cost)/N
+         
+    else:
+        sim = Similarity()
+        pos_sim = sim(h,h_bar)
+        neg_sim = sim(h_3d,hj_bar)
+        
+        return pos_sim, neg_sim, None
+         
 
 def mask_langauge_loss(M):
     

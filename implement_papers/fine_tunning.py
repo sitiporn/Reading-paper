@@ -37,7 +37,7 @@ now = datetime.now()
 dt_str = now.strftime("%d_%m_%Y_%H:%M")
 
 # config using yaml file
-with open('config/config2.yaml') as file:
+with open('config/config.yaml') as file:
 
     yaml_data = yaml.safe_load(file)
     
@@ -72,9 +72,21 @@ running_time = 0.0
 
 
 # loading model 
-select_model = 'roberta-base_epoch14_B=16_lr=5e-06_01_11_2021_17:17.pth'
-PATH = '../../models/'+ select_model
-checkpoint = torch.load(PATH,map_location=yaml_data["training_params"]["device"])
+#select_model = 'roberta-base_epoch14_B=16_lr=5e-06_01_11_2021_17:17.pth'
+#PATH = '../../models/'+ select_model
+#checkpoint = torch.load(PATH,map_location=yaml_data["training_params"]["device"])
+
+select_model = 'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
+
+
+
+# create dummy model 
+embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
+
+#embedding.load_state_dict(checkpoint,strict=False)
+embedding.load_model(select_model=select_model,strict=False)
+print("Loading Pretain Model done!")
+
 
 
 
@@ -122,16 +134,10 @@ print("temperature :",yaml_data["training_params"]["temp"])
  
         
 # Tensorboard
-logger = Log(lamb=yaml_data["training_params"]["lamda"],temp=yaml_data["training_params"]["temp"],experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["training_params"]["batch_size"],lr=yaml_data["training_params"]["lr"])
+logger = Log(load_weight=True,lamb=yaml_data["training_params"]["lamda"],temp=yaml_data["training_params"]["temp"],experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["training_params"]["batch_size"],lr=yaml_data["training_params"]["lr"])
 
 
 
-# create dummy model 
-embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
-
- 
-embedding.load_state_dict(checkpoint,strict=False)
-print("Loading Pretain Model done!")
 
 # create optimizer
 optimizer= AdamW(embedding.parameters(), lr=yaml_data["training_params"]["lr"])
@@ -151,7 +157,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         # (batch_size, seq_len, hidhen_dim) 
 
 
-        h, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map)
+        h, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map,masking=False)
         
         # https://stackoverflow.com/questions/63040954/how-to-extract-and-use-bert-encodings-of-sentences-for-text-similarity-among-sen 
         # use value of CLS token 
@@ -172,8 +178,8 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
 
 
          
-        label_ids = embedding.get_label()
-
+        label_ids, _  = embedding.get_label()
+          
        
         loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=yaml_data["training_params"]["smoothness"], device=yaml_data["training_params"]["device"])
 

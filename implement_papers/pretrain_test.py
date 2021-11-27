@@ -54,6 +54,13 @@ lr=5e-6
 model_name= "roberta-base" 
 
 
+# from config
+select_model = 'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
+
+# embedding 
+embedding = SimCSE(device='cuda:2',pretrain=True,model_name=model_name)
+embedding.load_model(select_model=select_model)
+
 # combine all datasets
 
 
@@ -109,18 +116,6 @@ valid_loader = DataLoader(valid_data,batch_size=batch_size,num_workers=8)
 test_loader = DataLoader(test_data,batch_size=batch_size,num_workers=8)
 
 
-# from config
-select_model = 'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
-PATH = '../../models/'+ select_model
-
-# embedding 
-embedding = SimCSE(device='cuda:2',pretrain=True,model_name=model_name)
-#checkpoint = torch.load(PATH,map_location='cuda:2')
-#embedding.load_state_dict(checkpoint,strict=False)
-
-embedding.load_state_dict(torch.load(PATH),strict=False)
-
-print("Test load Pretrain done !")
 
 
 correct = 0
@@ -132,11 +127,37 @@ for (idx, batch) in enumerate(valid_loader):
    h, _ = embedding.encode(sentence=batch['Text'],train=False)
    h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True,train=False)
 
+   
+   # https://stackoverflow.com/questions/63040954/how-to-extract-and-use-bert-encodings-of-sentences-for-text-similarity-among-sen 
+   # use value of CLS token 
+   # select first token  
+   h = h[:,0,:]
+   h_bar = h_bar[:,0,:]
+
+   # get negative pairs : (batch_size,batch_size-1,embed_size) 
    hj_bar = create_pair_sample(h_bar,debug=False)
    hj_bar = [torch.as_tensor(tensor) for tensor in hj_bar]
    hj_bar = torch.stack(hj_bar)
-           
+   
+   # convert h -> h3d tensor 
    h_3d = h.unsqueeze(1)
+   """
+   hi: torch.Size([16, 768]) 
+   h_bar: torch.Size([16, 768])
+   hj_bar: torch.Size([16, 15, 768])
+   hi_3d : torch.Size([16, 1, 768])
+   """
+   print("shape after") 
+   print(h.shape)
+   print(h_bar.shape)
+   print(hj_bar.shape)
+   print(h_3d.shape)
+   
+   
+   pos_sim, neg_sim = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size)
+   
+   print("pos_sim:",pos_sim)
+   print("neg_sim:",neg_sim)
 
    prediction = outputs.logits
 
@@ -148,18 +169,20 @@ for (idx, batch) in enumerate(valid_loader):
    prediction = torch.softmax(prediction,dim=-1)
    prediction = torch.max(prediction,dim=-1)[1]
 
-
-   print("prediction:",prediction)
-   print("labels :",labels)
-
+   
    correct += (prediction==labels).sum().item()
    total += labels.size(0)
-
+   
+   print("Positive similarity",pos_sim)
+   print("Negative similarity",neg_sim)
    print("correct :",correct)
    print("total :",total)
 
 acc_valid = 100 * (correct / total)
 
+print('Accuracy of valid: %d %%' % (acc_valid))
+
+"""
 correct = 0
 total = 0
 
@@ -175,6 +198,8 @@ for (idx, batch) in enumerate(test_loader):
            
    h_3d = h.unsqueeze(1)
 
+   _, pos_sim, neg_sim = contrasive_loss(h[:,0,:],h_bar[:,0,:],hj_bar[:,0,:],h_3d[:,0,:],temperature,batch_size)
+
    prediction = outputs.logits
 
    label, mask_arr = embedding.get_label()
@@ -191,12 +216,12 @@ for (idx, batch) in enumerate(test_loader):
 
    correct += (prediction==labels).sum().item()
    total += labels.size(0)
-
+   print("Positive similarity",pos_sim)
+   print("Negative similarity",neg_sim)
    print("correct :",correct)
    print("total :",total)
 
 acc_test = 100 * (correct/total)
-
-print('Accuracy of valid: %d %%' % (acc_valid))
-print('Accuracy of test: %d %%' %(acc_test))
+"""
+#print('Accuracy of test: %d %%' %(acc_test))
 

@@ -163,7 +163,6 @@ for epoch in range(epochs):
     valid_loss = 0.0      
     correct = 0
     total = 0
-    embedding.eval()
 
     for (idx, batch) in enumerate(valid_loader):
         

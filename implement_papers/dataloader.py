@@ -126,13 +126,21 @@ class CustomTextDataset(Dataset):
 
 def create_pair_sample(h_bar,debug:bool=False):
     """
-    h ->  a , b, c, a
-    h'->  a', b',c',a'
+    h ->  a , b, c, a   (batch_size,#embed_size)
+    h'->  a', b',c',a'  (batch_size,#embed_size)
     intent_idx -> (0,1,2,0)
-    h   ->      [a, b, c, a ] for all i batch
-    h_pos_bar = [a',b',c',a'] for all i batch 
+    :definition:
+    pos_pair : alll the same samples in the batch second forward 
+    neg_pair : all the samples in the batch without itself 
+
+    h_i : [a, b, c, a ] for all i batch up to N 
+    hi_bar : [a',b',c',a'] for all i batch up to N
+    hj_bar : eg. i = 1 : ([a,a,a],[b', c', a']) sum along N for each i 
+    hj_bar shape: (batch_size,batch_size-1,embed_size) 
+    hi_3d : (batch_size,batch_size-1,embed_size) 
+
     h_neg_bar = [[b',c',a'],[a',c',a'],[a',b',a'],[a',b',c']] 
-              
+    
     """
     h_neg_bar = []
 

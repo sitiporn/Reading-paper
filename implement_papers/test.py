@@ -57,18 +57,25 @@ with open('config/test.yaml') as file:
     yaml_data = yaml.load(jAll, Loader=loader) 
 
 
+select_model = 'roberta-base_B=16_lr=5e-06_27_11_2021_07:20.pth'
 embedding = SimCSE(device=yaml_data["testing_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
+
+embedding.load_model(select_model=select_model,strict=True)
 
 # loading model 
 # from config
+"""
 select_model = 'roberta-base_B=16_lr=5e-06_17_11_2021_09:51.pth'
 PATH = '../../models/'+ select_model
+""" 
 
+"""
 checkpoint = torch.load(PATH,map_location=yaml_data["testing_params"]["device"])
 embedding.load_state_dict(checkpoint,strict=False)
+"""
 
 # Tensorboard 
-logger = Log(lamb=0.05,temp=0.5,experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["testing_params"]["batch_size"],lr=yaml_data["testing_params"]["lr"])
+logger = Log(load_weight=True,lamb=0.05,temp=0.5,experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["testing_params"]["batch_size"],lr=yaml_data["testing_params"]["lr"])
 
 # get test set  
 
@@ -112,8 +119,9 @@ with torch.no_grad():
             _, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_maps)
 
             logits = outputs.logits
+            logits_soft = torch.softmax(logits,dim=-1)
 
-            _, predicted = torch.max(logits, 1)
+            _, predicted = torch.max(logits_soft,dim=-1)[1]
 
             if label_maps is not None: 
                 
