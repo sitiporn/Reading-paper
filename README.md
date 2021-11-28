@@ -112,9 +112,10 @@ Roberta | %12 |  |    | temp:0.5 , lamda:1.0 |
  - Exmaple of validate pretrain on language understanding tasks
   ![image](https://user-images.githubusercontent.com/31414731/143609508-d28b5cd1-46f2-4248-b744-cdf5ab799faa.png)                           
                                                                             
-                                                                                                         ## Run Background                                                 
-  ```bash
-  nohup python3 pretrain_test.py > output.log &                                                                     ```
+## Run Background                                                 
+```bash
+nohup python3 pretrain_test.py > output.log &                                                                     ```
+```
 ref - https://janakiev.com/blog/python-background/                                                                            
 ## Using Tensorboard on Remote Server container
 
