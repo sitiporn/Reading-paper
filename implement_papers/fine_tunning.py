@@ -141,7 +141,11 @@ logger = Log(load_weight=True,lamb=yaml_data["training_params"]["lamda"],temp=ya
 
 # create optimizer
 optimizer= AdamW(embedding.parameters(), lr=yaml_data["training_params"]["lr"])
-       
+
+total = 0
+skip_time = 0 
+
+
 for epoch in range(yaml_data["training_params"]["n_epochs"]):
 
     running_loss = 0.0
@@ -152,6 +156,8 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
     
 
         optimizer.zero_grad()
+
+        total +=1
          
         
         # (batch_size, seq_len, hidhen_dim) 
@@ -170,22 +176,26 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         logits = outputs.logits
         
                         
-        loss_s_cl = 0.0
-       
-        if h_i is not None:
-          
-          loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params"]["temp"],debug=False) 
+        #loss_s_cl = 0.0
+     
+        if h_i is None:
+            print("skip this batch")
+            skip_time +=1
+            continue
 
 
-         
+        loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params"]["temp"],debug=False) 
+
         label_ids, _  = embedding.get_label()
           
        
         loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=yaml_data["training_params"]["smoothness"], device=yaml_data["training_params"]["device"])
 
         running_loss_intent = loss_intent.item() 
-
-        loss_stage2 = loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
+        
+        
+        loss_stage2 = loss_s_cl 
+        #+ (yaml_data["training_params"]["lamda"] * loss_intent)
         
         
 
@@ -194,16 +204,18 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
 
         # collect for visualize 
         running_loss += loss_stage2.item()
+        """
         running_loss_intent += loss_intent.item() 
         running_loss_s_cl += loss_s_cl
-
-
+        """
         
         if idx % yaml_data["training_params"]["running_times"] ==  yaml_data["training_params"]["running_times"]-1: # print every 50 mini-batches
             running_time += 1
             logger.logging('Loss/Train',running_loss,running_time)
             print('[%d, %5d] loss_total: %.3f loss_supervised_contrasive:  %.3f loss_intent :%.3f ' %(epoch+1,idx+1,running_loss/yaml_data["training_params"]["running_times"] ,running_loss_s_cl/yaml_data["training_params"]["running_times"] ,running_loss_intent/yaml_data["training_params"]["running_times"]))
             
+            print("skip_time:",skip_time)
+            print("total :",total)
 
             #print('[%d, %5d] loss_total: %.3f' %(epoch+1,idx+1,running_loss/running_times))
             running_loss = 0.0

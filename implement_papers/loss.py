@@ -390,10 +390,12 @@ def get_label_dist(samples, train_examples,train=False):
     label_list - list of label texts
 
     """
-    label_map = {samples[0][i]['task']: i for i in range(len(samples[0]))}
+    label_map = {samples[i]['task']: i for i in range(len(samples))}
+    #label_map = {samples[i].label: i for i in range(len(samples))}
     
     # Hard code -> refactor later 
-    label_map['cancel'] = 149 
+    # label_map['cancel'] = 149 
+    #print("label_map:",label_map)
     
 
     label_distribution = torch.FloatTensor(len(label_map)).zero_()

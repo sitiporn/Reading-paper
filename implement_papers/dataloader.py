@@ -11,6 +11,7 @@ from torch import Tensor
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
 from transformers import RobertaTokenizer
+import random
 
 class IntentExample(object):
 
@@ -41,7 +42,7 @@ def load_intent_examples(file_path, do_lower_case=True):
 
     return examples
 
-def sample(N, examples):
+def sample(N, examples,train:bool=True):
     labels = {} # unique classes
     
 
@@ -49,10 +50,11 @@ def sample(N, examples):
     # check whether example's labels already exist or not 
      
     for e in examples:
-        
-        # remove less than five token from sample
-        if len(tokenizer(e.text)['input_ids']) <=7:
-            continue
+       
+        if train == True:
+            # remove less than five token from sample
+            if len(tokenizer(e.text)['input_ids']) <=7:
+                continue
             
         if e.label in labels:
             labels[e.label].append(e.text)
@@ -110,17 +112,84 @@ class SenLoader(Dataset):
 
 # create custom dataset class
 class CustomTextDataset(Dataset):
-    def __init__(self,labels,text):
+    def __init__(self,labels,text,batch_size):
         self.labels = labels
         self.text = text
+        self.batch_size = batch_size 
+        self.count = 0 
+        self.exist_classes = [] 
+        self.label_maps = None 
+        self.ids_maps = []
+        self.len_data = len(self.labels)
+
+
 
     def __len__(self):
         return len(self.labels)
 
     def __getitem__(self, idx):
+        
+        self.count +=1  
+        # it would be clear after call til batch_size  
+        self.exist_classes.append(self.labels[idx])
+        self.ids_maps.append(idx)
+
+
+        if self.count == self.batch_size:
+
+            unique_labels_keys = list(set(self.exist_classes))
+            table = [0] * len(unique_labels_keys)
+            unique_labels = dict(zip(unique_labels_keys,table))
+            
+            
+            for class_key in self.exist_classes:
+                unique_labels[class_key] = +1 
+
+            #print("tables of each labels :",unique_labels)
+
+         
+            
+            for index, key  in enumerate(unique_labels):
+                
+
+
+                if unique_labels[key] > 1:
+
+                   print("v>1 :",unique_labels[key])
+                   
+                   break
+
+                
+                if index == len(unique_labels.keys()) - 1:
+                    
+                    
+                    while True:
+                       
+                       pos_idx = random.randint(0,self.len_data-1) 
+
+                       if self.labels[pos_idx] in unique_labels.keys():
+                           if self.labels[pos_idx] == self.labels[idx]:
+                               pass
+
+                           else:
+                               print("old idx :",idx,self.labels[idx])
+                               idx = pos_idx
+                               print("new idx :",idx,self.labels[idx])
+                               self.count = 0  
+                               self.exist_classes = [] 
+                               self.ids_maps = []
+                            
+                               break 
+                              
+
+         
         label = self.labels[idx]
+        
         data = self.text[idx]
+        
         sample = {"Class": label,"Text": data}
+
+
     
         return sample
 

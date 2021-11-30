@@ -59,7 +59,7 @@ select_model = 'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
 
 # embedding 
 embedding = SimCSE(device='cuda:2',pretrain=True,model_name=model_name)
-embedding.load_model(select_model=select_model)
+#embedding.load_model(select_model=select_model)
 
 # combine all datasets
 
@@ -146,15 +146,17 @@ for (idx, batch) in enumerate(valid_loader):
    h_bar: torch.Size([16, 768])
    hj_bar: torch.Size([16, 15, 768])
    hi_3d : torch.Size([16, 1, 768])
-   """
-   print("shape after") 
-   print(h.shape)
+      
+   print("shape after")  
+   print(h.shape)       
    print(h_bar.shape)
    print(hj_bar.shape)
    print(h_3d.shape)
    
+   """ 
+     
    
-   pos_sim, neg_sim = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size)
+   pos_sim, neg_sim, _  = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size)
    
    print("pos_sim:",pos_sim)
    print("neg_sim:",neg_sim)

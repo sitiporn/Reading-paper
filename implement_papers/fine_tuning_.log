@@ -1,0 +1,805 @@
+Some weights of the model checkpoint at roberta-base were not used when initializing RobertaForSequenceClassification: ['lm_head.dense.weight', 'lm_head.layer_norm.bias', 'roberta.pooler.dense.weight', 'roberta.pooler.dense.bias', 'lm_head.bias', 'lm_head.decoder.weight', 'lm_head.layer_norm.weight', 'lm_head.dense.bias']
+- This IS expected if you are initializing RobertaForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing RobertaForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at roberta-base and are newly initialized: ['classifier.dense.weight', 'classifier.dense.bias', 'classifier.out_proj.bias', 'classifier.out_proj.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/usr/local/lib/python3.6/dist-packages/torch/nn/functional.py:2398: UserWarning: reduction: 'mean' divides the total loss by both the batch size and the support size.'batchmean' divides only by the batch size, and aligns with the KL div math definition.'mean' will be changed to behave the same as 'batchmean' in the next major release.
+  warnings.warn("reduction: 'mean' divides the total loss by both the batch size and the support size."
+Using RobertaForSequenceClassification ...
+Vocab size: 50265
+Load weight patial done !
+Loading Pretain Model done!
+dataset : CLINC150
+len of datasets! : 750
+the numbers of intents 149
+labels in finetune : 646
+646
+646
+DataLoader Done !
+lamda : 0.05
+temperature : 0.3
+name on tensorboard: Load=True_roberta-base_28_11_2021_14:15_B=16_lr _5e-06_lambda=0.05_temp=0.3
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[1,    10] loss_total: 2.447 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 5
+total : 10
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[1,    30] loss_total: 4.700 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 14
+total : 30
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[2,    10] loss_total: 3.850 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 25
+total : 51
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[2,    20] loss_total: 1.428 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 30
+total : 61
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[2,    30] loss_total: 2.492 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 34
+total : 71
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[3,    20] loss_total: 2.880 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 54
+total : 102
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[4,    30] loss_total: 7.089 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 79
+total : 153
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[5,    10] loss_total: 2.709 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 88
+total : 174
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[5,    30] loss_total: 4.611 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 96
+total : 194
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[6,    30] loss_total: 5.922 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 118
+total : 235
+skip this batch
+[6,    40] loss_total: 3.322 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 119
+total : 245
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[7,    30] loss_total: 5.095 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 135
+total : 276
+skip this batch
+skip this batch
+skip this batch
+[7,    40] loss_total: 2.482 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 138
+total : 286
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[8,    20] loss_total: 3.510 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 148
+total : 307
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[8,    30] loss_total: 1.256 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 155
+total : 317
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[9,    30] loss_total: 4.039 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 180
+total : 358
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[9,    40] loss_total: 2.067 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 184
+total : 368
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[12,    10] loss_total: 2.116 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 236
+total : 461
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[12,    20] loss_total: 1.847 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 241
+total : 471
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[12,    30] loss_total: 2.455 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 246
+total : 481
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[12,    40] loss_total: 1.759 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 251
+total : 491
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[13,    10] loss_total: 2.340 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 256
+total : 502
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[13,    20] loss_total: 2.607 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 260
+total : 512
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[13,    30] loss_total: 3.014 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 264
+total : 522
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[14,    10] loss_total: 2.003 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 273
+total : 543
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[15,    40] loss_total: 7.375 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 314
+total : 614
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[16,    30] loss_total: 8.008 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 329
+total : 645
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[16,    40] loss_total: 2.494 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 333
+total : 655
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[17,    20] loss_total: 4.439 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 344
+total : 676
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[18,    30] loss_total: 3.368 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 378
+total : 727
+skip this batch
+skip this batch
+skip this batch
+[18,    40] loss_total: 3.155 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 381
+total : 737
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[19,    30] loss_total: 5.841 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 397
+total : 768
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[20,    10] loss_total: 3.856 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 404
+total : 789
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[20,    30] loss_total: 5.373 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 413
+total : 809
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[20,    40] loss_total: 1.377 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 419
+total : 819
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[21,    20] loss_total: 6.153 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 427
+total : 840
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[21,    30] loss_total: 2.209 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 433
+total : 850
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[21,    40] loss_total: 1.727 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 438
+total : 860
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[22,    10] loss_total: 2.073 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 444
+total : 871
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[22,    40] loss_total: 6.563 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 459
+total : 901
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[23,    20] loss_total: 6.308 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 467
+total : 922
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[23,    30] loss_total: 2.971 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 471
+total : 932
+skip this batch
+skip this batch
+skip this batch
+[23,    40] loss_total: 3.088 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 474
+total : 942
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[24,    20] loss_total: 7.607 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 480
+total : 963
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[24,    30] loss_total: 2.882 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 484
+total : 973
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[24,    40] loss_total: 1.661 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 491
+total : 983
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[25,    40] loss_total: 7.690 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 514
+total : 1024
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[26,    10] loss_total: 1.660 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 522
+total : 1035
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[27,    10] loss_total: 3.184 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 536
+total : 1076
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[27,    40] loss_total: 10.051 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 546
+total : 1106
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[28,    10] loss_total: 1.870 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 553
+total : 1117
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[28,    20] loss_total: 2.980 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 557
+total : 1127
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[28,    40] loss_total: 3.533 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 570
+total : 1147
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[29,    10] loss_total: 2.422 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 576
+total : 1158
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[29,    40] loss_total: 8.935 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 588
+total : 1188
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[30,    30] loss_total: 8.889 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 603
+total : 1219
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+skip this batch
+[30,    40] loss_total: 2.425 loss_supervised_contrasive:  0.000 loss_intent :0.003 
+skip_time: 608
+total : 1229
+skip this batch
+deleate logger for one combination
+../../models/roberta-base_B=16_lr=5e-06_28_11_2021_14:15.pth
+Finished Training
+Saving Done !

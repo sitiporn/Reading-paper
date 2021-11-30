@@ -56,8 +56,10 @@ with open('config/test.yaml') as file:
 
     yaml_data = yaml.load(jAll, Loader=loader) 
 
+# 'roberta-base_B=16_lr=5e-06_27_11_2021_07:20.pth'
+select_model = 'roberta-base_B=16_lr=0.001_27_11_2021_17:06.pth'
 
-select_model = 'roberta-base_B=16_lr=5e-06_27_11_2021_07:20.pth'
+
 embedding = SimCSE(device=yaml_data["testing_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
 
 embedding.load_model(select_model=select_model,strict=True)
@@ -116,12 +118,12 @@ total = 0
 with torch.no_grad():
     for (idx, batch) in enumerate(test_loader): 
         
-            _, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_maps)
+            _, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_maps,masking=False,train=False)
 
             logits = outputs.logits
             logits_soft = torch.softmax(logits,dim=-1)
 
-            _, predicted = torch.max(logits_soft,dim=-1)[1]
+            _, predicted = torch.max(logits_soft,dim=-1)
 
             if label_maps is not None: 
                 
@@ -133,6 +135,8 @@ with torch.no_grad():
 
             print("Predicted:",predicted)
             print("label :",labels)
+            print("Correct :",correct)
+            print("Total :",total)
 
 print('Accuracy of the network : %d %%' % (
     100 * correct / total))
