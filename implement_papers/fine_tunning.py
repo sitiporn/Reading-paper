@@ -79,7 +79,6 @@ running_time = 0.0
 select_model = 'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
 
 
-
 # create dummy model 
 embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
 
@@ -87,47 +86,47 @@ embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_d
 embedding.load_model(select_model=select_model,strict=False)
 print("Loading Pretain Model done!")
 
-
-
+print("Freeze Backboned layers")
+embedding.freeze_layers()
 
 # get single dataset  
 data = combine('CLINC150','train_5') 
 
-print("len of datasets! :",len(data.get_examples()))
 
 # load all datasets 
 train_examples = data.get_examples()
 
-sampled_tasks = [sample(yaml_data["training_params"]["N"], train_examples) for i in range(yaml_data["training_params"]["T"])]
+print("len of datasets :",len(train_examples))
 
-print("the numbers of intents",len(sampled_tasks[0]))
+#sample datasets
+sampled_tasks = sample(yaml_data["training_params"]["N"], examples=train_examples,train=False) 
 
-label_distribution, label_map = get_label_dist(sampled_tasks,train_examples,train=True)
+print("the numbers of intents",len(sampled_tasks))
+
+label_distribution, label_map = get_label_dist(sampled_tasks,train_examples,train=False)
 
 #print("label_distribution:",label_distribution)
 
-
 train_loader = SenLoader(sampled_tasks)
-data = train_loader.get_data()
+
+"""
+#data = train_loader.get_data()
 
 #print(embedding.eval())
+"""
 
-for i in range(len(data)):
-   samples.append(data[i].text_a)
-   labels.append(data[i].label)
+for i in range(len(train_examples)):
+   samples.append(train_examples[i].text)
+   labels.append(train_examples[i].label)
 
-print("labels in finetune :",len(labels))
 
-train_data = CustomTextDataset(labels,samples)  
+
+train_data = CustomTextDataset(labels,samples,batch_size=yaml_data["training_params"]["batch_size"])  
+
 train_loader = DataLoader(train_data,batch_size=yaml_data["training_params"]["batch_size"],shuffle=True)
 
 print("DataLoader Done !")
 
-# Do hyperparameters search 
-
-#for i_lamp in lamda:
-#    for i_temp in temp:
-        
 
 print("lamda :",yaml_data["training_params"]["lamda"])
 print("temperature :",yaml_data["training_params"]["temp"])
@@ -161,8 +160,9 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
          
         
         # (batch_size, seq_len, hidhen_dim) 
-
-
+        if len(set(batch['Class'])) == len(batch['Class']):
+            print("no positive pairs !")
+      
         h, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map,masking=False)
         
         # https://stackoverflow.com/questions/63040954/how-to-extract-and-use-bert-encodings-of-sentences-for-text-similarity-among-sen 
@@ -191,11 +191,9 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
        
         loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=yaml_data["training_params"]["smoothness"], device=yaml_data["training_params"]["device"])
 
-        running_loss_intent = loss_intent.item() 
+        running_loss_intent = loss_intent.item()         
         
-        
-        loss_stage2 = loss_s_cl 
-        #+ (yaml_data["training_params"]["lamda"] * loss_intent)
+        loss_stage2 = loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
         
         
 
@@ -204,10 +202,8 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
 
         # collect for visualize 
         running_loss += loss_stage2.item()
-        """
         running_loss_intent += loss_intent.item() 
-        running_loss_s_cl += loss_s_cl
-        """
+        running_loss_s_cl += loss_s_cl.item()
         
         if idx % yaml_data["training_params"]["running_times"] ==  yaml_data["training_params"]["running_times"]-1: # print every 50 mini-batches
             running_time += 1
@@ -234,4 +230,3 @@ print(PATH_to_save)
 print('Finished Training')
 torch.save(model.state_dict(),PATH_to_save)
 print("Saving Done !")
-

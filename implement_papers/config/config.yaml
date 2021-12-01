@@ -12,7 +12,7 @@ training_params:
     N: 5 # the numbers of example per class 
     T: 1 # the numbers of trials
     temp: 0.3 # τ ∈ {0.1, 0.3, 0.5}
-    batch_size: 16 
+    batch_size: 32  
     n_epochs: 30
     lamda: 0.05       # λ′∈ {0.01, 0.03, 0.05}
     running_times: 10

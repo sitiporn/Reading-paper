@@ -56,7 +56,7 @@ with open('config/config.yaml') as file:
 
 labels = []
 samples = []
-batch_size = 4  
+batch_size = 16  
 
 # get single dataset  
 data = combine('CLINC150','train_5') 
@@ -77,7 +77,6 @@ label_distribution, label_map = get_label_dist(sample_task,train_examples,train=
 train_loader = SenLoader(sample_task)
 #data = train_loader.get_data()
 
-print("data:",data)
 
 for i in range(len(train_examples)):
    samples.append(train_examples[i].text)
@@ -87,11 +86,19 @@ train_data = CustomTextDataset(labels,samples,batch_size=batch_size)
 train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
 
 for i, batch in enumerate(train_loader):
-    print("batch :")
-    print(i,batch['Class'])
+
+    print("set batch :",len(set(batch['Class'])))
+    print("len batch :",len(batch['Class']))
+
+    if len(set(batch['Class'])) == len(batch['Class']):
+        
+        print("batch :")
+        print(i,batch['Class'])
     
+    """ 
     if i==5:
         break
+    """
 
 """
 

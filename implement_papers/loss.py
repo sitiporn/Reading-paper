@@ -100,6 +100,7 @@ class SimCSE(nn.Module):
             print("Vocab size:",self.config.vocab_size)
   
 
+        self.params = None 
         self.device = device
         self.model = self.model.to(self.device)
         self.model.train()
@@ -127,7 +128,30 @@ class SimCSE(nn.Module):
             self.model.load_state_dict(torch.load(PATH),strict=False)
             print("Load weight patial done !")
 
+    def freeze_layers(self):
+         
+        self.params = self.model.state_dict()
+    
+        val = self.params.keys()
+        print("len :",len(self.params.keys()))
+        count = 0 
 
+        for name, param in self.model.named_parameters():
+
+
+            # freeze layers except head 
+            # print(param) 
+            if count >= 197:
+                break
+
+            param.requires_grad = False
+            count +=1
+            
+        for name, param in self.model.named_parameters():
+
+                if param.requires_grad: 
+                    print(name)
+           
     def get_label(self,debug:bool=False):
 
         if debug == True:
@@ -394,6 +418,7 @@ def get_label_dist(samples, train_examples,train=False):
     #label_map = {samples[i].label: i for i in range(len(samples))}
     
     # Hard code -> refactor later 
+    # bugs key errors cancel when run from funtuning 
     # label_map['cancel'] = 149 
     #print("label_map:",label_map)
     

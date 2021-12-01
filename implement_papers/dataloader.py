@@ -121,7 +121,17 @@ class CustomTextDataset(Dataset):
         self.label_maps = None 
         self.ids_maps = []
         self.len_data = len(self.labels)
+        self.count_batch = 0 
+        
+        print("self.len_data ",self.len_data)
+        print("self.len data",self.batch_size)
+        self.max_count = self.len_data // self.batch_size 
+        print(self.max_count)
 
+        if self.len_data % self.batch_size !=0:
+            self.max_count += 1 
+        
+        print("the number of maximum of batching :",self.max_count)
 
 
     def __len__(self):
@@ -134,18 +144,30 @@ class CustomTextDataset(Dataset):
         self.exist_classes.append(self.labels[idx])
         self.ids_maps.append(idx)
 
+        """
+        if self.count_batch == self.max_count - 1:
+            if self.len_data % self.batch_size !=0: 
+                self.batch_size = self.len_data % self.batch_size
 
+            print("change batch size !",self.batch_size)
+            print("LAST batching !")
+
+        """
         if self.count == self.batch_size:
 
             unique_labels_keys = list(set(self.exist_classes))
             table = [0] * len(unique_labels_keys)
             unique_labels = dict(zip(unique_labels_keys,table))
             
+            self.count_batch += 1
+            #print("count_batch :",self.count_batch)
             
             for class_key in self.exist_classes:
                 unique_labels[class_key] = +1 
 
             #print("tables of each labels :",unique_labels)
+
+
 
          
             
@@ -172,9 +194,11 @@ class CustomTextDataset(Dataset):
                                pass
 
                            else:
-                               print("old idx :",idx,self.labels[idx])
+                               #print("old idx :",idx,self.labels[idx])
                                idx = pos_idx
-                               print("new idx :",idx,self.labels[idx])
+                               #print("new idx :",idx,self.labels[idx])
+                               unique_labels[self.labels[idx]] +=1  
+                               #print("statistics tables :",unique_labels)
                                self.count = 0  
                                self.exist_classes = [] 
                                self.ids_maps = []
