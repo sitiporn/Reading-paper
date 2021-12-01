@@ -26,6 +26,7 @@
    - Fine Tune
      - roberta-base_B=16_lr=5e-06_27_11_2021_07:20.pth (config.yaml)
      - roberta-base_B=16_lr=0.001_27_11_2021_17:06.pth
+     - roberta-base_B=32_lr=5e-06_01_12_2021_11:48.pth
    
    - Furthermore work
      - [ ] downloading baseline model to proof that dataset is able to discriminate  on CLINIC150, BANKINK77, HWU64
@@ -215,7 +216,7 @@ ssh root@localhost -p [port]
 
 ## Time Left (Final Defense 1 April)
  - 121 days 
- - 4 month and 1 days
+ - 4 month and 0 days
 
 
 ### example of readme 
