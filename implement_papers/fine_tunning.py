@@ -69,7 +69,8 @@ labels = []
 samples = []
 running_time = 0.0 
 
-
+# existed of task 0 
+load_weight=True
 
 # loading model 
 #select_model = 'roberta-base_epoch14_B=16_lr=5e-06_01_11_2021_17:17.pth'
@@ -133,7 +134,7 @@ print("temperature :",yaml_data["training_params"]["temp"])
  
         
 # Tensorboard
-logger = Log(load_weight=True,lamb=yaml_data["training_params"]["lamda"],temp=yaml_data["training_params"]["temp"],experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["training_params"]["batch_size"],lr=yaml_data["training_params"]["lr"])
+logger = Log(load_weight=load_weight,lamb=yaml_data["training_params"]["lamda"],temp=yaml_data["training_params"]["temp"],experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["training_params"]["batch_size"],lr=yaml_data["training_params"]["lr"])
 
 
 
@@ -223,7 +224,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
 del logger    
 print("deleate logger for one combination")
 
-PATH_to_save = f'../../models/{yaml_data["model_params"]["model"]}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
+PATH_to_save = f'../../models/Load={load_weight}_{yaml_data["model_params"]["model"]}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
 
 print(PATH_to_save)
 

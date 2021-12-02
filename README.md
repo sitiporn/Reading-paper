@@ -1,9 +1,11 @@
 ## Reading-papers
 
-  This will cover the several state of art papaers in NLP field 
+  This will cover reading and implementing the several state of art papaers in NLP field 
 
-
-## Implementation 
+### terms 
+    - task 0: pretrain of encoders for language understanding 
+    - task 1: pretrain of encoders for understanding utterances and contrastive utteraces tasks without labels 
+    - task 2: fine-tunning tasks (eg. few shot) train on KL-div predict probabilty and contrastive utteraces with labels 
 
 ### Urgent Plan
    - Pretrain(self-supervised)
@@ -31,6 +33,15 @@
      - [ ] downloading baseline model to proof that dataset is able to discriminate  on CLINIC150, BANKINK77, HWU64
      - [ ] fill-in validation acc on Pretrain dataset and fine-tunning dataset on CLINIC150, BANKINK77, HWU64
      - [ ] and test acc of every datasets
+
+### Assumption on theory 
+    - on tasks 1 whether we should use weights from task 0 or not is depend on utteraces understanding on tasks 1 performance if they cannot predict hidden masks we should use weight from task 0 if performance still ok no need to do so 
+    - unfreeze all layers to train on tasks 1 as we have a lot of samples  
+    - on task 2 train only classifier head as we have few samples  
+
+### Discussion 
+
+## Implementation 
 
 
 ### Experiment instruction
@@ -73,11 +84,6 @@
      -  fine-tuning takes 30 epochs
      -  label smoothing to the intent classification loss Zhang et al. (2020a).
 
-### Likely to be  wrong assumption 
-    - Pretrain from scarch without utilize the weight of Pretrain models <- How do I know that ?
-### Assumption
-    - use fix pretrain weight encoder
-    - train only head 
     
 ### Bug To fix
 
@@ -111,13 +117,16 @@ Roberta | %12 |  |    | temp:0.5 , lamda:1.0 |
   - https://docs.google.com/spreadsheets/d/1eGla8CvHOVMP_I3NML3YlgwF-GE9hDUb-k4FgmJeDrE/edit#gid=975089668                                                                          
  - Exmaple of validate pretrain on language understanding tasks
   ![image](https://user-images.githubusercontent.com/31414731/143609508-d28b5cd1-46f2-4248-b744-cdf5ab799faa.png)                           
-                                                                            
-## Run Background                                                 
+
+## Usage
+
+### Run Background                                                 
 ```bash
 nohup python3 pretrain_test.py > output.log &                                                                     ```
 ```
 ref - https://janakiev.com/blog/python-background/                                                                            
-## Using Tensorboard on Remote Server container
+
+### Using Tensorboard on Remote Server container
 
 
  1. map the remote port to a local port run on local machine
@@ -134,7 +143,7 @@ pip3 install tensorboard
 tensorboard dev upload --logdir runs
 ```
 
- 3. Usage
+ 3. Usage tensorboard
     ```python
      from torch.utils.tensorboard import SummaryWriter
      
@@ -150,7 +159,7 @@ tensorboard dev upload --logdir runs
      writer.close()
  
      ```
-## Build container on exist image
+### Build container on exist image
 
 1. build container
 
