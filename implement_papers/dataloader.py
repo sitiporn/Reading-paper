@@ -112,26 +112,28 @@ class SenLoader(Dataset):
 
 # create custom dataset class
 class CustomTextDataset(Dataset):
-    def __init__(self,labels,text,batch_size):
+    def __init__(self,labels,text,batch_size,repeated_label:bool=False):
         self.labels = labels
         self.text = text
         self.batch_size = batch_size 
         self.count = 0 
-        self.exist_classes = [] 
-        self.label_maps = None 
-        self.ids_maps = []
-        self.len_data = len(self.labels)
-        self.count_batch = 0 
-        
-        print("self.len_data ",self.len_data)
-        print("self.len data",self.batch_size)
-        self.max_count = self.len_data // self.batch_size 
-        print(self.max_count)
+        self.repeated_label = repeated_label
 
-        if self.len_data % self.batch_size !=0:
-            self.max_count += 1 
-        
-        print("the number of maximum of batching :",self.max_count)
+        if self.repeated_label == True:
+            self.exist_classes = [] 
+            self.label_maps = None 
+            self.ids_maps = []
+            self.len_data = len(self.labels)
+            self.count_batch = 0 
+            
+            #print("self.len_data ",self.len_data)
+            #print("self.len data",self.batch_size)
+            self.max_count = self.len_data // self.batch_size 
+
+            if self.len_data % self.batch_size !=0:
+                self.max_count += 1 
+            
+            print("the number of maximum of batching :",self.max_count)
 
 
     def __len__(self):
@@ -139,72 +141,73 @@ class CustomTextDataset(Dataset):
 
     def __getitem__(self, idx):
         
-        self.count +=1  
-        # it would be clear after call til batch_size  
-        self.exist_classes.append(self.labels[idx])
-        self.ids_maps.append(idx)
+        if self.repeated_label == True:
+            self.count +=1  
+            # it would be clear after call til batch_size  
+            self.exist_classes.append(self.labels[idx])
+            self.ids_maps.append(idx)
 
-        """
-        if self.count_batch == self.max_count - 1:
-            if self.len_data % self.batch_size !=0: 
-                self.batch_size = self.len_data % self.batch_size
+            """
+            if self.count_batch == self.max_count - 1:
+                if self.len_data % self.batch_size !=0: 
+                    self.batch_size = self.len_data % self.batch_size
 
-            print("change batch size !",self.batch_size)
-            print("LAST batching !")
+                print("change batch size !",self.batch_size)
+                print("LAST batching !")
 
-        """
-        if self.count == self.batch_size:
+            """
+            if self.count == self.batch_size:
 
-            unique_labels_keys = list(set(self.exist_classes))
-            table = [0] * len(unique_labels_keys)
-            unique_labels = dict(zip(unique_labels_keys,table))
-            
-            self.count_batch += 1
-            #print("count_batch :",self.count_batch)
-            
-            for class_key in self.exist_classes:
-                unique_labels[class_key] = +1 
-
-            #print("tables of each labels :",unique_labels)
-
-
-
-         
-            
-            for index, key  in enumerate(unique_labels):
+                unique_labels_keys = list(set(self.exist_classes))
+                table = [0] * len(unique_labels_keys)
+                unique_labels = dict(zip(unique_labels_keys,table))
                 
-
-
-                if unique_labels[key] > 1:
-
-                   print("v>1 :",unique_labels[key])
-                   
-                   break
-
+                self.count_batch += 1
+                #print("count_batch :",self.count_batch)
                 
-                if index == len(unique_labels.keys()) - 1:
+                for class_key in self.exist_classes:
+                    unique_labels[class_key] = +1 
+
+                #print("tables of each labels :",unique_labels)
+
+
+
+             
+                
+                for index, key  in enumerate(unique_labels):
                     
-                    
-                    while True:
+
+
+                    if unique_labels[key] > 1:
+
+                       print("v>1 :",unique_labels[key])
                        
-                       pos_idx = random.randint(0,self.len_data-1) 
+                       break
 
-                       if self.labels[pos_idx] in unique_labels.keys():
-                           if self.labels[pos_idx] == self.labels[idx]:
-                               pass
+                    
+                    if index == len(unique_labels.keys()) - 1:
+                        
+                        
+                        while True:
+                           
+                           pos_idx = random.randint(0,self.len_data-1) 
 
-                           else:
-                               #print("old idx :",idx,self.labels[idx])
-                               idx = pos_idx
-                               #print("new idx :",idx,self.labels[idx])
-                               unique_labels[self.labels[idx]] +=1  
-                               #print("statistics tables :",unique_labels)
-                               self.count = 0  
-                               self.exist_classes = [] 
-                               self.ids_maps = []
-                            
-                               break 
-                              
+                           if self.labels[pos_idx] in unique_labels.keys():
+                               if self.labels[pos_idx] == self.labels[idx]:
+                                   pass
+
+                               else:
+                                   #print("old idx :",idx,self.labels[idx])
+                                   idx = pos_idx
+                                   #print("new idx :",idx,self.labels[idx])
+                                   unique_labels[self.labels[idx]] +=1  
+                                   #print("statistics tables :",unique_labels)
+                                   self.count = 0  
+                                   self.exist_classes = [] 
+                                   self.ids_maps = []
+                                
+                                   break 
+                                  
 
          
         label = self.labels[idx]

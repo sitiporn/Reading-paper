@@ -30,8 +30,7 @@ dt_str = now.strftime("%d_%m_%Y_%H:%M")
 N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 temperature = 0.1
-batch_size = 16
-
+batch_size = 16 
 labels = []
 samples = []
 
@@ -43,7 +42,7 @@ lamda = 1.0
 running_times = 10
 lr=5e-6
 model_name= "roberta-base" 
-prior_weight = True 
+prior_weight = False 
 train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
 
 valid_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/valid/'
@@ -73,7 +72,7 @@ print("len of examples",len(sampled_tasks[0]))
 print("len of validation",len(valid_tasks[0]))
 
 
-embedding = SimCSE(device='cuda:2',pretrain=prior_weight,model_name=model_name) 
+embedding = SimCSE(device='cuda:1',pretrain=prior_weight,model_name=model_name) 
 sim = Similarity(temperature)
 
 train_loader = SenLoader(sampled_tasks)
@@ -94,14 +93,15 @@ for j in range(len(valid_data)):
    valid_labels.append(valid_data[j].label)
 
 optimizer= AdamW(embedding.parameters(), lr=lr)
-train_data = CustomTextDataset(labels,samples)  
-valid_data = CustomTextDataset(valid_labels,valid_samples)
+print(": train data :")
+train_data = CustomTextDataset(labels=labels,text=samples,batch_size=batch_size)
+
+print(": validation data :")
+valid_data = CustomTextDataset(valid_labels,valid_samples,batch_size=batch_size)
 
 train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True,num_workers=8)
 
 valid_loader = DataLoader(valid_data,batch_size=batch_size,num_workers=8)
-
-
 
 print("DataLoader Done !")
 
@@ -126,7 +126,7 @@ for epoch in range(epochs):
 
 
         hj_bar = create_pair_sample(h_bar,debug=False)    
-        hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
+        hj_bar = [torch.as_tensor(tensor) for tensor in hj_bar]
         hj_bar = torch.stack(hj_bar)
         
         h_3d = h.unsqueeze(1)
@@ -134,7 +134,7 @@ for epoch in range(epochs):
         # print(len(hj_bar),len(hj_bar[0]),len(hj_bar[0][0]))
         # change it to be to taking grad
         
-        loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size) 
+        _, _, loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size,compute_loss=True) 
         loss_lml = outputs.loss
 
         # loss of pretrain model 
@@ -159,7 +159,7 @@ for epoch in range(epochs):
 
             model = embedding.get_model()  
 
-    
+    print(f"validation on epoch = {epoch}") 
     valid_loss = 0.0      
     correct = 0
     total = 0
@@ -181,7 +181,7 @@ for epoch in range(epochs):
         # print(len(hj_bar),len(hj_bar[0]),len(hj_bar[0][0]))
         # change it to be to taking grad
         
-        loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size) 
+        _, _, loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size,compute_loss=True) 
         loss_lml = outputs.loss
 
         #(batch_size,seq_len,vocab_size) 
@@ -238,9 +238,8 @@ for epoch in range(epochs):
          
 
       
-#    for data, labels in validloader:
-
-    PATH_to_save = f'../../models/{model_name}_epoch{epoch}_B={batch_size}_lr={lr}_{dt_str}.pth'
+#   for data, labels in validloader:
+    PATH_to_save = f'../../models/Load={prior_weight}_{model_name}_epoch{epoch}_B={batch_size}_lr={lr}_{dt_str}.pth' 
     torch.save(model.state_dict(),PATH_to_save)    
     print("save !:",PATH_to_save)
 
