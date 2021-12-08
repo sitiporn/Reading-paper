@@ -19,6 +19,9 @@
             - roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth (recently) 
               - on language understanding  (of last epochs validation 31 %) ,( after training session use validation set 41 %)
               - on similarity 
+            - Load=False_roberta-base_epoch14_B=16_lr=5e-06_08_12_2021_07:21.pth
+     
+            
         - [ ]  2.test RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
         - [ ]  3.Load Pretrain and train on dataset of this papers validate each epochs
         - [ ]  4.test from (3.) RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
