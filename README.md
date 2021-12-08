@@ -14,7 +14,7 @@
             - roberta-base_epoch14_B=16_lr=5e-06_24_11_2021_11:34.pth  
               - Suck on language understanding task cannot predict mask token
               - on Similarity -> pending
-            -   - Load=False_roberta-base_epoch14_B=16_lr=5e-06_08_12_2021_07:21.pth
+            - Load=False_roberta-base_epoch14_B=16_lr=5e-06_08_12_2021_07:21.pth
           - existed weight
             - roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_04:23.pth
             - roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth (recently) 
