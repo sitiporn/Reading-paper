@@ -28,7 +28,7 @@ from loss import intent_classification_loss
 from loss import norm_vect 
 import yaml 
 import json
-import re
+import random
 
 
 # get time 
@@ -55,7 +55,10 @@ model_name= "roberta-base"
 
 
 # from config
-select_model = 'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
+select_model = 'Load=False_roberta-base_epoch14_B=16_lr=5e-06_08_12_2021_07:21.pth' 
+
+
+#roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth
 
 # embedding 
 embedding = SimCSE(device='cuda:2',pretrain=True,model_name=model_name)
@@ -109,8 +112,8 @@ for j in range(len(test)):
    test_labels.append(test[i].label)
 
 
-valid_data = CustomTextDataset(valid_labels,valid_samples)
-test_data = CustomTextDataset(test_labels,test_samples)
+valid_data = CustomTextDataset(valid_labels,valid_samples,batch_size=batch_size)
+test_data = CustomTextDataset(test_labels,test_samples,batch_size=batch_size)
 
 valid_loader = DataLoader(valid_data,batch_size=batch_size,num_workers=8)
 test_loader = DataLoader(test_data,batch_size=batch_size,num_workers=8)
@@ -182,9 +185,7 @@ for (idx, batch) in enumerate(valid_loader):
 
 acc_valid = 100 * (correct / total)
 
-print('Accuracy of valid: %d %%' % (acc_valid))
 
-"""
 correct = 0
 total = 0
 
@@ -200,7 +201,7 @@ for (idx, batch) in enumerate(test_loader):
            
    h_3d = h.unsqueeze(1)
 
-   _, pos_sim, neg_sim = contrasive_loss(h[:,0,:],h_bar[:,0,:],hj_bar[:,0,:],h_3d[:,0,:],temperature,batch_size)
+   pos_sim, neg_sim, _ = contrasive_loss(h[:,0,:],h_bar[:,0,:],hj_bar[:,0,:],h_3d[:,0,:],temperature,batch_size)
 
    prediction = outputs.logits
 
@@ -223,7 +224,9 @@ for (idx, batch) in enumerate(test_loader):
    print("correct :",correct)
    print("total :",total)
 
+
 acc_test = 100 * (correct/total)
-"""
-#print('Accuracy of test: %d %%' %(acc_test))
+
+print('Accuracy of valid: %d %%' % (acc_valid))
+print('Accuracy of test: %d %%' %(acc_test))
 
