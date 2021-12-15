@@ -57,7 +57,10 @@ with open('config/test.yaml') as file:
     yaml_data = yaml.load(jAll, Loader=loader) 
 
 # 'roberta-base_B=16_lr=5e-06_27_11_2021_07:20.pth'
-select_model = 'roberta-base_B=16_lr=0.001_27_11_2021_17:06.pth'
+#'roberta-base_B=16_lr=0.001_27_11_2021_17:06.pth'
+
+select_model = 'Load=True_roberta-base_B=16_lr=5e-06_13_12_2021_14:55.pth'
+
 
 
 embedding = SimCSE(device=yaml_data["testing_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
@@ -88,27 +91,30 @@ print("Combine dataset done !:",len(data.get_examples()))
 # load all datasets 
 test_examples = data.get_examples()
 
-sampled_tasks = [sample(yaml_data["testing_params"]["N"], test_examples) for i in range(yaml_data["testing_params"]["T"])]
-
-print("len of examples",len(sampled_tasks[0]))
+#sampled_tasks = [sample(yaml_data["testing_params"]["N"], test_examples) for i in range(yaml_data["testing_params"]["T"])]
+sampled_tasks = sample(yaml_data["testing_params"]["N"],examples=test_examples,train=False)
+#print("len of examples",len(sampled_tasks[0]))
 
 sim = Similarity()
 test_loader = SenLoader(sampled_tasks)
-data  = test_loader.get_data()
+#data  = test_loader.get_data()
 
 samples = []
 labels = [] 
 
-for i in range(len(data)):
-   samples.append(data[i].text_a)
-   labels.append(data[i].label)
+#for i in range(len(data)):
+for i in range(len(test_examples)):
+   #samples.append(data[i].text_a)
+   #labels.append(data[i].label)
+   samples.append(test_examples[i].text)
+   labels.append(test_examples[i].label)
 
 optimizer= AdamW(embedding.parameters(), lr=yaml_data["testing_params"]["lr"])
-test_data = CustomTextDataset(labels,samples)  
+test_data = CustomTextDataset(labels,samples,batch_size=yaml_data["testing_params"]["batch_size"])  
 test_loader = DataLoader(test_data,batch_size=yaml_data["testing_params"]["batch_size"],shuffle=False,num_workers=2)
 
 print("Test of Dataloader !")
-label_distribution, label_maps = get_label_dist(sampled_tasks,test_examples,train=True)
+label_distribution, label_maps = get_label_dist(sampled_tasks,test_examples,train=False)
 
 
 

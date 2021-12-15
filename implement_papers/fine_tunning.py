@@ -175,26 +175,29 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
         # (batch_size, seq_len, vocab_size) 
         logits = outputs.logits
-        
+         
                         
         #loss_s_cl = 0.0
      
+        """
         if h_i is None:
             print("skip this batch")
             skip_time +=1
             continue
-
 
         loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params"]["temp"],debug=False) 
 
         label_ids, _  = embedding.get_label()
           
        
-        loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=yaml_data["training_params"]["smoothness"], device=yaml_data["training_params"]["device"])
+        #loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=yaml_data["training_params"]["smoothness"], device=yaml_data["training_params"]["device"])
+        """        
 
+        loss_intent = outputs.loss  
         running_loss_intent = loss_intent.item()         
         
-        loss_stage2 = loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
+        loss_stage2 = loss_intent
+        #loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
         
         
 
@@ -204,7 +207,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         # collect for visualize 
         running_loss += loss_stage2.item()
         running_loss_intent += loss_intent.item() 
-        running_loss_s_cl += loss_s_cl.item()
+        running_loss_s_cl += 0 #loss_s_cl.item()
         
         if idx % yaml_data["training_params"]["running_times"] ==  yaml_data["training_params"]["running_times"]-1: # print every 50 mini-batches
             running_time += 1

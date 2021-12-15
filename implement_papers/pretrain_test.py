@@ -52,17 +52,18 @@ lamda = 1.0
 running_times = 10
 lr=5e-6
 model_name= "roberta-base" 
+pretrain = False 
 
 
 # from config
-select_model = 'Load=False_roberta-base_epoch14_B=16_lr=5e-06_08_12_2021_07:21.pth' 
-
+select_model = 'Load=False_roberta-base_epoch14_B=16_lr=5e-06_08_12_2021_07:21.pth'
 
 #roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth
 
+
 # embedding 
-embedding = SimCSE(device='cuda:2',pretrain=True,model_name=model_name)
-#embedding.load_model(select_model=select_model)
+embedding = SimCSE(device='cuda:2',pretrain=pretrain,model_name=model_name)
+embedding.load_model(select_model=select_model)
 
 # combine all datasets
 
@@ -184,8 +185,7 @@ for (idx, batch) in enumerate(valid_loader):
    print("total :",total)
 
 acc_valid = 100 * (correct / total)
-
-
+"""
 correct = 0
 total = 0
 
@@ -226,7 +226,7 @@ for (idx, batch) in enumerate(test_loader):
 
 
 acc_test = 100 * (correct/total)
-
+"""
 print('Accuracy of valid: %d %%' % (acc_valid))
-print('Accuracy of test: %d %%' %(acc_test))
+#print('Accuracy of test: %d %%' %(acc_test))
 
