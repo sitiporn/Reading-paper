@@ -59,7 +59,10 @@ with open('config/test.yaml') as file:
 # 'roberta-base_B=16_lr=5e-06_27_11_2021_07:20.pth'
 #'roberta-base_B=16_lr=0.001_27_11_2021_17:06.pth'
 
-select_model = 'Load=True_roberta-base_B=16_lr=5e-06_13_12_2021_14:55.pth'
+select_model = "Load=True_roberta-base_B=16_lr=5e-06_18_12_2021_10:05.pth"
+#"Load=True_roberta-base_B=16_lr=5e-06_18_12_2021_09:57.pth"
+
+#'Load=True_roberta-base_B=16_lr=5e-06_13_12_2021_14:55.pth'
 
 
 

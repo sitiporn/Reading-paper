@@ -151,6 +151,9 @@ class SimCSE(nn.Module):
 
                 if param.requires_grad: 
                     print(name)
+
+    def eval(self):
+        print(self.model.eval())
            
     def get_label(self,debug:bool=False):
 

@@ -125,9 +125,11 @@ class CustomTextDataset(Dataset):
             self.ids_maps = []
             self.len_data = len(self.labels)
             self.count_batch = 0 
+            self.is_left_batch = False
             
             #print("self.len_data ",self.len_data)
             #print("self.len data",self.batch_size)
+            
             self.max_count = self.len_data // self.batch_size 
 
             if self.len_data % self.batch_size !=0:
@@ -147,31 +149,42 @@ class CustomTextDataset(Dataset):
             self.exist_classes.append(self.labels[idx])
             self.ids_maps.append(idx)
 
-            """
+             
             if self.count_batch == self.max_count - 1:
+                self.count_batch = +1 
+                #print("self.count_batch :",self.count_batch)
+                self.count_batch = 0 
+
                 if self.len_data % self.batch_size !=0: 
                     self.batch_size = self.len_data % self.batch_size
+                    self.is_left_batch = True
 
-                print("change batch size !",self.batch_size)
-                print("LAST batching !")
+                #print("change batch size !",self.batch_size)
+                #print("LAST batching !")
 
-            """
+                    
             if self.count == self.batch_size:
 
                 unique_labels_keys = list(set(self.exist_classes))
                 table = [0] * len(unique_labels_keys)
                 unique_labels = dict(zip(unique_labels_keys,table))
                 
-                self.count_batch += 1
-                #print("count_batch :",self.count_batch)
+                if self.is_left_batch == True:
+                    self.is_left_batch = False
+                    self.batch_size = 16  
+
+                else: 
+                    self.count_batch += 1
+                    #print("count_batch :",self.count_batch)
                 
                 for class_key in self.exist_classes:
                     unique_labels[class_key] = +1 
 
                 #print("tables of each labels :",unique_labels)
 
-
-
+                # Todo :
+                # 1. batching align between in Custom and dataloader 
+                # 2. control repeated label of last batch   
              
                 
                 for index, key  in enumerate(unique_labels):
@@ -202,12 +215,26 @@ class CustomTextDataset(Dataset):
                                    #print("new idx :",idx,self.labels[idx])
                                    unique_labels[self.labels[idx]] +=1  
                                    #print("statistics tables :",unique_labels)
+                                   # replace last token
+                                   self.exist_classes[-1] = self.labels[idx]
+                                   """
+                                   print("==========")
+                                   print("len exist_classes :",len(set(self.exist_classes)))
+                                   print(self.exist_classes)
+                                   """
+
+
+                                   if len(set(self.exist_classes)) ==  len(self.exist_classes):
+                                       print("unique_labels:")
+                                       #print(unique_labels)
+                                       
+                                   
                                    self.count = 0  
                                    self.exist_classes = [] 
                                    self.ids_maps = []
                                 
                                    break 
-                                  
+                                      
 
          
         label = self.labels[idx]

@@ -187,32 +187,12 @@ for epoch in range(epochs):
         #(batch_size,seq_len,vocab_size) 
         prediction = outputs.logits 
        
-        """
-        Todo
-
-        1. select only mask token
-        2. find softmax along that token
-        3. find the highest prob of mask token   
-        4. compare the label belong to mask pos with predict of mask
-        """
 
         labels, mask_arr  = embedding.get_label()
 
-        """
-        prediction shape before mask: (batch_size,seq_len,vocab_size)
-        prediction after masking : (#of masking,vocab_size)
-        labels after masking : (#of masking)
-        """
-        """
-        print("Prediction shape:",prediction.shape) 
-        print("Predicton:",prediction[mask_arr])
-        print("labels :",labels[mask_arr])
-        """ 
         prediction = prediction[mask_arr]
         labels = labels[mask_arr]
        
-        #print("prediction after masking ",prediction.shape)
-        #print("labels after masking :",labels.shape)
         
         prediction = torch.softmax(prediction,dim=-1)
         prediction = torch.max(prediction,dim=-1)[1]

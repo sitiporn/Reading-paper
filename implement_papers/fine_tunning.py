@@ -83,12 +83,14 @@ select_model = 'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
 # create dummy model 
 embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
 
+
+"""
 #embedding.load_state_dict(checkpoint,strict=False)
 embedding.load_model(select_model=select_model,strict=False)
 print("Loading Pretain Model done!")
 
-print("Freeze Backboned layers")
-embedding.freeze_layers()
+#print("Freeze Backboned layers")
+#embedding.freeze_layers()
 
 # get single dataset  
 data = combine('CLINC150','train_5') 
@@ -122,7 +124,7 @@ for i in range(len(train_examples)):
 
 
 
-train_data = CustomTextDataset(labels,samples,batch_size=yaml_data["training_params"]["batch_size"])  
+train_data = CustomTextDataset(labels,samples,batch_size=yaml_data["training_params"]["batch_size"],repeated_label=True)  
 
 train_loader = DataLoader(train_data,batch_size=yaml_data["training_params"]["batch_size"],shuffle=True)
 
@@ -161,8 +163,15 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
          
         
         # (batch_size, seq_len, hidhen_dim) 
+
+        """
+        """
         if len(set(batch['Class'])) == len(batch['Class']):
+            
             print("no positive pairs !")
+            print("len batch class o/p :",len(set(batch['Class'])))
+            print(batch['Class'])
+            print("=====================")
       
         h, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map,masking=False)
         
@@ -179,35 +188,48 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
                         
         #loss_s_cl = 0.0
      
-        """
         if h_i is None:
             print("skip this batch")
             skip_time +=1
             continue
 
+
         loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params"]["temp"],debug=False) 
 
+        """
         label_ids, _  = embedding.get_label()
           
        
         #loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=yaml_data["training_params"]["smoothness"], device=yaml_data["training_params"]["device"])
         """        
+        """
+        Todo : 15/12/62
+        * classifier 
+         - (xj, yj)
+         - f(xj) - feature vector extracted by pretrain 
+         - pj = Softmax(W * f(xj) + b) 
+         - W = M , b=0 : this weight initailization 
+         - M -> [mu1,...,muk] 
+
+        * supervised_contrasive_loss  
+
+         - remove skip of every batch  
+         - test contrasive loss to proof the correctness
+
+        """
 
         loss_intent = outputs.loss  
-        running_loss_intent = loss_intent.item()         
         
-        loss_stage2 = loss_intent
-        #loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
+        loss_stage2 = loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
         
         
-
         loss_stage2.backward()
         optimizer.step()
 
         # collect for visualize 
         running_loss += loss_stage2.item()
         running_loss_intent += loss_intent.item() 
-        running_loss_s_cl += 0 #loss_s_cl.item()
+        running_loss_s_cl += loss_s_cl.item()
         
         if idx % yaml_data["training_params"]["running_times"] ==  yaml_data["training_params"]["running_times"]-1: # print every 50 mini-batches
             running_time += 1
@@ -221,6 +243,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
             running_loss = 0.0
             logger.close()
             model = embedding.get_model()   
+    
 
     
 
@@ -234,3 +257,4 @@ print(PATH_to_save)
 print('Finished Training')
 torch.save(model.state_dict(),PATH_to_save)
 print("Saving Done !")
+"""
