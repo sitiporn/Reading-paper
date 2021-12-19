@@ -84,13 +84,12 @@ select_model = 'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
 embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
 
 
-"""
 #embedding.load_state_dict(checkpoint,strict=False)
 embedding.load_model(select_model=select_model,strict=False)
 print("Loading Pretain Model done!")
 
-#print("Freeze Backboned layers")
-#embedding.freeze_layers()
+print("Freeze Backboned layers")
+embedding.freeze_layers(freeze_layers_count=8)
 
 # get single dataset  
 data = combine('CLINC150','train_5') 
@@ -164,8 +163,6 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         
         # (batch_size, seq_len, hidhen_dim) 
 
-        """
-        """
         if len(set(batch['Class'])) == len(batch['Class']):
             
             print("no positive pairs !")
@@ -180,44 +177,34 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         h = h[:,0,:]
         
 
-        
+        # Todo: debug pos and neg pairs        
         T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
         # (batch_size, seq_len, vocab_size) 
         logits = outputs.logits
          
                         
-        #loss_s_cl = 0.0
      
         if h_i is None:
             print("skip this batch")
             skip_time +=1
             continue
-
-
+   
+        # Todo: debug supervised contrasive loss 
         loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params"]["temp"],debug=False) 
 
         """
-        label_ids, _  = embedding.get_label()
+        #label_ids, _  = embedding.get_label()
           
        
         #loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=yaml_data["training_params"]["smoothness"], device=yaml_data["training_params"]["device"])
-        """        
         """
-        Todo : 15/12/62
-        * classifier 
-         - (xj, yj)
-         - f(xj) - feature vector extracted by pretrain 
-         - pj = Softmax(W * f(xj) + b) 
-         - W = M , b=0 : this weight initailization 
-         - M -> [mu1,...,muk] 
-
-        * supervised_contrasive_loss  
-
-         - remove skip of every batch  
-         - test contrasive loss to proof the correctness
+        """
+        Todo: classifier
+        1. p = Softmax(W @ f(x) + b) w_init = [mu1,mu2,mu3] and b = 0 
+        2. Entropy regularization : average of H(p), for all quries 
+        3. Cosine similarity + softmax  just norm method |w| and |q| 
 
         """
-
         loss_intent = outputs.loss  
         
         loss_stage2 = loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
@@ -246,7 +233,6 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
     
 
     
-
 del logger    
 print("deleate logger for one combination")
 
@@ -257,4 +243,3 @@ print(PATH_to_save)
 print('Finished Training')
 torch.save(model.state_dict(),PATH_to_save)
 print("Saving Done !")
-"""

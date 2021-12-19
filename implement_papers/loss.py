@@ -128,32 +128,29 @@ class SimCSE(nn.Module):
             self.model.load_state_dict(torch.load(PATH),strict=False)
             print("Load weight patial done !")
 
-    def freeze_layers(self):
-         
-        self.params = self.model.state_dict()
-    
-        val = self.params.keys()
-        print("len :",len(self.params.keys()))
-        count = 0 
+    def freeze_layers(self,freeze_layers_count:int):
 
-        for name, param in self.model.named_parameters():
+        count_layer = 0
+        if freeze_layers_count:
+        # freeze embeddings of the model
+            for param in self.model.roberta.embeddings.parameters():
 
+                param.requires_grad = False 
 
-            # freeze layers except head 
-            # print(param) 
-            if count >= 197:
-                break
+            if freeze_layers_count != -1:
 
-            param.requires_grad = False
-            count +=1
-            
-        for name, param in self.model.named_parameters():
+                for layer in self.model.roberta.encoder.layer[:freeze_layers_count]:
 
-                if param.requires_grad: 
-                    print(name)
+                    count_layer +=1 
+                    for param in layer.parameters():
+                        param.requires_grad = False
+                    
+            print("the number of freezing layers",count_layer) 
+
 
     def eval(self):
-        print(self.model.eval())
+        
+        return self.model.eval()
            
     def get_label(self,debug:bool=False):
 
@@ -355,7 +352,7 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
 
     neg_pair - two utterances across different class  
    
-        loss_stage2   
+    loss_stage2   
     """
     
     sim = Similarity(temp)

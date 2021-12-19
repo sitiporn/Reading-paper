@@ -1,0 +1,2138 @@
+Some weights of the model checkpoint at roberta-base were not used when initializing RobertaForSequenceClassification: ['lm_head.layer_norm.bias', 'roberta.pooler.dense.weight', 'lm_head.dense.weight', 'lm_head.bias', 'lm_head.layer_norm.weight', 'lm_head.dense.bias', 'lm_head.decoder.weight', 'roberta.pooler.dense.bias']
+- This IS expected if you are initializing RobertaForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing RobertaForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at roberta-base and are newly initialized: ['classifier.dense.weight', 'classifier.out_proj.weight', 'classifier.out_proj.bias', 'classifier.dense.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Using RobertaForSequenceClassification ...
+Vocab size: 50265
+Load weight patial done !
+Loading Pretain Model done!
+Freeze Backboned layers
+the number of freezing layers 8
+dataset : CLINC150
+len of datasets : 750
+the numbers of intents 150
+the number of maximum of batching : 47
+DataLoader Done !
+lamda : 0.05
+temperature : 0.3
+name on tensorboard: Load=True_roberta-base_19_12_2021_03:58_B=16_lr _5e-06_lambda=0.05_temp=0.3
+[1,    10] loss_total: 3.460 loss_supervised_contrasive:  3.210 loss_intent :5.016 
+skip_time: 0
+total : 10
+[1,    20] loss_total: 4.280 loss_supervised_contrasive:  7.239 loss_intent :10.038 
+skip_time: 0
+total : 20
+[1,    30] loss_total: 3.942 loss_supervised_contrasive:  10.931 loss_intent :15.031 
+skip_time: 0
+total : 30
+[1,    40] loss_total: 3.559 loss_supervised_contrasive:  14.239 loss_intent :20.043 
+skip_time: 0
+total : 40
+no positive pairs !
+len batch class o/p : 16
+['pto_used', 'update_playlist', 'how_busy', 'pin_change', 'cancel', 'reset_settings', 'find_phone', 'roll_dice', 'change_volume', 'mpg', 'what_are_your_hobbies', 'timezone', 'pto_request_status', 'nutrition_info', 'card_declined', 'bill_due']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['are_you_a_bot', 'reset_settings', 'car_rental', 'plug_type', 'cook_time', 'maybe', 'alarm', 'shopping_list_update', 'next_song', 'direct_deposit', 'whisper_mode', 'redeem_rewards', 'reminder', 'meal_suggestion', 'oil_change_when', 'tire_pressure']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['schedule_maintenance', 'next_song', 'application_status', 'rollover_401k', 'damaged_card', 'oil_change_how', 'meal_suggestion', 'w2', 'next_holiday', 'bill_due', 'change_language', 'pto_request', 'reminder_update', 'shopping_list_update', 'fun_fact', 'change_speed']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['insurance_change', 'reminder_update', 'how_old_are_you', 'pto_balance', 'credit_limit', 'cook_time', 'change_volume', 'min_payment', 'routing', 'bill_due', 'transfer', 'calories', 'international_fees', 'timer', 'bill_balance', 'traffic']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['rollover_401k', 'credit_limit', 'calories', 'bill_balance', 'new_card', 'expiration_date', 'oil_change_how', 'jump_start', 'taxes', 'payday', 'travel_notification', 'improve_credit_score', 'w2', 'what_are_your_hobbies', 'todo_list_update', 'order_checks']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['vaccines', 'payday', 'min_payment', 'change_ai_name', 'travel_alert', 'report_lost_card', 'jump_start', 'credit_limit_change', 'card_declined', 'user_name', 'shopping_list_update', 'spending_history', 'travel_notification', 'what_is_your_name', 'confirm_reservation', 'current_location']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['yes', 'what_is_your_name', 'exchange_rate', 'credit_limit', 'how_busy', 'pto_request_status', 'no', 'order_status', 'do_you_have_pets', 'change_ai_name', 'tire_pressure', 'next_song', 'change_language', 'fun_fact', 'insurance_change', 'routing']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['confirm_reservation', 'meeting_schedule', 'are_you_a_bot', 'smart_home', 'transfer', 'how_old_are_you', 'weather', 'gas', 'translate', 'international_fees', 'change_language', 'cancel_reservation', 'bill_balance', 'freeze_account', 'cook_time', 'expiration_date']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['schedule_meeting', 'are_you_a_bot', 'direct_deposit', 'routing', 'tell_joke', 'sync_device', 'international_visa', 'directions', 'definition', 'current_location', 'oil_change_how', 'schedule_maintenance', 'replacement_card_duration', 'exchange_rate', 'lost_luggage', 'change_ai_name']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['greeting', 'replacement_card_duration', 'ingredients_list', 'how_busy', 'change_user_name', 'goodbye', 'new_card', 'sync_device', 'make_call', 'order_status', 'insurance', 'roll_dice', 'ingredient_substitution', 'what_are_your_hobbies', 'reset_settings', 'flight_status']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['todo_list', 'ingredient_substitution', 'shopping_list', 'oil_change_how', 'vaccines', 'where_are_you_from', 'income', 'credit_limit_change', 'what_is_your_name', 'carry_on', 'share_location', 'tell_joke', 'what_can_i_ask_you', 'min_payment', 'international_fees', 'application_status']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['order_status', 'text', 'alarm', 'spending_history', 'translate', 'lost_luggage', 'flip_coin', 'freeze_account', 'timer', 'taxes', 'payday', 'w2', 'interest_rate', 'how_old_are_you', 'report_lost_card', 'distance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['spelling', 'interest_rate', 'min_payment', 'make_call', 'directions', 'date', 'food_last', 'change_user_name', 'international_fees', 'calories', 'report_fraud', 'car_rental', 'schedule_meeting', 'w2', 'rewards_balance', 'current_location']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['no', 'tire_change', 'bill_balance', 'rollover_401k', 'balance', 'improve_credit_score', 'user_name', 'measurement_conversion', 'plug_type', 'reset_settings', 'flight_status', 'schedule_meeting', 'calculator', 'change_speed', 'cancel_reservation', 'flip_coin']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['restaurant_suggestion', 'make_call', 'timer', 'greeting', 'what_are_your_hobbies', 'next_holiday', 'spending_history', 'mpg', 'calories', 'tire_change', 'how_old_are_you', 'gas', 'credit_limit_change', 'report_lost_card', 'lost_luggage', 'recipe']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['improve_credit_score', 'greeting', 'meeting_schedule', 'tire_pressure', 'cancel', 'change_accent', 'user_name', 'cancel_reservation', 'apr', 'nutrition_info', 'alarm', 'flight_status', 'share_location', 'date', 'account_blocked', 'todo_list']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['current_location', 'apr', 'change_accent', 'replacement_card_duration', 'credit_limit_change', 'restaurant_reviews', 'confirm_reservation', 'pto_used', 'report_fraud', 'car_rental', 'redeem_rewards', 'recipe', 'last_maintenance', 'pay_bill', 'text', 'rewards_balance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['balance', 'replacement_card_duration', 'maybe', 'timezone', 'redeem_rewards', 'change_accent', 'meeting_schedule', 'calendar_update', 'sync_device', 'share_location', 'next_song', 'todo_list', 'reset_settings', 'carry_on', 'pto_request', 'restaurant_suggestion']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['flip_coin', 'sync_device', 'restaurant_suggestion', 'last_maintenance', 'pto_request_status', 'play_music', 'timezone', 'pin_change', 'who_do_you_work_for', 'schedule_maintenance', 'international_fees', 'book_hotel', 'whisper_mode', 'gas_type', 'what_song', 'traffic']
+=====================
+skip this batch
+[2,    30] loss_total: 5.607 loss_supervised_contrasive:  5.333 loss_intent :5.481 
+skip_time: 19
+total : 77
+no positive pairs !
+len batch class o/p : 16
+['order', 'meaning_of_life', 'uber', 'credit_limit', 'payday', 'income', 'find_phone', 'carry_on', 'transactions', 'todo_list_update', 'ingredient_substitution', 'where_are_you_from', 'jump_start', 'change_volume', 'greeting', 'balance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['what_can_i_ask_you', 'payday', 'application_status', 'meeting_schedule', 'change_ai_name', 'restaurant_reservation', 'taxes', 'spending_history', 'measurement_conversion', 'smart_home', 'report_fraud', 'card_declined', 'play_music', 'book_flight', 'calendar_update', 'plug_type']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['how_busy', 'smart_home', 'restaurant_reviews', 'alarm', 'recipe', 'mpg', 'roll_dice', 'ingredients_list', 'account_blocked', 'fun_fact', 'play_music', 'schedule_meeting', 'travel_alert', 'thank_you', 'time', 'transactions']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['alarm', 'timer', 'calendar', 'definition', 'text', 'jump_start', 'oil_change_when', 'plug_type', 'what_song', 'last_maintenance', 'date', 'fun_fact', 'what_can_i_ask_you', 'next_holiday', 'confirm_reservation', 'next_song']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['calendar', 'reminder', 'travel_alert', 'restaurant_reviews', 'what_is_your_name', 'change_ai_name', 'ingredients_list', 'pto_request', 'date', 'cook_time', 'balance', 'uber', 'account_blocked', 'application_status', 'travel_suggestion', 'measurement_conversion']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_user_name', 'balance', 'credit_score', 'cook_time', 'shopping_list_update', 'exchange_rate', 'goodbye', 'restaurant_reviews', 'what_are_your_hobbies', 'pto_request', 'next_song', 'shopping_list', 'car_rental', 'routing', 'direct_deposit', 'calculator']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['order', 'credit_score', 'account_blocked', 'international_visa', 'share_location', 'ingredient_substitution', 'time', 'recipe', 'travel_notification', 'directions', 'interest_rate', 'play_music', 'book_hotel', 'order_checks', 'calories', 'find_phone']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['insurance_change', 'how_busy', 'do_you_have_pets', 'ingredients_list', 'credit_score', 'reset_settings', 'thank_you', 'cancel', 'recipe', 'food_last', 'roll_dice', 'current_location', 'definition', 'pto_used', 'find_phone', 'change_user_name']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['greeting', 'order_checks', 'where_are_you_from', 'timezone', 'credit_limit', 'report_lost_card', 'vaccines', 'travel_notification', 'next_song', 'rollover_401k', 'cancel', 'goodbye', 'definition', 'share_location', 'apr', 'bill_due']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['accept_reservations', 'play_music', 'calendar_update', 'update_playlist', 'change_language', 'spending_history', 'what_are_your_hobbies', 'min_payment', 'timer', 'change_accent', 'transactions', 'international_visa', 'ingredient_substitution', 'sync_device', 'who_made_you', 'payday']
+=====================
+skip this batch
+[3,    10] loss_total: 2.311 loss_supervised_contrasive:  2.137 loss_intent :3.489 
+skip_time: 29
+total : 104
+no positive pairs !
+len batch class o/p : 16
+['restaurant_reservation', 'tire_pressure', 'tell_joke', 'goodbye', 'make_call', 'what_song', 'oil_change_when', 'directions', 'current_location', 'redeem_rewards', 'time', 'next_holiday', 'replacement_card_duration', 'book_hotel', 'reset_settings', 'who_do_you_work_for']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['credit_score', 'oil_change_when', 'translate', 'replacement_card_duration', 'spending_history', 'oil_change_how', 'travel_alert', 'expiration_date', 'transfer', 'bill_balance', 'carry_on', 'redeem_rewards', 'traffic', 'text', 'report_lost_card', 'pto_used']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['alarm', 'travel_notification', 'food_last', 'schedule_maintenance', 'application_status', 'tire_pressure', 'cook_time', 'directions', 'travel_alert', 'no', 'fun_fact', 'calendar', 'report_lost_card', 'do_you_have_pets', 'meaning_of_life', 'report_fraud']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['restaurant_reviews', 'pin_change', 'oil_change_when', 'sync_device', 'change_volume', 'change_ai_name', 'freeze_account', 'income', 'credit_limit', 'book_hotel', 'shopping_list', 'insurance', 'change_language', 'directions', 'expiration_date', 'ingredient_substitution']
+=====================
+skip this batch
+[3,    20] loss_total: 2.173 loss_supervised_contrasive:  4.160 loss_intent :6.480 
+skip_time: 33
+total : 114
+no positive pairs !
+len batch class o/p : 16
+['carry_on', 'todo_list_update', 'whisper_mode', 'schedule_meeting', 'how_old_are_you', 'min_payment', 'transfer', 'alarm', 'jump_start', 'recipe', 'rewards_balance', 'gas', 'ingredient_substitution', 'insurance', 'translate', 'what_is_your_name']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['apr', 'interest_rate', 'payday', 'how_old_are_you', 'change_ai_name', 'pto_request_status', 'meaning_of_life', 'maybe', 'rollover_401k', 'greeting', 'replacement_card_duration', 'weather', 'carry_on', 'do_you_have_pets', 'todo_list', 'current_location']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['direct_deposit', 'change_accent', 'change_speed', 'todo_list_update', 'tire_change', 'flight_status', 'measurement_conversion', 'repeat', 'nutrition_info', 'card_declined', 'transactions', 'distance', 'change_volume', 'next_song', 'restaurant_reviews', 'income']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['routing', 'credit_limit', 'exchange_rate', 'whisper_mode', 'measurement_conversion', 'repeat', 'tire_pressure', 'transfer', 'last_maintenance', 'time', 'update_playlist', 'date', 'what_are_your_hobbies', 'car_rental', 'pay_bill', 'reminder']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['order', 'pto_request_status', 'next_holiday', 'last_maintenance', 'change_speed', 'who_do_you_work_for', 'book_flight', 'plug_type', 'change_language', 'reminder_update', 'uber', 'cook_time', 'vaccines', 'redeem_rewards', 'car_rental', 'pto_request']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['oil_change_when', 'replacement_card_duration', 'exchange_rate', 'order_checks', 'who_made_you', 'tire_pressure', 'last_maintenance', 'greeting', 'calories', 'card_declined', 'yes', 'restaurant_reservation', 'tire_change', 'make_call', 'schedule_maintenance', 'spending_history']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meal_suggestion', 'car_rental', 'timezone', 'restaurant_reservation', 'cancel_reservation', 'gas_type', 'weather', 'change_speed', 'card_declined', 'expiration_date', 'distance', 'flight_status', 'report_lost_card', 'transfer', 'calendar', 'mpg']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['improve_credit_score', 'who_do_you_work_for', 'vaccines', 'how_busy', 'replacement_card_duration', 'order', 'pto_balance', 'what_are_your_hobbies', 'smart_home', 'date', 'redeem_rewards', 'spending_history', 'insurance_change', 'calculator', 'account_blocked', 'interest_rate']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['exchange_rate', 'restaurant_reviews', 'tell_joke', 'flip_coin', 'report_fraud', 'pin_change', 'maybe', 'order_checks', 'what_song', 'schedule_meeting', 'order_status', 'next_holiday', 'update_playlist', 'share_location', 'what_can_i_ask_you', 'bill_balance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['reminder', 'find_phone', 'what_is_your_name', 'pin_change', 'change_ai_name', 'pto_request', 'nutrition_info', 'card_declined', 'taxes', 'bill_balance', 'todo_list', 'damaged_card', 'change_user_name', 'bill_due', 'routing', 'book_flight']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['reminder_update', 'restaurant_suggestion', 'shopping_list_update', 'book_flight', 'order_status', 'calories', 'international_fees', 'ingredient_substitution', 'uber', 'food_last', 'account_blocked', 'how_old_are_you', 'change_speed', 'reminder', 'smart_home', 'oil_change_how']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['taxes', 'bill_due', 'food_last', 'order_status', 'update_playlist', 'cancel_reservation', 'distance', 'vaccines', 'share_location', 'tell_joke', 'payday', 'recipe', 'todo_list', 'reset_settings', 'text', 'mpg']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['expiration_date', 'alarm', 'recipe', 'application_status', 'make_call', 'lost_luggage', 'change_accent', 'calendar', 'taxes', 'sync_device', 'rewards_balance', 'international_visa', 'maybe', 'user_name', 'flight_status', 'direct_deposit']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 14
+['spelling', 'what_is_your_name', 'meeting_schedule', 'flight_status', 'todo_list_update', 'direct_deposit', 'international_fees', 'account_blocked', 'user_name', 'reminder_update', 'next_holiday', 'credit_score', 'meaning_of_life', 'timer']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_volume', 'reminder_update', 'change_speed', 'order_status', 'restaurant_reservation', 'what_are_your_hobbies', 'do_you_have_pets', 'mpg', 'damaged_card', 'interest_rate', 'sync_device', 'order', 'travel_notification', 'transfer', 'travel_alert', 'carry_on']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['restaurant_reviews', 'who_made_you', 'tell_joke', 'thank_you', 'repeat', 'do_you_have_pets', 'pto_request_status', 'cancel_reservation', 'where_are_you_from', 'todo_list', 'flip_coin', 'calendar_update', 'payday', 'income', 'text', 'apr']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['last_maintenance', 'pto_used', 'meal_suggestion', 'reminder', 'vaccines', 'freeze_account', 'improve_credit_score', 'international_visa', 'book_hotel', 'measurement_conversion', 'thank_you', 'alarm', 'weather', 'confirm_reservation', 'direct_deposit', 'food_last']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['gas_type', 'tell_joke', 'pto_balance', 'oil_change_when', 'maybe', 'tire_change', 'food_last', 'exchange_rate', 'last_maintenance', 'time', 'jump_start', 'restaurant_reviews', 'new_card', 'change_ai_name', 'greeting', 'bill_balance']
+=====================
+skip this batch
+[4,    10] loss_total: 2.694 loss_supervised_contrasive:  2.544 loss_intent :2.993 
+skip_time: 51
+total : 151
+no positive pairs !
+len batch class o/p : 16
+['todo_list', 'pto_request_status', 'greeting', 'smart_home', 'reset_settings', 'cancel', 'meeting_schedule', 'play_music', 'insurance', 'how_busy', 'plug_type', 'card_declined', 'payday', 'pay_bill', 'ingredient_substitution', 'lost_luggage']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['no', 'credit_limit_change', 'pin_change', 'order', 'rewards_balance', 'pay_bill', 'schedule_maintenance', 'repeat', 'tell_joke', 'find_phone', 'where_are_you_from', 'ingredient_substitution', 'timer', 'whisper_mode', 'calories', 'mpg']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['calendar_update', 'confirm_reservation', 'damaged_card', 'how_old_are_you', 'plug_type', 'share_location', 'international_fees', 'gas', 'restaurant_suggestion', 'meal_suggestion', 'date', 'spending_history', 'routing', 'goodbye', 'make_call', 'pto_request']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['what_are_your_hobbies', 'routing', 'redeem_rewards', 'directions', 'text', 'meal_suggestion', 'meaning_of_life', 'cook_time', 'pto_used', 'what_can_i_ask_you', 'sync_device', 'last_maintenance', 'what_song', 'next_holiday', 'greeting', 'distance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['redeem_rewards', 'play_music', 'mpg', 'balance', 'flip_coin', 'what_song', 'insurance_change', 'flight_status', 'income', 'where_are_you_from', 'calendar', 'travel_suggestion', 'damaged_card', 'user_name', 'w2', 'change_ai_name']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['nutrition_info', 'yes', 'thank_you', 'change_volume', 'roll_dice', 'expiration_date', 'smart_home', 'insurance', 'exchange_rate', 'gas', 'restaurant_suggestion', 'repeat', 'weather', 'text', 'book_hotel', 'timezone']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['find_phone', 'pto_request', 'cancel_reservation', 'tire_change', 'cancel', 'weather', 'routing', 'reminder_update', 'rollover_401k', 'what_can_i_ask_you', 'date', 'confirm_reservation', 'report_lost_card', 'travel_suggestion', 'bill_balance', 'smart_home']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['calculator', 'carry_on', 'time', 'schedule_maintenance', 'rollover_401k', 'what_can_i_ask_you', 'credit_limit_change', 'expiration_date', 'order_checks', 'maybe', 'play_music', 'pay_bill', 'food_last', 'insurance_change', 'vaccines', 'replacement_card_duration']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['car_rental', 'oil_change_how', 'goodbye', 'what_song', 'who_do_you_work_for', 'report_lost_card', 'todo_list_update', 'spending_history', 'greeting', 'international_fees', 'change_user_name', 'change_language', 'meaning_of_life', 'travel_suggestion', 'yes', 'next_holiday']
+=====================
+skip this batch
+[4,    30] loss_total: 4.003 loss_supervised_contrasive:  6.274 loss_intent :8.460 
+skip_time: 60
+total : 171
+no positive pairs !
+len batch class o/p : 16
+['todo_list_update', 'cook_time', 'card_declined', 'confirm_reservation', 'replacement_card_duration', 'text', 'credit_score', 'what_is_your_name', 'timer', 'pin_change', 'distance', 'meaning_of_life', 'oil_change_when', 'order_status', 'next_song', 'traffic']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['date', 'expiration_date', 'next_song', 'credit_limit', 'pto_balance', 'no', 'plug_type', 'gas', 'spending_history', 'whisper_mode', 'bill_due', 'shopping_list_update', 'damaged_card', 'roll_dice', 'change_user_name', 'how_old_are_you']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['bill_due', 'bill_balance', 'shopping_list', 'payday', 'rewards_balance', 'roll_dice', 'calendar', 'share_location', 'current_location', 'thank_you', 'alarm', 'international_visa', 'travel_notification', 'car_rental', 'yes', 'schedule_meeting']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['insurance', 'oil_change_how', 'reminder_update', 'nutrition_info', 'change_speed', 'yes', 'user_name', 'oil_change_when', 'schedule_maintenance', 'calories', 'tell_joke', 'pay_bill', 'current_location', 'update_playlist', 'definition', 'credit_limit']
+=====================
+skip this batch
+[4,    40] loss_total: 2.116 loss_supervised_contrasive:  8.240 loss_intent :11.446 
+skip_time: 64
+total : 181
+no positive pairs !
+len batch class o/p : 16
+['report_lost_card', 'freeze_account', 'accept_reservations', 'travel_alert', 'timer', 'schedule_meeting', 'spending_history', 'application_status', 'maybe', 'balance', 'gas', 'cook_time', 'income', 'oil_change_when', 'make_call', 'redeem_rewards']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['account_blocked', 'ingredient_substitution', 'next_song', 'freeze_account', 'next_holiday', 'cook_time', 'measurement_conversion', 'flip_coin', 'are_you_a_bot', 'definition', 'share_location', 'who_made_you', 'balance', 'report_lost_card', 'no', 'translate']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 14
+['tire_pressure', 'how_old_are_you', 'change_accent', 'translate', 'replacement_card_duration', 'who_made_you', 'jump_start', 'distance', 'confirm_reservation', 'traffic', 'nutrition_info', 'do_you_have_pets', 'book_flight', 'balance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['jump_start', 'credit_score', 'shopping_list_update', 'order_checks', 'weather', 'spelling', 'schedule_maintenance', 'restaurant_suggestion', 'pay_bill', 'expiration_date', 'confirm_reservation', 'tire_change', 'measurement_conversion', 'report_lost_card', 'no', 'whisper_mode']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['update_playlist', 'definition', 'plug_type', 'credit_limit', 'weather', 'carry_on', 'restaurant_reservation', 'accept_reservations', 'transfer', 'direct_deposit', 'rollover_401k', 'mpg', 'w2', 'restaurant_suggestion', 'order', 'measurement_conversion']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_volume', 'greeting', 'transactions', 'uber', 'user_name', 'tell_joke', 'travel_suggestion', 'measurement_conversion', 'reminder_update', 'change_accent', 'pto_request', 'credit_score', 'todo_list_update', 'food_last', 'alarm', 'rollover_401k']
+=====================
+skip this batch
+[5,    10] loss_total: 2.656 loss_supervised_contrasive:  2.482 loss_intent :3.477 
+skip_time: 70
+total : 198
+no positive pairs !
+len batch class o/p : 16
+['change_user_name', 'apr', 'pay_bill', 'ingredient_substitution', 'cancel_reservation', 'routing', 'what_is_your_name', 'meeting_schedule', 'pto_used', 'weather', 'travel_alert', 'calendar', 'replacement_card_duration', 'what_song', 'gas_type', 'directions']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['cook_time', 'improve_credit_score', 'change_speed', 'account_blocked', 'definition', 'what_are_your_hobbies', 'weather', 'ingredient_substitution', 'calculator', 'min_payment', 'order_status', 'alarm', 'reset_settings', 'todo_list', 'make_call', 'play_music']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['reminder', 'current_location', 'account_blocked', 'tire_pressure', 'thank_you', 'calculator', 'rewards_balance', 'schedule_meeting', 'meaning_of_life', 'travel_alert', 'pay_bill', 'insurance_change', 'spelling', 'ingredients_list', 'order_status', 'credit_score']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['schedule_maintenance', 'last_maintenance', 'taxes', 'calculator', 'timezone', 'bill_due', 'smart_home', 'do_you_have_pets', 'vaccines', 'international_fees', 'change_speed', 'where_are_you_from', 'recipe', 'share_location', 'traffic', 'report_fraud']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['interest_rate', 'w2', 'uber', 'traffic', 'do_you_have_pets', 'spending_history', 'tell_joke', 'gas', 'travel_notification', 'distance', 'vaccines', 'improve_credit_score', 'oil_change_how', 'balance', 'timer', 'what_song']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meaning_of_life', 'gas_type', 'travel_suggestion', 'change_language', 'credit_score', 'carry_on', 'spelling', 'w2', 'directions', 'repeat', 'distance', 'uber', 'pto_balance', 'nutrition_info', 'timer', 'schedule_maintenance']
+=====================
+skip this batch
+[5,    30] loss_total: 4.739 loss_supervised_contrasive:  6.874 loss_intent :10.420 
+skip_time: 76
+total : 218
+no positive pairs !
+len batch class o/p : 16
+['change_user_name', 'sync_device', 'vaccines', 'date', 'balance', 'shopping_list_update', 'ingredients_list', 'current_location', 'cancel', 'pto_used', 'where_are_you_from', 'cancel_reservation', 'meal_suggestion', 'order', 'cook_time', 'tire_change']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['rollover_401k', 'change_speed', 'traffic', 'cook_time', 'change_user_name', 'what_can_i_ask_you', 'share_location', 'report_fraud', 'apr', 'reminder', 'time', 'current_location', 'routing', 'fun_fact', 'who_do_you_work_for', 'damaged_card']
+=====================
+skip this batch
+[5,    40] loss_total: 3.527 loss_supervised_contrasive:  10.202 loss_intent :14.390 
+skip_time: 78
+total : 228
+no positive pairs !
+len batch class o/p : 16
+['gas_type', 'meaning_of_life', 'make_call', 'replacement_card_duration', 'tell_joke', 'cancel_reservation', 'alarm', 'restaurant_suggestion', 'change_speed', 'yes', 'how_old_are_you', 'application_status', 'restaurant_reservation', 'change_volume', 'maybe', 'min_payment']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_language', 'what_are_your_hobbies', 'credit_limit_change', 'pin_change', 'do_you_have_pets', 'user_name', 'change_volume', 'tire_pressure', 'maybe', 'restaurant_reservation', 'ingredient_substitution', 'schedule_meeting', 'todo_list', 'vaccines', 'oil_change_how', 'next_holiday']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['order', 'reset_settings', 'change_user_name', 'weather', 'how_old_are_you', 'restaurant_suggestion', 'who_do_you_work_for', 'play_music', 'change_accent', 'whisper_mode', 'rewards_balance', 'international_fees', 'pto_request', 'travel_suggestion', 'timer', 'pin_change']
+=====================
+skip this batch
+[6,    10] loss_total: 2.482 loss_supervised_contrasive:  2.308 loss_intent :3.464 
+skip_time: 81
+total : 245
+[6,    20] loss_total: 4.164 loss_supervised_contrasive:  6.225 loss_intent :8.408 
+skip_time: 81
+total : 255
+no positive pairs !
+len batch class o/p : 16
+['cancel_reservation', 'pto_balance', 'balance', 'report_fraud', 'meaning_of_life', 'shopping_list', 'change_user_name', 'sync_device', 'accept_reservations', 'timer', 'timezone', 'credit_limit', 'update_playlist', 'calendar_update', 'routing', 'calories']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['calendar', 'min_payment', 'timer', 'pay_bill', 'food_last', 'international_fees', 'smart_home', 'change_speed', 'transactions', 'calendar_update', 'travel_alert', 'change_volume', 'shopping_list_update', 'tire_pressure', 'pto_request_status', 'are_you_a_bot']
+=====================
+skip this batch
+[6,    30] loss_total: 3.689 loss_supervised_contrasive:  9.717 loss_intent :12.361 
+skip_time: 83
+total : 265
+no positive pairs !
+len batch class o/p : 16
+['plug_type', 'vaccines', 'greeting', 'flip_coin', 'credit_score', 'freeze_account', 'restaurant_reviews', 'roll_dice', 'goodbye', 'cancel', 'recipe', 'routing', 'sync_device', 'car_rental', 'reset_settings', 'nutrition_info']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['food_last', 'measurement_conversion', 'oil_change_when', 'schedule_meeting', 'travel_alert', 'what_are_your_hobbies', 'insurance_change', 'w2', 'change_volume', 'book_hotel', 'time', 'bill_balance', 'redeem_rewards', 'tell_joke', 'card_declined', 'order_checks']
+=====================
+skip this batch
+[6,    40] loss_total: 3.183 loss_supervised_contrasive:  12.702 loss_intent :16.321 
+skip_time: 85
+total : 275
+no positive pairs !
+len batch class o/p : 16
+['oil_change_when', 'ingredients_list', 'damaged_card', 'todo_list', 'yes', 'no', 'make_call', 'gas', 'thank_you', 'order', 'text', 'translate', 'maybe', 'directions', 'exchange_rate', 'pay_bill']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 14
+['exchange_rate', 'meaning_of_life', 'current_location', 'gas', 'redeem_rewards', 'order_checks', 'direct_deposit', 'change_accent', 'ingredient_substitution', 'pay_bill', 'rewards_balance', 'account_blocked', 'goodbye', 'definition']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['food_last', 'freeze_account', 'thank_you', 'next_holiday', 'tire_pressure', 'confirm_reservation', 'next_song', 'balance', 'gas', 'ingredients_list', 'timezone', 'travel_suggestion', 'change_accent', 'schedule_meeting', 'how_busy', 'what_is_your_name']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['credit_limit', 'pay_bill', 'spelling', 'insurance_change', 'lost_luggage', 'what_song', 'credit_score', 'expiration_date', 'distance', 'travel_notification', 'pto_request', 'international_visa', 'change_user_name', 'ingredients_list', 'jump_start', 'bill_due']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['what_are_your_hobbies', 'cancel', 'rollover_401k', 'reminder_update', 'apr', 'time', 'pay_bill', 'oil_change_when', 'shopping_list', 'change_ai_name', 'next_holiday', 'ingredients_list', 'pto_balance', 'flip_coin', 'last_maintenance', 'todo_list']
+=====================
+skip this batch
+[7,    10] loss_total: 2.575 loss_supervised_contrasive:  2.403 loss_intent :3.446 
+skip_time: 90
+total : 292
+no positive pairs !
+len batch class o/p : 16
+['application_status', 'find_phone', 'direct_deposit', 'apr', 'measurement_conversion', 'improve_credit_score', 'travel_notification', 'credit_limit_change', 'meaning_of_life', 'bill_due', 'new_card', 'roll_dice', 'oil_change_how', 'credit_limit', 'definition', 'order_checks']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['tire_change', 'what_can_i_ask_you', 'where_are_you_from', 'calendar_update', 'shopping_list', 'spelling', 'how_old_are_you', 'greeting', 'current_location', 'book_hotel', 'translate', 'rollover_401k', 'change_user_name', 'reminder_update', 'meal_suggestion', 'pay_bill']
+=====================
+skip this batch
+[7,    20] loss_total: 4.297 loss_supervised_contrasive:  6.503 loss_intent :7.392 
+skip_time: 92
+total : 302
+no positive pairs !
+len batch class o/p : 16
+['bill_balance', 'pin_change', 'order_checks', 'rewards_balance', 'maybe', 'change_volume', 'traffic', 'report_fraud', 'todo_list', 'expiration_date', 'nutrition_info', 'carry_on', 'credit_limit', 'international_fees', 'freeze_account', 'timer']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['taxes', 'goodbye', 'routing', 'pto_used', 'calculator', 'shopping_list_update', 'are_you_a_bot', 'who_made_you', 'timer', 'redeem_rewards', 'calendar', 'definition', 'exchange_rate', 'alarm', 'new_card', 'reminder']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['expiration_date', 'make_call', 'interest_rate', 'international_fees', 'ingredient_substitution', 'lost_luggage', 'pto_request', 'todo_list', 'traffic', 'bill_due', 'calories', 'timer', 'cancel', 'carry_on', 'find_phone', 'car_rental']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['direct_deposit', 'pto_balance', 'weather', 'play_music', 'card_declined', 'greeting', 'text', 'order', 'thank_you', 'transfer', 'accept_reservations', 'cancel_reservation', 'damaged_card', 'travel_suggestion', 'min_payment', 'roll_dice']
+=====================
+skip this batch
+[7,    30] loss_total: 1.609 loss_supervised_contrasive:  7.963 loss_intent :10.366 
+skip_time: 96
+total : 312
+no positive pairs !
+len batch class o/p : 16
+['what_are_your_hobbies', 'fun_fact', 'repeat', 'meal_suggestion', 'nutrition_info', 'account_blocked', 'plug_type', 'next_song', 'shopping_list_update', 'vaccines', 'improve_credit_score', 'routing', 'tell_joke', 'pto_request_status', 'reminder_update', 'goodbye']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['uber', 'no', 'tire_pressure', 'international_visa', 'update_playlist', 'meaning_of_life', 'repeat', 'recipe', 'ingredient_substitution', 'directions', 'measurement_conversion', 'goodbye', 'schedule_meeting', 'time', 'where_are_you_from', 'change_volume']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_user_name', 'bill_balance', 'interest_rate', 'rollover_401k', 'how_old_are_you', 'roll_dice', 'how_busy', 'goodbye', 'restaurant_suggestion', 'shopping_list', 'weather', 'where_are_you_from', 'apr', 'greeting', 'change_language', 'meeting_schedule']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['what_song', 'flight_status', 'cancel', 'share_location', 'book_flight', 'yes', 'travel_alert', 'card_declined', 'shopping_list_update', 'travel_suggestion', 'rewards_balance', 'fun_fact', 'insurance_change', 'todo_list_update', 'carry_on', 'redeem_rewards']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['roll_dice', 'text', 'taxes', 'travel_notification', 'rollover_401k', 'account_blocked', 'repeat', 'freeze_account', 'order_status', 'order_checks', 'change_language', 'nutrition_info', 'directions', 'pay_bill', 'change_speed', 'time']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['tire_change', 'oil_change_when', 'flight_status', 'reminder', 'pto_request', 'share_location', 'traffic', 'flip_coin', 'freeze_account', 'income', 'thank_you', 'who_do_you_work_for', 'balance', 'credit_limit', 'cook_time', 'no']
+=====================
+skip this batch
+[8,    20] loss_total: 7.632 loss_supervised_contrasive:  7.189 loss_intent :8.869 
+skip_time: 102
+total : 349
+no positive pairs !
+len batch class o/p : 16
+['international_visa', 'weather', 'directions', 'traffic', 'cancel_reservation', 'new_card', 'balance', 'how_busy', 'reset_settings', 'direct_deposit', 'bill_due', 'transactions', 'transfer', 'how_old_are_you', 'rewards_balance', 'meaning_of_life']
+=====================
+skip this batch
+[8,    30] loss_total: 3.879 loss_supervised_contrasive:  10.845 loss_intent :13.315 
+skip_time: 103
+total : 359
+no positive pairs !
+len batch class o/p : 16
+['car_rental', 'order_checks', 'who_do_you_work_for', 'thank_you', 'goodbye', 'plug_type', 'restaurant_suggestion', 'order', 'book_hotel', 'who_made_you', 'report_fraud', 'smart_home', 'order_status', 'change_volume', 'bill_balance', 'meaning_of_life']
+=====================
+skip this batch
+[8,    40] loss_total: 3.410 loss_supervised_contrasive:  14.033 loss_intent :17.775 
+skip_time: 104
+total : 369
+no positive pairs !
+len batch class o/p : 14
+['reminder', 'timer', 'oil_change_how', 'smart_home', 'order', 'what_are_your_hobbies', 'are_you_a_bot', 'next_song', 'last_maintenance', 'direct_deposit', 'income', 'what_song', 'spelling', 'redeem_rewards']
+=====================
+skip this batch
+[9,    10] loss_total: 2.673 loss_supervised_contrasive:  2.427 loss_intent :4.932 
+skip_time: 105
+total : 386
+[9,    20] loss_total: 3.569 loss_supervised_contrasive:  5.749 loss_intent :9.861 
+skip_time: 105
+total : 396
+[9,    30] loss_total: 3.532 loss_supervised_contrasive:  9.034 loss_intent :14.793 
+skip_time: 105
+total : 406
+[9,    40] loss_total: 2.842 loss_supervised_contrasive:  11.630 loss_intent :19.731 
+skip_time: 105
+total : 416
+no positive pairs !
+len batch class o/p : 14
+['transfer', 'last_maintenance', 'update_playlist', 'are_you_a_bot', 'redeem_rewards', 'current_location', 'find_phone', 'text', 'user_name', 'apr', 'todo_list_update', 'pto_balance', 'cancel_reservation', 'calendar_update']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['balance', 'international_visa', 'restaurant_reviews', 'calories', 'tell_joke', 'directions', 'gas', 'change_language', 'improve_credit_score', 'flip_coin', 'payday', 'change_speed', 'how_busy', 'book_hotel', 'ingredient_substitution', 'expiration_date']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['w2', 'credit_score', 'next_song', 'schedule_maintenance', 'restaurant_reviews', 'text', 'weather', 'redeem_rewards', 'meeting_schedule', 'change_speed', 'nutrition_info', 'confirm_reservation', 'gas', 'order_checks', 'travel_alert', 'who_do_you_work_for']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['damaged_card', 'confirm_reservation', 'todo_list', 'calendar', 'tire_change', 'translate', 'measurement_conversion', 'reminder', 'spending_history', 'carry_on', 'definition', 'change_user_name', 'new_card', 'payday', 'make_call', 'where_are_you_from']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_accent', 'mpg', 'fun_fact', 'vaccines', 'greeting', 'oil_change_when', 'credit_limit', 'travel_alert', 'restaurant_reservation', 'do_you_have_pets', 'change_volume', 'play_music', 'food_last', 'current_location', 'directions', 'uber']
+=====================
+skip this batch
+[10,    10] loss_total: 2.397 loss_supervised_contrasive:  2.249 loss_intent :2.968 
+skip_time: 110
+total : 433
+no positive pairs !
+len batch class o/p : 16
+['account_blocked', 'todo_list_update', 'nutrition_info', 'meaning_of_life', 'tire_pressure', 'time', 'insurance', 'meal_suggestion', 'bill_due', 'no', 'what_are_your_hobbies', 'sync_device', 'cancel_reservation', 'text', 'what_song', 'mpg']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['fun_fact', 'time', 'travel_notification', 'what_are_your_hobbies', 'exchange_rate', 'car_rental', 'replacement_card_duration', 'next_song', 'whisper_mode', 'min_payment', 'sync_device', 'recipe', 'rewards_balance', 'gas_type', 'timer', 'gas']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['do_you_have_pets', 'whisper_mode', 'maybe', 'find_phone', 'meal_suggestion', 'flip_coin', 'order', 'improve_credit_score', 'todo_list_update', 'travel_alert', 'card_declined', 'apr', 'restaurant_reviews', 'oil_change_when', 'spelling', 'cancel']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['shopping_list_update', 'international_fees', 'spending_history', 'todo_list_update', 'accept_reservations', 'how_old_are_you', 'plug_type', 'restaurant_reservation', 'interest_rate', 'new_card', 'bill_due', 'pin_change', 'pto_balance', 'tire_change', 'timezone', 'jump_start']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['who_do_you_work_for', 'transactions', 'credit_limit_change', 'lost_luggage', 'user_name', 'definition', 'meaning_of_life', 'international_visa', 'w2', 'make_call', 'repeat', 'bill_balance', 'report_fraud', 'report_lost_card', 'flight_status', 'timer']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['book_flight', 'are_you_a_bot', 'book_hotel', 'distance', 'smart_home', 'restaurant_reviews', 'reminder_update', 'goodbye', 'travel_notification', 'freeze_account', 'change_volume', 'meal_suggestion', 'reminder', 'credit_limit', 'who_made_you', 'flip_coin']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['travel_suggestion', 'book_hotel', 'reset_settings', 'distance', 'time', 'shopping_list', 'calories', 'meaning_of_life', 'apr', 'oil_change_how', 'roll_dice', 'update_playlist', 'date', 'credit_score', 'next_song', 'international_fees']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['nutrition_info', 'time', 'transactions', 'last_maintenance', 'jump_start', 'spelling', 'maybe', 'meaning_of_life', 'schedule_maintenance', 'taxes', 'todo_list', 'who_do_you_work_for', 'international_fees', 'redeem_rewards', 'lost_luggage', 'reminder_update']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['confirm_reservation', 'spelling', 'smart_home', 'are_you_a_bot', 'rewards_balance', 'date', 'find_phone', 'how_old_are_you', 'directions', 'yes', 'timezone', 'current_location', 'car_rental', 'w2', 'jump_start', 'meal_suggestion']
+=====================
+skip this batch
+[10,    30] loss_total: 4.524 loss_supervised_contrasive:  6.501 loss_intent :8.413 
+skip_time: 119
+total : 453
+no positive pairs !
+len batch class o/p : 16
+['user_name', 'confirm_reservation', 'next_song', 'where_are_you_from', 'vaccines', 'calendar', 'measurement_conversion', 'pto_request_status', 'what_song', 'what_can_i_ask_you', 'rollover_401k', 'international_visa', 'apr', 'tell_joke', 'change_volume', 'damaged_card']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['report_lost_card', 'tire_change', 'vaccines', 'routing', 'schedule_meeting', 'replacement_card_duration', 'pto_balance', 'spending_history', 'who_do_you_work_for', 'current_location', 'calendar_update', 'gas_type', 'reset_settings', 'what_can_i_ask_you', 'cook_time', 'carry_on']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meeting_schedule', 'meal_suggestion', 'balance', 'update_playlist', 'order_status', 'report_fraud', 'vaccines', 'measurement_conversion', 'where_are_you_from', 'ingredient_substitution', 'reset_settings', 'no', 'change_speed', 'new_card', 'how_busy', 'greeting']
+=====================
+skip this batch
+[10,    40] loss_total: 2.980 loss_supervised_contrasive:  9.308 loss_intent :11.866 
+skip_time: 122
+total : 463
+no positive pairs !
+len batch class o/p : 16
+['pto_request_status', 'bill_due', 'tire_change', 'ingredient_substitution', 'change_accent', 'vaccines', 'damaged_card', 'schedule_maintenance', 'yes', 'no', 'transfer', 'play_music', 'schedule_meeting', 'calculator', 'pin_change', 'transactions']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['direct_deposit', 'credit_score', 'order', 'text', 'payday', 'repeat', 'taxes', 'improve_credit_score', 'yes', 'what_is_your_name', 'schedule_meeting', 'change_user_name', 'carry_on', 'maybe', 'mpg', 'thank_you']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 14
+['timezone', 'what_is_your_name', 'order', 'plug_type', 'tell_joke', 'international_visa', 'todo_list', 'measurement_conversion', 'maybe', 'pto_request', 'definition', 'date', 'weather', 'travel_alert']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['book_flight', 'bill_due', 'yes', 'measurement_conversion', 'report_lost_card', 'what_are_your_hobbies', 'fun_fact', 'damaged_card', 'order_checks', 'calories', 'find_phone', 'calendar_update', 'next_holiday', 'change_user_name', 'goodbye', 'restaurant_reservation']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['cancel_reservation', 'order', 'international_fees', 'book_flight', 'accept_reservations', 'traffic', 'roll_dice', 'reminder_update', 'gas', 'insurance_change', 'calories', 'order_checks', 'yes', 'schedule_maintenance', 'flip_coin', 'reset_settings']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['pin_change', 'who_do_you_work_for', 'lost_luggage', 'order_checks', 'food_last', 'redeem_rewards', 'spending_history', 'tire_pressure', 'maybe', 'mpg', 'accept_reservations', 'change_user_name', 'rewards_balance', 'meaning_of_life', 'account_blocked', 'calendar']
+=====================
+skip this batch
+[11,    10] loss_total: 2.651 loss_supervised_contrasive:  2.477 loss_intent :3.467 
+skip_time: 128
+total : 480
+no positive pairs !
+len batch class o/p : 16
+['redeem_rewards', 'todo_list_update', 'tire_change', 'calculator', 'insurance', 'pin_change', 'find_phone', 'carry_on', 'pto_used', 'meeting_schedule', 'spelling', 'oil_change_how', 'tire_pressure', 'reminder', 'cancel', 'balance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_volume', 'account_blocked', 'replacement_card_duration', 'payday', 'improve_credit_score', 'timezone', 'meaning_of_life', 'car_rental', 'order_checks', 'calendar', 'jump_start', 'translate', 'who_made_you', 'current_location', 'pay_bill', 'schedule_meeting']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['restaurant_reviews', 'shopping_list', 'book_hotel', 'calendar', 'w2', 'application_status', 'international_fees', 'vaccines', 'who_do_you_work_for', 'share_location', 'repeat', 'how_busy', 'insurance', 'pto_request_status', 'timer', 'roll_dice']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['travel_notification', 'transfer', 'report_fraud', 'international_fees', 'interest_rate', 'shopping_list', 'expiration_date', 'flip_coin', 'user_name', 'change_language', 'spelling', 'change_speed', 'payday', 'measurement_conversion', 'flight_status', 'what_song']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['repeat', 'international_visa', 'no', 'reminder', 'who_do_you_work_for', 'yes', 'carry_on', 'oil_change_when', 'fun_fact', 'change_speed', 'bill_balance', 'taxes', 'make_call', 'jump_start', 'cancel', 'nutrition_info']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['replacement_card_duration', 'date', 'do_you_have_pets', 'report_fraud', 'timer', 'what_are_your_hobbies', 'pto_balance', 'who_do_you_work_for', 'travel_suggestion', 'calories', 'confirm_reservation', 'alarm', 'change_accent', 'interest_rate', 'timezone', 'how_busy']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['smart_home', 'restaurant_reservation', 'restaurant_reviews', 'what_song', 'payday', 'damaged_card', 'shopping_list_update', 'translate', 'calendar', 'freeze_account', 'schedule_meeting', 'what_are_your_hobbies', 'cook_time', 'current_location', 'travel_notification', 'direct_deposit']
+=====================
+skip this batch
+[11,    30] loss_total: 5.723 loss_supervised_contrasive:  7.878 loss_intent :9.900 
+skip_time: 135
+total : 500
+no positive pairs !
+len batch class o/p : 16
+['calories', 'new_card', 'directions', 'damaged_card', 'pto_used', 'order', 'restaurant_suggestion', 'timezone', 'repeat', 'next_song', 'time', 'date', 'application_status', 'recipe', 'calendar_update', 'apr']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['min_payment', 'order', 'schedule_maintenance', 'recipe', 'todo_list_update', 'text', 'do_you_have_pets', 'pay_bill', 'cancel', 'accept_reservations', 'application_status', 'travel_suggestion', 'food_last', 'credit_limit', 'payday', 'cook_time']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['current_location', 'calendar_update', 'next_song', 'pto_request_status', 'reset_settings', 'pin_change', 'todo_list_update', 'calculator', 'replacement_card_duration', 'ingredient_substitution', 'thank_you', 'improve_credit_score', 'traffic', 'change_accent', 'oil_change_how', 'carry_on']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['next_holiday', 'application_status', 'balance', 'transactions', 'who_made_you', 'change_volume', 'play_music', 'todo_list', 'distance', 'roll_dice', 'bill_balance', 'reset_settings', 'maybe', 'goodbye', 'shopping_list_update', 'w2']
+=====================
+skip this batch
+[11,    40] loss_total: 2.947 loss_supervised_contrasive:  10.675 loss_intent :12.888 
+skip_time: 139
+total : 510
+no positive pairs !
+len batch class o/p : 16
+['carry_on', 'travel_suggestion', 'book_hotel', 'fun_fact', 'pto_balance', 'min_payment', 'next_holiday', 'do_you_have_pets', 'car_rental', 'card_declined', 'repeat', 'no', 'directions', 'rollover_401k', 'todo_list_update', 'freeze_account']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['todo_list_update', 'car_rental', 'change_ai_name', 'reminder', 'new_card', 'gas_type', 'calendar_update', 'taxes', 'cancel_reservation', 'lost_luggage', 'timer', 'where_are_you_from', 'application_status', 'improve_credit_score', 'time', 'are_you_a_bot']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['alarm', 'update_playlist', 'plug_type', 'last_maintenance', 'new_card', 'change_language', 'are_you_a_bot', 'recipe', 'text', 'shopping_list', 'what_can_i_ask_you', 'direct_deposit', 'expiration_date', 'card_declined', 'transactions', 'nutrition_info']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['thank_you', 'plug_type', 'cook_time', 'translate', 'measurement_conversion', 'spelling', 'schedule_maintenance', 'rewards_balance', 'travel_notification', 'accept_reservations', 'make_call', 'next_song', 'reminder_update', 'freeze_account', 'calendar', 'what_can_i_ask_you']
+=====================
+skip this batch
+[12,    10] loss_total: 3.922 loss_supervised_contrasive:  3.699 loss_intent :4.455 
+skip_time: 143
+total : 527
+no positive pairs !
+len batch class o/p : 16
+['fun_fact', 'tire_change', 'vaccines', 'credit_score', 'pay_bill', 'expiration_date', 'exchange_rate', 'user_name', 'meaning_of_life', 'min_payment', 'confirm_reservation', 'lost_luggage', 'improve_credit_score', 'travel_notification', 'how_old_are_you', 'card_declined']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['jump_start', 'reminder_update', 'apr', 'oil_change_how', 'calculator', 'confirm_reservation', 'insurance_change', 'tell_joke', 'how_busy', 'what_are_your_hobbies', 'w2', 'shopping_list_update', 'new_card', 'shopping_list', 'meal_suggestion', 'spelling']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['credit_limit_change', 'cancel_reservation', 'date', 'calendar', 'todo_list', 'how_busy', 'yes', 'restaurant_suggestion', 'book_hotel', 'next_holiday', 'directions', 'tire_change', 'recipe', 'mpg', 'spending_history', 'application_status']
+=====================
+skip this batch
+[12,    20] loss_total: 3.098 loss_supervised_contrasive:  6.624 loss_intent :7.910 
+skip_time: 146
+total : 537
+no positive pairs !
+len batch class o/p : 16
+['schedule_meeting', 'accept_reservations', 'change_volume', 'change_language', 'payday', 'account_blocked', 'change_speed', 'last_maintenance', 'who_do_you_work_for', 'credit_limit_change', 'directions', 'cancel', 'international_visa', 'carry_on', 'thank_you', 'where_are_you_from']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['redeem_rewards', 'who_made_you', 'taxes', 'pin_change', 'calories', 'order_status', 'travel_suggestion', 'exchange_rate', 'timer', 'tire_pressure', 'book_hotel', 'repeat', 'uber', 'date', 'jump_start', 'change_speed']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['timezone', 'yes', 'restaurant_reservation', 'alarm', 'who_do_you_work_for', 'exchange_rate', 'directions', 'w2', 'order_checks', 'time', 'taxes', 'replacement_card_duration', 'balance', 'play_music', 'spelling', 'payday']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['confirm_reservation', 'yes', 'expiration_date', 'reset_settings', 'roll_dice', 'spelling', 'replacement_card_duration', 'gas', 'bill_due', 'book_flight', 'update_playlist', 'how_busy', 'distance', 'apr', 'maybe', 'rewards_balance']
+=====================
+skip this batch
+[12,    30] loss_total: 2.255 loss_supervised_contrasive:  8.731 loss_intent :10.883 
+skip_time: 150
+total : 547
+no positive pairs !
+len batch class o/p : 16
+['what_is_your_name', 'time', 'make_call', 'pto_used', 'change_ai_name', 'who_made_you', 'order_status', 'greeting', 'transfer', 'find_phone', 'car_rental', 'calculator', 'calories', 'international_visa', 'schedule_maintenance', 'insurance_change']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meaning_of_life', 'what_can_i_ask_you', 'travel_notification', 'pay_bill', 'how_busy', 'schedule_maintenance', 'card_declined', 'translate', 'routing', 'weather', 'change_volume', 'time', 'schedule_meeting', 'freeze_account', 'definition', 'current_location']
+=====================
+skip this batch
+[12,    40] loss_total: 3.812 loss_supervised_contrasive:  12.345 loss_intent :14.838 
+skip_time: 152
+total : 557
+no positive pairs !
+len batch class o/p : 16
+['whisper_mode', 'translate', 'ingredients_list', 'new_card', 'roll_dice', 'routing', 'current_location', 'order_checks', 'nutrition_info', 'play_music', 'accept_reservations', 'shopping_list_update', 'do_you_have_pets', 'interest_rate', 'time', 'flight_status']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['fun_fact', 'cancel_reservation', 'improve_credit_score', 'lost_luggage', 'income', 'nutrition_info', 'todo_list_update', 'mpg', 'credit_score', 'make_call', 'measurement_conversion', 'ingredients_list', 'damaged_card', 'pin_change', 'tell_joke', 'maybe']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['text', 'application_status', 'min_payment', 'oil_change_when', 'improve_credit_score', 'income', 'damaged_card', 'meeting_schedule', 'restaurant_reviews', 'repeat', 'nutrition_info', 'flight_status', 'accept_reservations', 'where_are_you_from', 'sync_device', 'date']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['application_status', 'interest_rate', 'transactions', 'pin_change', 'order_checks', 'sync_device', 'plug_type', 'pto_used', 'next_holiday', 'restaurant_reservation', 'income', 'routing', 'travel_alert', 'gas_type', 'cancel_reservation', 'food_last']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['international_visa', 'pto_request_status', 'user_name', 'plug_type', 'what_are_your_hobbies', 'transactions', 'change_ai_name', 'bill_balance', 'text', 'oil_change_how', 'how_busy', 'ingredient_substitution', 'who_made_you', 'damaged_card', 'restaurant_reviews', 'restaurant_suggestion']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['measurement_conversion', 'find_phone', 'play_music', 'gas', 'spelling', 'order_status', 'timer', 'who_made_you', 'international_fees', 'pto_balance', 'time', 'min_payment', 'transactions', 'shopping_list', 'travel_suggestion', 'cook_time']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['redeem_rewards', 'definition', 'flight_status', 'find_phone', 'pto_balance', 'repeat', 'tire_pressure', 'travel_notification', 'fun_fact', 'carry_on', 'uber', 'reset_settings', 'order', 'transactions', 'damaged_card', 'next_song']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['definition', 'current_location', 'exchange_rate', 'gas_type', 'interest_rate', 'vaccines', 'thank_you', 'damaged_card', 'cook_time', 'reset_settings', 'distance', 'reminder', 'maybe', 'rewards_balance', 'change_user_name', 'insurance_change']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['who_made_you', 'damaged_card', 'replacement_card_duration', 'income', 'taxes', 'cook_time', 'whisper_mode', 'distance', 'redeem_rewards', 'greeting', 'accept_reservations', 'gas', 'order_checks', 'nutrition_info', 'shopping_list', 'book_flight']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['reset_settings', 'insurance_change', 'account_blocked', 'report_lost_card', 'mpg', 'time', 'plug_type', 'pto_used', 'definition', 'reminder_update', 'freeze_account', 'vaccines', 'card_declined', 'translate', 'recipe', 'transfer']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['pto_balance', 'apr', 'distance', 'confirm_reservation', 'book_flight', 'order_checks', 'definition', 'schedule_maintenance', 'update_playlist', 'taxes', 'rewards_balance', 'restaurant_reservation', 'pto_used', 'calendar_update', 'change_volume', 'repeat']
+=====================
+skip this batch
+[13,    20] loss_total: 5.560 loss_supervised_contrasive:  5.238 loss_intent :6.441 
+skip_time: 163
+total : 584
+no positive pairs !
+len batch class o/p : 16
+['direct_deposit', 'rollover_401k', 'change_language', 'distance', 'roll_dice', 'routing', 'vaccines', 'restaurant_reviews', 'change_volume', 'change_speed', 'update_playlist', 'card_declined', 'goodbye', 'transfer', 'credit_score', 'next_song']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['flight_status', 'spelling', 'oil_change_how', 'measurement_conversion', 'timer', 'balance', 'pay_bill', 'what_song', 'damaged_card', 'calendar_update', 'tell_joke', 'change_volume', 'oil_change_when', 'travel_suggestion', 'who_made_you', 'who_do_you_work_for']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['improve_credit_score', 'fun_fact', 'payday', 'update_playlist', 'spending_history', 'pay_bill', 'todo_list_update', 'change_volume', 'play_music', 'plug_type', 'insurance', 'greeting', 'definition', 'exchange_rate', 'bill_balance', 'change_accent']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['shopping_list_update', 'how_busy', 'meaning_of_life', 'who_do_you_work_for', 'flight_status', 'alarm', 'car_rental', 'redeem_rewards', 'current_location', 'how_old_are_you', 'travel_suggestion', 'credit_limit_change', 'next_holiday', 'report_fraud', 'account_blocked', 'credit_limit']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['oil_change_when', 'make_call', 'calendar', 'whisper_mode', 'next_song', 'todo_list', 'user_name', 'credit_limit_change', 'flight_status', 'nutrition_info', 'what_are_your_hobbies', 'schedule_meeting', 'how_old_are_you', 'direct_deposit', 'schedule_maintenance', 'car_rental']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meaning_of_life', 'calendar', 'freeze_account', 'insurance', 'directions', 'text', 'what_can_i_ask_you', 'measurement_conversion', 'change_volume', 'user_name', 'timer', 'book_flight', 'flip_coin', 'translate', 'smart_home', 'make_call']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['who_made_you', 'alarm', 'international_visa', 'reset_settings', 'replacement_card_duration', 'tell_joke', 'shopping_list', 'greeting', 'restaurant_suggestion', 'travel_alert', 'flip_coin', 'who_do_you_work_for', 'international_fees', 'bill_balance', 'travel_suggestion', 'credit_limit']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meaning_of_life', 'goodbye', 'change_volume', 'maybe', 'distance', 'balance', 'what_can_i_ask_you', 'bill_balance', 'smart_home', 'food_last', 'nutrition_info', 'weather', 'new_card', 'interest_rate', 'cancel', 'credit_limit_change']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['text', 'flip_coin', 'international_fees', 'credit_limit_change', 'change_user_name', 'card_declined', 'carry_on', 'cancel', 'credit_limit', 'tire_change', 'transactions', 'plug_type', 'directions', 'bill_due', 'interest_rate', 'report_fraud']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['report_fraud', 'improve_credit_score', 'cook_time', 'confirm_reservation', 'application_status', 'insurance', 'cancel', 'how_old_are_you', 'schedule_meeting', 'date', 'routing', 'damaged_card', 'where_are_you_from', 'yes', 'ingredients_list', 'shopping_list_update']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 14
+['international_fees', 'confirm_reservation', 'what_are_your_hobbies', 'ingredient_substitution', 'vaccines', 'payday', 'tire_change', 'direct_deposit', 'date', 'tire_pressure', 'meaning_of_life', 'thank_you', 'expiration_date', 'nutrition_info']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_speed', 'travel_alert', 'what_are_your_hobbies', 'thank_you', 'order_checks', 'traffic', 'pto_balance', 'update_playlist', 'reminder', 'pto_request_status', 'last_maintenance', 'what_can_i_ask_you', 'pay_bill', 'uber', 'restaurant_reviews', 'bill_balance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['sync_device', 'how_busy', 'share_location', 'spending_history', 'transfer', 'translate', 'timezone', 'who_do_you_work_for', 'cancel', 'pay_bill', 'international_fees', 'spelling', 'rollover_401k', 'change_ai_name', 'report_lost_card', 'goodbye']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['new_card', 'flight_status', 'distance', 'repeat', 'flip_coin', 'meeting_schedule', 'order_status', 'shopping_list_update', 'todo_list', 'international_visa', 'insurance_change', 'report_lost_card', 'w2', 'pay_bill', 'freeze_account', 'oil_change_when']
+=====================
+skip this batch
+[14,    10] loss_total: 2.961 loss_supervised_contrasive:  2.788 loss_intent :3.470 
+skip_time: 177
+total : 621
+no positive pairs !
+len batch class o/p : 16
+['whisper_mode', 'payday', 'book_hotel', 'pto_request_status', 'bill_due', 'schedule_maintenance', 'make_call', 'insurance', 'cook_time', 'change_accent', 'oil_change_how', 'timer', 'how_old_are_you', 'card_declined', 'new_card', 'meal_suggestion']
+=====================
+skip this batch
+[14,    20] loss_total: 3.960 loss_supervised_contrasive:  6.524 loss_intent :7.958 
+skip_time: 178
+total : 631
+no positive pairs !
+len batch class o/p : 16
+['calendar_update', 'what_is_your_name', 'directions', 'pto_request_status', 'user_name', 'pin_change', 'alarm', 'book_flight', 'order_status', 'repeat', 'nutrition_info', 'meaning_of_life', 'distance', 'gas', 'make_call', 'fun_fact']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['gas', 'reminder_update', 'book_hotel', 'directions', 'bill_due', 'user_name', 'shopping_list', 'pto_used', 'pto_request', 'make_call', 'yes', 'alarm', 'direct_deposit', 'text', 'interest_rate', 'cancel']
+=====================
+skip this batch
+[14,    30] loss_total: 2.708 loss_supervised_contrasive:  9.033 loss_intent :11.933 
+skip_time: 180
+total : 641
+no positive pairs !
+len batch class o/p : 16
+['reminder', 'order', 'payday', 'credit_limit', 'freeze_account', 'repeat', 'replacement_card_duration', 'transactions', 'international_fees', 'time', 'improve_credit_score', 'restaurant_reviews', 'ingredients_list', 'ingredient_substitution', 'calories', 'order_checks']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['redeem_rewards', 'how_busy', 'transactions', 'play_music', 'gas_type', 'book_hotel', 'taxes', 'confirm_reservation', 'schedule_maintenance', 'report_fraud', 'find_phone', 'payday', 'restaurant_suggestion', 'time', 'expiration_date', 'change_speed']
+=====================
+skip this batch
+[14,    40] loss_total: 3.491 loss_supervised_contrasive:  12.325 loss_intent :15.902 
+skip_time: 182
+total : 651
+no positive pairs !
+len batch class o/p : 16
+['payday', 'meaning_of_life', 'flight_status', 'do_you_have_pets', 'what_song', 'spelling', 'credit_score', 'todo_list_update', 'meeting_schedule', 'thank_you', 'meal_suggestion', 'text', 'calculator', 'sync_device', 'timer', 'account_blocked']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['what_can_i_ask_you', 'text', 'pin_change', 'uber', 'book_flight', 'travel_alert', 'find_phone', 'gas_type', 'no', 'weather', 'share_location', 'transfer', 'time', 'how_old_are_you', 'what_are_your_hobbies', 'international_visa']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['shopping_list', 'change_volume', 'restaurant_reservation', 'travel_notification', 'carry_on', 'next_song', 'income', 'ingredient_substitution', 'min_payment', 'sync_device', 'current_location', 'whisper_mode', 'apr', 'redeem_rewards', 'replacement_card_duration', 'account_blocked']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 14
+['distance', 'order_status', 'credit_limit', 'accept_reservations', 'roll_dice', 'sync_device', 'repeat', 'alarm', 'what_song', 'lost_luggage', 'fun_fact', 'share_location', 'report_fraud', 'rollover_401k']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['last_maintenance', 'oil_change_how', 'timezone', 'what_can_i_ask_you', 'damaged_card', 'whisper_mode', 'what_are_your_hobbies', 'cook_time', 'user_name', 'reset_settings', 'change_language', 'taxes', 'accept_reservations', 'credit_score', 'how_busy', 'plug_type']
+=====================
+skip this batch
+[15,    10] loss_total: 3.719 loss_supervised_contrasive:  3.496 loss_intent :4.462 
+skip_time: 187
+total : 668
+no positive pairs !
+len batch class o/p : 16
+['exchange_rate', 'freeze_account', 'lost_luggage', 'confirm_reservation', 'current_location', 'repeat', 'yes', 'recipe', 'who_do_you_work_for', 'car_rental', 'application_status', 'min_payment', 'damaged_card', 'are_you_a_bot', 'directions', 'sync_device']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['ingredient_substitution', 'taxes', 'travel_alert', 'damaged_card', 'who_do_you_work_for', 'plug_type', 'gas_type', 'cancel', 'transfer', 'calculator', 'rewards_balance', 'date', 'schedule_meeting', 'restaurant_suggestion', 'thank_you', 'payday']
+=====================
+skip this batch
+[15,    20] loss_total: 2.641 loss_supervised_contrasive:  5.938 loss_intent :8.450 
+skip_time: 189
+total : 678
+no positive pairs !
+len batch class o/p : 16
+['book_flight', 'whisper_mode', 'meaning_of_life', 'order_status', 'spelling', 'bill_balance', 'cook_time', 'reminder', 'cancel_reservation', 'definition', 'oil_change_how', 'traffic', 'change_speed', 'roll_dice', 'application_status', 'fun_fact']
+=====================
+skip this batch
+[15,    30] loss_total: 3.317 loss_supervised_contrasive:  9.031 loss_intent :12.926 
+skip_time: 190
+total : 688
+[15,    40] loss_total: 4.674 loss_supervised_contrasive:  13.456 loss_intent :17.911 
+skip_time: 190
+total : 698
+no positive pairs !
+len batch class o/p : 16
+['spending_history', 'how_old_are_you', 'jump_start', 'pto_used', 'book_flight', 'reset_settings', 'oil_change_when', 'sync_device', 'spelling', 'update_playlist', 'mpg', 'are_you_a_bot', 'change_speed', 'maybe', 'flight_status', 'balance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['timer', 'oil_change_how', 'spelling', 'do_you_have_pets', 'what_is_your_name', 'schedule_meeting', 'food_last', 'routing', 'plug_type', 'credit_score', 'greeting', 'alarm', 'restaurant_suggestion', 'sync_device', 'credit_limit', 'freeze_account']
+=====================
+skip this batch
+[16,    10] loss_total: 3.507 loss_supervised_contrasive:  3.308 loss_intent :3.982 
+skip_time: 192
+total : 715
+no positive pairs !
+len batch class o/p : 16
+['gas_type', 'book_hotel', 'user_name', 'play_music', 'rollover_401k', 'goodbye', 'distance', 'transfer', 'income', 'change_accent', 'shopping_list', 'international_visa', 'mpg', 'repeat', 'transactions', 'min_payment']
+=====================
+skip this batch
+[16,    20] loss_total: 4.770 loss_supervised_contrasive:  7.854 loss_intent :8.448 
+skip_time: 193
+total : 725
+no positive pairs !
+len batch class o/p : 16
+['text', 'thank_you', 'spelling', 'what_song', 'no', 'share_location', 'order_status', 'order_checks', 'travel_notification', 'restaurant_reviews', 'report_lost_card', 'taxes', 'insurance_change', 'credit_limit_change', 'spending_history', 'jump_start']
+=====================
+skip this batch
+[16,    30] loss_total: 3.994 loss_supervised_contrasive:  11.624 loss_intent :12.936 
+skip_time: 194
+total : 735
+[16,    40] loss_total: 5.351 loss_supervised_contrasive:  16.726 loss_intent :17.920 
+skip_time: 194
+total : 745
+no positive pairs !
+len batch class o/p : 16
+['tire_change', 'book_flight', 'card_declined', 'confirm_reservation', 'account_blocked', 'bill_balance', 'lost_luggage', 'yes', 'rewards_balance', 'income', 'uber', 'pin_change', 'direct_deposit', 'cook_time', 'distance', 'meaning_of_life']
+=====================
+skip this batch
+[17,    10] loss_total: 3.322 loss_supervised_contrasive:  3.073 loss_intent :4.982 
+skip_time: 195
+total : 762
+[17,    20] loss_total: 4.150 loss_supervised_contrasive:  6.973 loss_intent :9.980 
+skip_time: 195
+total : 772
+[17,    30] loss_total: 4.343 loss_supervised_contrasive:  11.066 loss_intent :14.956 
+skip_time: 195
+total : 782
+[17,    40] loss_total: 3.480 loss_supervised_contrasive:  14.297 loss_intent :19.951 
+skip_time: 195
+total : 792
+no positive pairs !
+len batch class o/p : 16
+['rollover_401k', 'nutrition_info', 'calculator', 'change_language', 'spelling', 'travel_notification', 'expiration_date', 'improve_credit_score', 'meeting_schedule', 'order', 'tire_pressure', 'insurance_change', 'translate', 'change_user_name', 'how_old_are_you', 'whisper_mode']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['car_rental', 'bill_balance', 'traffic', 'w2', 'reset_settings', 'are_you_a_bot', 'who_do_you_work_for', 'spending_history', 'book_flight', 'translate', 'todo_list_update', 'exchange_rate', 'cancel', 'plug_type', 'uber', 'travel_suggestion']
+=====================
+skip this batch
+[18,    10] loss_total: 3.188 loss_supervised_contrasive:  2.989 loss_intent :3.980 
+skip_time: 197
+total : 809
+no positive pairs !
+len batch class o/p : 16
+['spelling', 'what_is_your_name', 'transfer', 'uber', 'play_music', 'order_status', 'balance', 'payday', 'routing', 'distance', 'user_name', 'card_declined', 'measurement_conversion', 'are_you_a_bot', 'freeze_account', 'improve_credit_score']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['reminder_update', 'uber', 'order_checks', 'what_can_i_ask_you', 'flip_coin', 'directions', 'schedule_meeting', 'shopping_list_update', 'yes', 'how_busy', 'income', 'international_fees', 'lost_luggage', 'ingredients_list', 'are_you_a_bot', 'where_are_you_from']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['todo_list_update', 'expiration_date', 'oil_change_how', 'travel_suggestion', 'goodbye', 'what_are_your_hobbies', 'alarm', 'whisper_mode', 'todo_list', 'tire_change', 'report_lost_card', 'shopping_list', 'pin_change', 'credit_limit_change', 'car_rental', 'next_holiday']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['next_holiday', 'credit_limit_change', 'rollover_401k', 'restaurant_suggestion', 'what_song', 'update_playlist', 'spelling', 'book_flight', 'direct_deposit', 'jump_start', 'food_last', 'todo_list', 'pto_balance', 'next_song', 'shopping_list_update', 'damaged_card']
+=====================
+skip this batch
+[18,    20] loss_total: 3.103 loss_supervised_contrasive:  5.942 loss_intent :6.979 
+skip_time: 201
+total : 819
+no positive pairs !
+len batch class o/p : 16
+['accept_reservations', 'international_fees', 'schedule_meeting', 'travel_alert', 'tire_change', 'thank_you', 'spelling', 'current_location', 'reminder', 'no', 'order', 'expiration_date', 'mpg', 'pto_request', 'calories', 'what_are_your_hobbies']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['exchange_rate', 'smart_home', 'order_checks', 'traffic', 'order_status', 'plug_type', 'vaccines', 'next_holiday', 'timezone', 'goodbye', 'distance', 'improve_credit_score', 'change_speed', 'freeze_account', 'damaged_card', 'gas']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['card_declined', 'application_status', 'cancel', 'where_are_you_from', 'insurance_change', 'how_busy', 'next_song', 'definition', 'change_user_name', 'change_volume', 'nutrition_info', 'pto_used', 'redeem_rewards', 'text', 'whisper_mode', 'yes']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['make_call', 'whisper_mode', 'travel_suggestion', 'schedule_meeting', 'user_name', 'ingredients_list', 'no', 'w2', 'lost_luggage', 'reminder_update', 'gas', 'who_do_you_work_for', 'travel_notification', 'meal_suggestion', 'calculator', 'restaurant_suggestion']
+=====================
+skip this batch
+[18,    30] loss_total: 2.759 loss_supervised_contrasive:  8.551 loss_intent :9.971 
+skip_time: 205
+total : 829
+no positive pairs !
+len batch class o/p : 16
+['gas_type', 'spending_history', 'apr', 'redeem_rewards', 'ingredient_substitution', 'who_made_you', 'update_playlist', 'fun_fact', 'restaurant_reviews', 'calories', 'rewards_balance', 'alarm', 'travel_alert', 'change_user_name', 'international_visa', 'tell_joke']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['roll_dice', 'time', 'order', 'travel_suggestion', 'schedule_maintenance', 'international_fees', 'schedule_meeting', 'flight_status', 'goodbye', 'min_payment', 'travel_alert', 'where_are_you_from', 'traffic', 'replacement_card_duration', 'pay_bill', 'timer']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['bill_due', 'order', 'who_made_you', 'change_accent', 'reminder_update', 'account_blocked', 'accept_reservations', 'smart_home', 'change_speed', 'whisper_mode', 'pto_request_status', 'time', 'calendar', 'report_fraud', 'rewards_balance', 'meal_suggestion']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['measurement_conversion', 'account_blocked', 'nutrition_info', 'book_flight', 'order', 'card_declined', 'todo_list', 'pin_change', 'traffic', 'meeting_schedule', 'time', 'new_card', 'plug_type', 'replacement_card_duration', 'do_you_have_pets', 'credit_limit_change']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meeting_schedule', 'translate', 'cancel_reservation', 'report_lost_card', 'change_user_name', 'sync_device', 'what_song', 'what_can_i_ask_you', 'change_ai_name', 'direct_deposit', 'todo_list_update', 'oil_change_how', 'greeting', 'w2', 'restaurant_suggestion', 'recipe']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['oil_change_when', 'sync_device', 'text', 'what_are_your_hobbies', 'last_maintenance', 'ingredient_substitution', 'play_music', 'balance', 'income', 'restaurant_suggestion', 'expiration_date', 'cancel', 'what_is_your_name', 'plug_type', 'share_location', 'greeting']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['travel_alert', 'restaurant_suggestion', 'meal_suggestion', 'maybe', 'timer', 'tire_pressure', 'share_location', 'sync_device', 'reminder', 'roll_dice', 'rewards_balance', 'food_last', 'timezone', 'account_blocked', 'what_is_your_name', 'pay_bill']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['no', 'roll_dice', 'interest_rate', 'maybe', 'travel_alert', 'calendar_update', 'balance', 'last_maintenance', 'transfer', 'who_made_you', 'do_you_have_pets', 'share_location', 'tire_change', 'international_visa', 'timezone', 'goodbye']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 14
+['food_last', 'last_maintenance', 'bill_balance', 'change_volume', 'date', 'fun_fact', 'text', 'maybe', 'taxes', 'rewards_balance', 'alarm', 'calendar_update', 'transfer', 'no']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['no', 'cancel_reservation', 'goodbye', 'last_maintenance', 'accept_reservations', 'update_playlist', 'user_name', 'restaurant_reviews', 'bill_balance', 'tire_change', 'share_location', 'expiration_date', 'new_card', 'report_lost_card', 'credit_limit_change', 'meeting_schedule']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['weather', 'transfer', 'flip_coin', 'accept_reservations', 'credit_score', 'mpg', 'calendar', 'order_status', 'pin_change', 'todo_list', 'apr', 'nutrition_info', 'how_busy', 'calendar_update', 'bill_due', 'calories']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['current_location', 'change_volume', 'meal_suggestion', 'report_fraud', 'plug_type', 'time', 'pay_bill', 'insurance_change', 'account_blocked', 'redeem_rewards', 'alarm', 'damaged_card', 'jump_start', 'income', 'reset_settings', 'schedule_maintenance']
+=====================
+skip this batch
+[19,    10] loss_total: 2.886 loss_supervised_contrasive:  2.711 loss_intent :3.497 
+skip_time: 217
+total : 856
+no positive pairs !
+len batch class o/p : 16
+['oil_change_when', 'ingredient_substitution', 'pto_request_status', 'change_speed', 'change_volume', 'insurance', 'find_phone', 'transactions', 'yes', 'thank_you', 'meaning_of_life', 'carry_on', 'measurement_conversion', 'translate', 'make_call', 'calories']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['timer', 'smart_home', 'card_declined', 'translate', 'tire_pressure', 'rollover_401k', 'mpg', 'what_can_i_ask_you', 'food_last', 'next_song', 'freeze_account', 'uber', 'tell_joke', 'yes', 'income', 'calendar']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['ingredient_substitution', 'calendar_update', 'oil_change_how', 'mpg', 'tire_change', 'shopping_list_update', 'yes', 'change_user_name', 'smart_home', 'sync_device', 'pto_request', 'restaurant_reviews', 'play_music', 'cancel', 'min_payment', 'next_song']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['uber', 'change_ai_name', 'book_flight', 'update_playlist', 'car_rental', 'w2', 'ingredient_substitution', 'restaurant_reservation', 'tire_pressure', 'make_call', 'report_fraud', 'gas', 'greeting', 'oil_change_how', 'play_music', 'who_do_you_work_for']
+=====================
+skip this batch
+[19,    20] loss_total: 1.969 loss_supervised_contrasive:  4.531 loss_intent :6.477 
+skip_time: 221
+total : 866
+no positive pairs !
+len batch class o/p : 16
+['next_song', 'shopping_list', 'next_holiday', 'travel_suggestion', 'replacement_card_duration', 'what_song', 'who_made_you', 'what_can_i_ask_you', 'gas', 'income', 'card_declined', 'apr', 'reminder_update', 'timezone', 'reset_settings', 'flight_status']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['food_last', 'calories', 'insurance_change', 'freeze_account', 'order_status', 'meaning_of_life', 'distance', 'are_you_a_bot', 'confirm_reservation', 'change_ai_name', 'ingredients_list', 'definition', 'payday', 'carry_on', 'schedule_meeting', 'what_song']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['calendar', 'roll_dice', 'tire_pressure', 'meaning_of_life', 'todo_list_update', 'current_location', 'do_you_have_pets', 'direct_deposit', 'timezone', 'change_language', 'recipe', 'freeze_account', 'order_checks', 'expiration_date', 'gas', 'gas_type']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['taxes', 'spelling', 'lost_luggage', 'cancel_reservation', 'order_checks', 'new_card', 'apr', 'change_speed', 'min_payment', 'travel_notification', 'travel_suggestion', 'report_lost_card', 'fun_fact', 'replacement_card_duration', 'how_busy', 'goodbye']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['maybe', 'improve_credit_score', 'directions', 'min_payment', 'tire_change', 'balance', 'oil_change_when', 'mpg', 'replacement_card_duration', 'what_song', 'pay_bill', 'rollover_401k', 'reminder_update', 'international_fees', 'alarm', 'order']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['recipe', 'do_you_have_pets', 'thank_you', 'shopping_list_update', 'goodbye', 'traffic', 'rollover_401k', 'taxes', 'cook_time', 'pto_used', 'order_checks', 'redeem_rewards', 'book_flight', 'pay_bill', 'fun_fact', 'maybe']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['reminder_update', 'book_hotel', 'exchange_rate', 'order_checks', 'change_accent', 'change_user_name', 'reset_settings', 'repeat', 'whisper_mode', 'w2', 'travel_suggestion', 'text', 'car_rental', 'vaccines', 'traffic', 'oil_change_when']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meal_suggestion', 'accept_reservations', 'play_music', 'oil_change_when', 'international_fees', 'cancel_reservation', 'change_language', 'credit_limit', 'where_are_you_from', 'meeting_schedule', 'mpg', 'exchange_rate', 'text', 'oil_change_how', 'reminder_update', 'spending_history']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meal_suggestion', 'vaccines', 'pin_change', 'cancel_reservation', 'uber', 'how_busy', 'ingredients_list', 'measurement_conversion', 'international_fees', 'improve_credit_score', 'change_volume', 'transfer', 'food_last', 'timer', 'whisper_mode', 'flip_coin']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meal_suggestion', 'maybe', 'distance', 'measurement_conversion', 'calories', 'restaurant_reviews', 'make_call', 'taxes', 'change_speed', 'weather', 'apr', 'fun_fact', 'restaurant_reservation', 'flight_status', 'spelling', 'lost_luggage']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['report_fraud', 'rewards_balance', 'calculator', 'restaurant_reservation', 'oil_change_when', 'interest_rate', 'book_hotel', 'book_flight', 'car_rental', 'goodbye', 'directions', 'order', 'jump_start', 'definition', 'todo_list_update', 'user_name']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['travel_alert', 'replacement_card_duration', 'credit_limit', 'time', 'maybe', 'what_song', 'exchange_rate', 'change_accent', 'insurance_change', 'what_are_your_hobbies', 'what_is_your_name', 'ingredients_list', 'international_visa', 'payday', 'todo_list', 'current_location']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['plug_type', 'expiration_date', 'what_are_your_hobbies', 'pin_change', 'who_do_you_work_for', 'improve_credit_score', 'insurance_change', 'credit_limit', 'share_location', 'tell_joke', 'next_song', 'income', 'shopping_list_update', 'directions', 'todo_list', 'distance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['spending_history', 'order_status', 'find_phone', 'share_location', 'alarm', 'order', 'bill_due', 'are_you_a_bot', 'calendar_update', 'flip_coin', 'reminder', 'taxes', 'calculator', 'make_call', 'repeat', 'direct_deposit']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 14
+['weather', 'nutrition_info', 'pto_balance', 'direct_deposit', 'repeat', 'damaged_card', 'travel_notification', 'no', 'are_you_a_bot', 'order_checks', 'smart_home', 'shopping_list_update', 'rewards_balance', 'replacement_card_duration']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['schedule_maintenance', 'how_busy', 'order', 'pto_request_status', 'update_playlist', 'what_can_i_ask_you', 'text', 'timezone', 'transfer', 'time', 'reminder_update', 'next_song', 'user_name', 'tire_pressure', 'card_declined', 'change_speed']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['bill_due', 'international_fees', 'restaurant_reservation', 'todo_list_update', 'shopping_list_update', 'change_speed', 'date', 'what_song', 'what_are_your_hobbies', 'where_are_you_from', 'schedule_maintenance', 'confirm_reservation', 'pto_used', 'taxes', 'alarm', 'card_declined']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['who_do_you_work_for', 'freeze_account', 'change_ai_name', 'measurement_conversion', 'insurance_change', 'calendar', 'report_lost_card', 'change_user_name', 'translate', 'schedule_meeting', 'transactions', 'international_visa', 'directions', 'balance', 'reset_settings', 'pay_bill']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['improve_credit_score', 'carry_on', 'ingredient_substitution', 'weather', 'next_holiday', 'international_visa', 'order_checks', 'text', 'cook_time', 'bill_due', 'what_can_i_ask_you', 'change_speed', 'restaurant_suggestion', 'pto_request', 'credit_limit', 'alarm']
+=====================
+skip this batch
+[20,    10] loss_total: 2.559 loss_supervised_contrasive:  2.409 loss_intent :2.990 
+skip_time: 240
+total : 903
+no positive pairs !
+len batch class o/p : 16
+['payday', 'jump_start', 'travel_suggestion', 'timer', 'rollover_401k', 'traffic', 'measurement_conversion', 'vaccines', 'mpg', 'tire_change', 'cook_time', 'timezone', 'plug_type', 'nutrition_info', 'flight_status', 'meeting_schedule']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_volume', 'pin_change', 'reset_settings', 'whisper_mode', 'book_hotel', 'change_language', 'calendar_update', 'current_location', 'flip_coin', 'routing', 'accept_reservations', 'greeting', 'credit_limit', 'make_call', 'oil_change_how', 'card_declined']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['user_name', 'gas_type', 'whisper_mode', 'travel_notification', 'international_fees', 'oil_change_how', 'change_volume', 'find_phone', 'min_payment', 'interest_rate', 'direct_deposit', 'change_user_name', 'tell_joke', 'uber', 'lost_luggage', 'weather']
+=====================
+skip this batch
+[20,    20] loss_total: 3.676 loss_supervised_contrasive:  5.910 loss_intent :6.483 
+skip_time: 243
+total : 913
+no positive pairs !
+len batch class o/p : 16
+['order', 'fun_fact', 'expiration_date', 'change_accent', 'credit_limit_change', 'timezone', 'uber', 'what_is_your_name', 'ingredient_substitution', 'mpg', 'time', 'tell_joke', 'calculator', 'nutrition_info', 'pto_balance', 'jump_start']
+=====================
+skip this batch
+[20,    30] loss_total: 3.705 loss_supervised_contrasive:  9.391 loss_intent :10.973 
+skip_time: 244
+total : 923
+no positive pairs !
+len batch class o/p : 16
+['change_speed', 'flip_coin', 'improve_credit_score', 'traffic', 'plug_type', 'mpg', 'accept_reservations', 'tire_change', 'book_hotel', 'calculator', 'meeting_schedule', 'spelling', 'w2', 'what_song', 'order_status', 'account_blocked']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['apr', 'cancel_reservation', 'order_status', 'what_is_your_name', 'make_call', 'next_song', 'what_are_your_hobbies', 'travel_suggestion', 'change_speed', 'oil_change_when', 'car_rental', 'spelling', 'balance', 'meal_suggestion', 'restaurant_reviews', 'credit_limit']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['no', 'confirm_reservation', 'change_language', 'ingredients_list', 'calories', 'calculator', 'timezone', 'find_phone', 'pay_bill', 'direct_deposit', 'pin_change', 'time', 'last_maintenance', 'travel_alert', 'car_rental', 'sync_device']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['spending_history', 'schedule_maintenance', 'recipe', 'do_you_have_pets', 'cancel_reservation', 'sync_device', 'traffic', 'book_flight', 'transactions', 'distance', 'definition', 'account_blocked', 'travel_suggestion', 'yes', 'carry_on', 'restaurant_reviews']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['ingredients_list', 'card_declined', 'who_do_you_work_for', 'order_status', 'play_music', 'account_blocked', 'redeem_rewards', 'recipe', 'pto_used', 'share_location', 'change_user_name', 'traffic', 'current_location', 'what_is_your_name', 'confirm_reservation', 'plug_type']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['maybe', 'tire_pressure', 'distance', 'insurance', 'what_song', 'plug_type', 'min_payment', 'change_ai_name', 'international_fees', 'travel_alert', 'goodbye', 'travel_notification', 'restaurant_reviews', 'interest_rate', 'jump_start', 'pto_request_status']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 14
+['weather', 'order', 'exchange_rate', 'do_you_have_pets', 'timer', 'change_ai_name', 'text', 'calendar', 'payday', 'routing', 'new_card', 'book_flight', 'pto_balance', 'shopping_list']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['what_song', 'mpg', 'confirm_reservation', 'where_are_you_from', 'account_blocked', 'recipe', 'ingredient_substitution', 'yes', 'last_maintenance', 'book_flight', 'nutrition_info', 'direct_deposit', 'shopping_list', 'insurance', 'definition', 'oil_change_how']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['sync_device', 'replacement_card_duration', 'exchange_rate', 'flip_coin', 'improve_credit_score', 'change_speed', 'current_location', 'book_flight', 'damaged_card', 'change_user_name', 'lost_luggage', 'bill_balance', 'car_rental', 'insurance_change', 'text', 'todo_list_update']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['thank_you', 'spelling', 'order_status', 'w2', 'gas', 'smart_home', 'report_fraud', 'calories', 'redeem_rewards', 'roll_dice', 'min_payment', 'change_volume', 'reset_settings', 'recipe', 'pin_change', 'flight_status']
+=====================
+skip this batch
+[21,    10] loss_total: 3.601 loss_supervised_contrasive:  3.426 loss_intent :3.497 
+skip_time: 254
+total : 950
+no positive pairs !
+len batch class o/p : 16
+['time', 'what_song', 'repeat', 'timer', 'directions', 'change_language', 'sync_device', 'what_is_your_name', 'maybe', 'application_status', 'ingredient_substitution', 'reminder_update', 'international_visa', 'redeem_rewards', 'transfer', 'spending_history']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['who_do_you_work_for', 'shopping_list', 'pin_change', 'damaged_card', 'make_call', 'restaurant_reviews', 'book_flight', 'confirm_reservation', 'interest_rate', 'time', 'expiration_date', 'change_accent', 'payday', 'date', 'transfer', 'pto_request_status']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['credit_score', 'roll_dice', 'redeem_rewards', 'how_busy', 'order_status', 'balance', 'transactions', 'interest_rate', 'recipe', 'spending_history', 'order_checks', 'expiration_date', 'what_are_your_hobbies', 'smart_home', 'sync_device', 'definition']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['gas', 'book_flight', 'ingredients_list', 'tire_change', 'how_old_are_you', 'last_maintenance', 'pto_balance', 'definition', 'restaurant_reviews', 'calendar', 'interest_rate', 'tire_pressure', 'goodbye', 'reminder', 'whisper_mode', 'flip_coin']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['thank_you', 'tire_pressure', 'transactions', 'min_payment', 'order_checks', 'gas_type', 'new_card', 'spelling', 'flight_status', 'greeting', 'timezone', 'shopping_list', 'pto_request_status', 'transfer', 'goodbye', 'credit_score']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['interest_rate', 'pto_balance', 'routing', 'rollover_401k', 'ingredient_substitution', 'card_declined', 'w2', 'shopping_list_update', 'share_location', 'no', 'todo_list_update', 'do_you_have_pets', 'repeat', 'change_accent', 'what_can_i_ask_you', 'damaged_card']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['repeat', 'reminder', 'carry_on', 'who_made_you', 'routing', 'travel_alert', 'tell_joke', 'damaged_card', 'food_last', 'schedule_maintenance', 'pto_used', 'travel_suggestion', 'directions', 'find_phone', 'todo_list', 'timezone']
+=====================
+skip this batch
+[21,    30] loss_total: 4.959 loss_supervised_contrasive:  8.061 loss_intent :9.980 
+skip_time: 261
+total : 970
+no positive pairs !
+len batch class o/p : 16
+['what_song', 'directions', 'yes', 'cancel_reservation', 'rewards_balance', 'schedule_meeting', 'definition', 'where_are_you_from', 'goodbye', 'thank_you', 'change_language', 'greeting', 'cancel', 'next_holiday', 'gas', 'schedule_maintenance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['user_name', 'international_visa', 'timer', 'damaged_card', 'book_flight', 'jump_start', 'roll_dice', 'rewards_balance', 'last_maintenance', 'pin_change', 'lost_luggage', 'balance', 'cancel_reservation', 'book_hotel', 'oil_change_how', 'thank_you']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['how_old_are_you', 'pay_bill', 'reminder_update', 'calculator', 'order_status', 'travel_suggestion', 'alarm', 'balance', 'yes', 'pin_change', 'cancel', 'rewards_balance', 'rollover_401k', 'last_maintenance', 'insurance', 'gas_type']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['schedule_meeting', 'share_location', 'repeat', 'order', 'what_is_your_name', 'pay_bill', 'timer', 'next_holiday', 'no', 'replacement_card_duration', 'travel_suggestion', 'insurance_change', 'roll_dice', 'ingredients_list', 'translate', 'apr']
+=====================
+skip this batch
+[21,    40] loss_total: 3.459 loss_supervised_contrasive:  11.371 loss_intent :12.971 
+skip_time: 265
+total : 980
+no positive pairs !
+len batch class o/p : 16
+['are_you_a_bot', 'shopping_list_update', 'where_are_you_from', 'mpg', 'reminder', 'oil_change_when', 'todo_list', 'change_language', 'pto_request', 'fun_fact', 'accept_reservations', 'ingredients_list', 'meeting_schedule', 'what_is_your_name', 'date', 'direct_deposit']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['share_location', 'ingredient_substitution', 'tell_joke', 'replacement_card_duration', 'who_do_you_work_for', 'fun_fact', 'directions', 'make_call', 'rewards_balance', 'freeze_account', 'no', 'interest_rate', 'change_speed', 'international_visa', 'confirm_reservation', 'meeting_schedule']
+=====================
+skip this batch
+[22,    10] loss_total: 3.697 loss_supervised_contrasive:  3.474 loss_intent :4.473 
+skip_time: 267
+total : 997
+no positive pairs !
+len batch class o/p : 16
+['pto_balance', 'pto_used', 'order_checks', 'restaurant_reviews', 'insurance', 'who_made_you', 'time', 'rewards_balance', 'timer', 'calculator', 'income', 'book_flight', 'pay_bill', 'spending_history', 'tire_change', 'uber']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['insurance_change', 'interest_rate', 'what_are_your_hobbies', 'car_rental', 'transactions', 'pin_change', 'directions', 'roll_dice', 'find_phone', 'sync_device', 'text', 'calculator', 'change_volume', 'play_music', 'spelling', 'pay_bill']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['replacement_card_duration', 'tell_joke', 'schedule_maintenance', 'w2', 'reminder', 'reminder_update', 'current_location', 'distance', 'rollover_401k', 'change_volume', 'next_holiday', 'who_do_you_work_for', 'mpg', 'uber', 'calories', 'ingredients_list']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['carry_on', 'flip_coin', 'apr', 'order', 'gas', 'accept_reservations', 'text', 'what_are_your_hobbies', 'bill_due', 'calories', 'change_speed', 'how_old_are_you', 'book_hotel', 'balance', 'exchange_rate', 'shopping_list_update']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['pto_request_status', 'lost_luggage', 'car_rental', 'transfer', 'gas', 'nutrition_info', 'weather', 'credit_limit', 'bill_balance', 'thank_you', 'w2', 'fun_fact', 'measurement_conversion', 'smart_home', 'schedule_maintenance', 'freeze_account']
+=====================
+skip this batch
+[22,    20] loss_total: 2.191 loss_supervised_contrasive:  5.540 loss_intent :6.965 
+skip_time: 272
+total : 1007
+no positive pairs !
+len batch class o/p : 16
+['expiration_date', 'spending_history', 'change_volume', 'yes', 'application_status', 'directions', 'pto_used', 'share_location', 'plug_type', 'reset_settings', 'international_visa', 'how_busy', 'lost_luggage', 'insurance_change', 'credit_limit_change', 'direct_deposit']
+=====================
+skip this batch
+[22,    30] loss_total: 3.115 loss_supervised_contrasive:  8.430 loss_intent :11.479 
+skip_time: 273
+total : 1017
+no positive pairs !
+len batch class o/p : 16
+['time', 'cancel_reservation', 'find_phone', 'change_accent', 'user_name', 'tire_change', 'new_card', 'car_rental', 'weather', 'play_music', 'min_payment', 'lost_luggage', 'flip_coin', 'current_location', 'plug_type', 'nutrition_info']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['thank_you', 'exchange_rate', 'last_maintenance', 'nutrition_info', 'who_made_you', 'transfer', 'calendar_update', 'pto_request', 'pto_used', 'flight_status', 'travel_notification', 'spelling', 'rollover_401k', 'credit_score', 'tire_change', 'ingredients_list']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['insurance_change', 'travel_notification', 'change_ai_name', 'smart_home', 'accept_reservations', 'shopping_list_update', 'report_lost_card', 'exchange_rate', 'uber', 'tire_change', 'order_status', 'meaning_of_life', 'make_call', 'reminder', 'date', 'flip_coin']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['fun_fact', 'credit_score', 'restaurant_reservation', 'transfer', 'traffic', 'order_checks', 'car_rental', 'flight_status', 'are_you_a_bot', 'pin_change', 'do_you_have_pets', 'new_card', 'shopping_list_update', 'update_playlist', 'travel_suggestion', 'change_volume']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['translate', 'payday', 'confirm_reservation', 'gas_type', 'routing', 'date', 'are_you_a_bot', 'roll_dice', 'next_song', 'change_volume', 'no', 'goodbye', 'repeat', 'timezone', 'who_do_you_work_for', 'what_is_your_name']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['calendar_update', 'update_playlist', 'report_lost_card', 'reminder_update', 'yes', 'carry_on', 'pto_balance', 'improve_credit_score', 'next_song', 'cook_time', 'calories', 'oil_change_how', 'freeze_account', 'no', 'sync_device', 'book_flight']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['calendar', 'vaccines', 'definition', 'how_old_are_you', 'flip_coin', 'oil_change_when', 'gas_type', 'shopping_list_update', 'calendar_update', 'sync_device', 'confirm_reservation', 'timezone', 'taxes', 'change_user_name', 'tell_joke', 'jump_start']
+=====================
+skip this batch
+[23,    10] loss_total: 3.706 loss_supervised_contrasive:  3.456 loss_intent :5.009 
+skip_time: 280
+total : 1044
+no positive pairs !
+len batch class o/p : 16
+['what_song', 'car_rental', 'improve_credit_score', 'cancel', 'update_playlist', 'interest_rate', 'reminder_update', 'oil_change_when', 'last_maintenance', 'what_is_your_name', 'application_status', 'pto_used', 'todo_list_update', 'expiration_date', 'smart_home', 'income']
+=====================
+skip this batch
+[23,    20] loss_total: 3.367 loss_supervised_contrasive:  6.598 loss_intent :9.496 
+skip_time: 281
+total : 1054
+no positive pairs !
+len batch class o/p : 16
+['directions', 'account_blocked', 'spending_history', 'report_lost_card', 'uber', 'pto_request', 'play_music', 'international_fees', 'order', 'spelling', 'travel_suggestion', 'min_payment', 'what_song', 'reminder', 'oil_change_when', 'last_maintenance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['goodbye', 'greeting', 'date', 'repeat', 'ingredients_list', 'accept_reservations', 'book_hotel', 'roll_dice', 'do_you_have_pets', 'what_are_your_hobbies', 'weather', 'tire_change', 'insurance_change', 'change_volume', 'lost_luggage', 'credit_score']
+=====================
+skip this batch
+[23,    40] loss_total: 6.689 loss_supervised_contrasive:  12.838 loss_intent :18.487 
+skip_time: 283
+total : 1074
+no positive pairs !
+len batch class o/p : 16
+['timer', 'how_busy', 'food_last', 'repeat', 'reminder', 'card_declined', 'weather', 'flight_status', 'reminder_update', 'calculator', 'pay_bill', 'share_location', 'play_music', 'oil_change_how', 'yes', 'time']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['payday', 'directions', 'meeting_schedule', 'definition', 'who_do_you_work_for', 'credit_limit', 'calendar_update', 'yes', 'international_visa', 'tire_pressure', 'user_name', 'oil_change_when', 'schedule_maintenance', 'transfer', 'ingredient_substitution', 'greeting']
+=====================
+skip this batch
+[24,    10] loss_total: 4.061 loss_supervised_contrasive:  3.836 loss_intent :4.496 
+skip_time: 285
+total : 1091
+[24,    20] loss_total: 4.640 loss_supervised_contrasive:  8.227 loss_intent :9.489 
+skip_time: 285
+total : 1101
+no positive pairs !
+len batch class o/p : 16
+['what_is_your_name', 'income', 'definition', 'cancel', 'calories', 'exchange_rate', 'insurance', 'restaurant_reservation', 'payday', 'next_song', 'where_are_you_from', 'tire_change', 'meal_suggestion', 'report_lost_card', 'smart_home', 'schedule_maintenance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['application_status', 'time', 'tell_joke', 'car_rental', 'greeting', 'flight_status', 'change_speed', 'bill_due', 'routing', 'meeting_schedule', 'play_music', 'reminder_update', 'yes', 'smart_home', 'apr', 'schedule_meeting']
+=====================
+skip this batch
+[24,    30] loss_total: 3.389 loss_supervised_contrasive:  11.416 loss_intent :13.477 
+skip_time: 287
+total : 1111
+[24,    40] loss_total: 4.732 loss_supervised_contrasive:  15.898 loss_intent :18.478 
+skip_time: 287
+total : 1121
+[25,    10] loss_total: 4.287 loss_supervised_contrasive:  4.038 loss_intent :4.991 
+skip_time: 287
+total : 1138
+[25,    20] loss_total: 2.338 loss_supervised_contrasive:  6.125 loss_intent :9.996 
+skip_time: 287
+total : 1148
+[25,    30] loss_total: 4.055 loss_supervised_contrasive:  9.930 loss_intent :14.997 
+skip_time: 287
+total : 1158
+[25,    40] loss_total: 4.201 loss_supervised_contrasive:  13.881 loss_intent :19.996 
+skip_time: 287
+total : 1168
+no positive pairs !
+len batch class o/p : 14
+['rollover_401k', 'expiration_date', 'change_user_name', 'nutrition_info', 'timer', 'income', 'credit_limit', 'jump_start', 'calendar', 'new_card', 'traffic', 'update_playlist', 'pto_balance', 'car_rental']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['shopping_list_update', 'balance', 'what_is_your_name', 'who_made_you', 'fun_fact', 'international_fees', 'plug_type', 'are_you_a_bot', 'improve_credit_score', 'jump_start', 'text', 'alarm', 'repeat', 'calculator', 'new_card', 'spending_history']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['what_is_your_name', 'report_fraud', 'vaccines', 'cook_time', 'spelling', 'min_payment', 'change_language', 'credit_score', 'apr', 'insurance_change', 'play_music', 'oil_change_how', 'payday', 'shopping_list', 'alarm', 'greeting']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['do_you_have_pets', 'bill_due', 'change_accent', 'change_user_name', 'min_payment', 'restaurant_reservation', 'schedule_meeting', 'order_checks', 'next_song', 'share_location', 'order', 'change_speed', 'yes', 'travel_notification', 'traffic', 'order_status']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['transactions', 'schedule_meeting', 'restaurant_suggestion', 'translate', 'confirm_reservation', 'change_language', 'insurance_change', 'distance', 'rollover_401k', 'what_is_your_name', 'new_card', 'shopping_list', 'spending_history', 'calculator', 'routing', 'schedule_maintenance']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['credit_limit', 'distance', 'reset_settings', 'time', 'direct_deposit', 'todo_list', 'rollover_401k', 'payday', 'yes', 'fun_fact', 'reminder_update', 'travel_notification', 'current_location', 'taxes', 'play_music', 'greeting']
+=====================
+skip this batch
+[26,    10] loss_total: 2.532 loss_supervised_contrasive:  2.407 loss_intent :2.504 
+skip_time: 293
+total : 1185
+no positive pairs !
+len batch class o/p : 16
+['interest_rate', 'calendar_update', 'who_do_you_work_for', 'todo_list_update', 'apr', 'food_last', 'spelling', 'ingredient_substitution', 'last_maintenance', 'restaurant_reservation', 'pay_bill', 'whisper_mode', 'meaning_of_life', 'card_declined', 'book_flight', 'direct_deposit']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['time', 'cook_time', 'text', 'meeting_schedule', 'car_rental', 'tire_pressure', 'exchange_rate', 'thank_you', 'todo_list_update', 'cancel_reservation', 'change_language', 'flip_coin', 'repeat', 'goodbye', 'calendar_update', 'confirm_reservation']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['tire_change', 'alarm', 'transactions', 'make_call', 'meeting_schedule', 'where_are_you_from', 'w2', 'nutrition_info', 'update_playlist', 'user_name', 'traffic', 'maybe', 'spending_history', 'meal_suggestion', 'next_holiday', 'lost_luggage']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['taxes', 'spending_history', 'gas_type', 'definition', 'replacement_card_duration', 'goodbye', 'travel_suggestion', 'carry_on', 'mpg', 'account_blocked', 'are_you_a_bot', 'balance', 'oil_change_when', 'payday', 'play_music', 'weather']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['credit_limit', 'reminder_update', 'timezone', 'date', 'flip_coin', 'smart_home', 'apr', 'no', 'calories', 'share_location', 'interest_rate', 'direct_deposit', 'tire_pressure', 'measurement_conversion', 'calendar_update', 'uber']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['user_name', 'schedule_maintenance', 'reminder', 'oil_change_when', 'pto_request', 'travel_alert', 'weather', 'application_status', 'gas', 'calendar', 'pto_used', 'replacement_card_duration', 'international_visa', 'next_holiday', 'book_flight', 'meaning_of_life']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['oil_change_when', 'book_flight', 'what_can_i_ask_you', 'damaged_card', 'insurance_change', 'income', 'mpg', 'who_do_you_work_for', 'application_status', 'report_lost_card', 'translate', 'improve_credit_score', 'change_ai_name', 'play_music', 'new_card', 'ingredients_list']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['gas', 'mpg', 'bill_due', 'rollover_401k', 'routing', 'repeat', 'change_accent', 'schedule_maintenance', 'improve_credit_score', 'account_blocked', 'ingredient_substitution', 'calculator', 'travel_alert', 'insurance', 'expiration_date', 'international_fees']
+=====================
+skip this batch
+[26,    30] loss_total: 5.790 loss_supervised_contrasive:  7.896 loss_intent :8.516 
+skip_time: 301
+total : 1205
+no positive pairs !
+len batch class o/p : 16
+['tell_joke', 'international_visa', 'timer', 'order_status', 'shopping_list', 'time', 'carry_on', 'todo_list', 'credit_limit_change', 'new_card', 'traffic', 'alarm', 'what_song', 'sync_device', 'user_name', 'who_made_you']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['vaccines', 'time', 'food_last', 'min_payment', 'car_rental', 'yes', 'pto_used', 'jump_start', 'accept_reservations', 'freeze_account', 'shopping_list', 'pto_request', 'meal_suggestion', 'uber', 'ingredients_list', 'measurement_conversion']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['confirm_reservation', 'plug_type', 'uber', 'calendar', 'travel_suggestion', 'todo_list_update', 'traffic', 'schedule_meeting', 'roll_dice', 'tell_joke', 'schedule_maintenance', 'tire_change', 'translate', 'gas', 'apr', 'ingredients_list']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['insurance_change', 'apr', 'international_visa', 'oil_change_when', 'restaurant_reviews', 'nutrition_info', 'carry_on', 'travel_suggestion', 'change_user_name', 'order_checks', 'lost_luggage', 'definition', 'date', 'roll_dice', 'current_location', 'card_declined']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['cook_time', 'payday', 'application_status', 'report_lost_card', 'update_playlist', 'time', 'maybe', 'greeting', 'what_are_your_hobbies', 'who_made_you', 'alarm', 'pay_bill', 'food_last', 'card_declined', 'reminder_update', 'order']
+=====================
+skip this batch
+[26,    40] loss_total: 1.757 loss_supervised_contrasive:  9.528 loss_intent :11.006 
+skip_time: 306
+total : 1215
+no positive pairs !
+len batch class o/p : 16
+['ingredient_substitution', 'damaged_card', 'restaurant_suggestion', 'international_fees', 'restaurant_reviews', 'book_hotel', 'vaccines', 'no', 'fun_fact', 'timezone', 'tell_joke', 'greeting', 'timer', 'what_is_your_name', 'calculator', 'credit_limit_change']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['pay_bill', 'calculator', 'meeting_schedule', 'travel_notification', 'oil_change_how', 'transfer', 'weather', 'pto_used', 'recipe', 'how_busy', 'what_song', 'reminder', 'find_phone', 'international_fees', 'rollover_401k', 'directions']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['last_maintenance', 'rollover_401k', 'yes', 'update_playlist', 'freeze_account', 'international_visa', 'spending_history', 'taxes', 'timezone', 'plug_type', 'pto_request_status', 'spelling', 'pin_change', 'what_are_your_hobbies', 'lost_luggage', 'cancel']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['cancel_reservation', 'next_song', 'what_are_your_hobbies', 'todo_list_update', 'todo_list', 'restaurant_reviews', 'direct_deposit', 'restaurant_suggestion', 'cancel', 'insurance', 'oil_change_how', 'apr', 'who_made_you', 'order_status', 'definition', 'what_song']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['do_you_have_pets', 'apr', 'vaccines', 'spelling', 'insurance', 'pto_used', 'distance', 'improve_credit_score', 'report_lost_card', 'share_location', 'meaning_of_life', 'shopping_list', 'international_fees', 'maybe', 'bill_balance', 'change_speed']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['roll_dice', 'update_playlist', 'date', 'improve_credit_score', 'account_blocked', 'travel_suggestion', 'translate', 'pto_balance', 'exchange_rate', 'what_song', 'order_status', 'food_last', 'plug_type', 'jump_start', 'goodbye', 'smart_home']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['pin_change', 'restaurant_reservation', 'measurement_conversion', 'what_song', 'reminder', 'card_declined', 'directions', 'what_are_your_hobbies', 'calendar', 'confirm_reservation', 'user_name', 'goodbye', 'pto_request_status', 'change_ai_name', 'spelling', 'share_location']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['play_music', 'measurement_conversion', 'credit_score', 'direct_deposit', 'translate', 'shopping_list_update', 'book_flight', 'flip_coin', 'ingredients_list', 'order', 'damaged_card', 'distance', 'pto_used', 'replacement_card_duration', 'bill_due', 'cancel_reservation']
+=====================
+skip this batch
+[27,    10] loss_total: 2.773 loss_supervised_contrasive:  2.623 loss_intent :3.006 
+skip_time: 314
+total : 1232
+no positive pairs !
+len batch class o/p : 16
+['translate', 'flight_status', 'whisper_mode', 'order_status', 'measurement_conversion', 'meal_suggestion', 'taxes', 'card_declined', 'freeze_account', 'do_you_have_pets', 'spending_history', 'recipe', 'rollover_401k', 'accept_reservations', 'pto_request', 'international_fees']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['pin_change', 'oil_change_how', 'change_speed', 'recipe', 'make_call', 'international_fees', 'restaurant_reservation', 'routing', 'shopping_list', 'cancel', 'redeem_rewards', 'mpg', 'whisper_mode', 'insurance_change', 'change_language', 'meal_suggestion']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['date', 'translate', 'next_holiday', 'restaurant_reservation', 'credit_limit', 'pto_balance', 'flip_coin', 'freeze_account', 'confirm_reservation', 'alarm', 'book_hotel', 'card_declined', 'ingredient_substitution', 'recipe', 'interest_rate', 'greeting']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['todo_list_update', 'travel_suggestion', 'change_language', 'how_old_are_you', 'income', 'direct_deposit', 'oil_change_when', 'accept_reservations', 'are_you_a_bot', 'mpg', 'travel_notification', 'who_do_you_work_for', 'calendar', 'meal_suggestion', 'restaurant_suggestion', 'who_made_you']
+=====================
+skip this batch
+[27,    20] loss_total: 2.778 loss_supervised_contrasive:  5.250 loss_intent :6.016 
+skip_time: 318
+total : 1242
+no positive pairs !
+len batch class o/p : 16
+['tell_joke', 'gas_type', 'order_status', 'order', 'vaccines', 'cancel_reservation', 'bill_balance', 'timezone', 'play_music', 'schedule_maintenance', 'travel_alert', 'balance', 'calendar_update', 'find_phone', 'carry_on', 'routing']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['definition', 'confirm_reservation', 'order_checks', 'vaccines', 'rollover_401k', 'travel_suggestion', 'calculator', 'restaurant_suggestion', 'date', 'sync_device', 'travel_alert', 'do_you_have_pets', 'reminder_update', 'taxes', 'rewards_balance', 'where_are_you_from']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['w2', 'change_volume', 'next_holiday', 'taxes', 'thank_you', 'spelling', 'update_playlist', 'calories', 'tire_change', 'tire_pressure', 'make_call', 'reminder_update', 'order_status', 'change_ai_name', 'book_flight', 'pay_bill']
+=====================
+skip this batch
+[27,    30] loss_total: 3.356 loss_supervised_contrasive:  8.431 loss_intent :9.527 
+skip_time: 321
+total : 1252
+no positive pairs !
+len batch class o/p : 16
+['w2', 'exchange_rate', 'plug_type', 'meaning_of_life', 'replacement_card_duration', 'transfer', 'traffic', 'change_speed', 'order', 'payday', 'who_do_you_work_for', 'directions', 'flight_status', 'tire_pressure', 'todo_list_update', 'travel_notification']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['are_you_a_bot', 'todo_list', 'calculator', 'cancel', 'card_declined', 'fun_fact', 'current_location', 'meal_suggestion', 'accept_reservations', 'distance', 'bill_due', 'transactions', 'order_status', 'next_song', 'reminder_update', 'tell_joke']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['balance', 'reminder', 'insurance', 'tell_joke', 'damaged_card', 'schedule_meeting', 'make_call', 'travel_notification', 'freeze_account', 'find_phone', 'next_song', 'min_payment', 'alarm', 'order', 'directions', 'cancel_reservation']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_user_name', 'pto_balance', 'redeem_rewards', 'schedule_meeting', 'greeting', 'direct_deposit', 'book_flight', 'new_card', 'text', 'tell_joke', 'date', 'report_lost_card', 'repeat', 'user_name', 'min_payment', 'transfer']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['credit_limit_change', 'text', 'change_accent', 'payday', 'traffic', 'restaurant_reviews', 'nutrition_info', 'alarm', 'maybe', 'yes', 'international_fees', 'tire_pressure', 'min_payment', 'interest_rate', 'oil_change_how', 'are_you_a_bot']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['what_can_i_ask_you', 'pto_request', 'last_maintenance', 'are_you_a_bot', 'travel_notification', 'traffic', 'what_are_your_hobbies', 'repeat', 'schedule_maintenance', 'change_volume', 'no', 'thank_you', 'bill_due', 'update_playlist', 'international_fees', 'share_location']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_user_name', 'credit_limit_change', 'book_flight', 'last_maintenance', 'pto_balance', 'spelling', 'text', 'share_location', 'next_song', 'balance', 'exchange_rate', 'rewards_balance', 'smart_home', 'jump_start', 'new_card', 'timer']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['where_are_you_from', 'tire_pressure', 'plug_type', 'sync_device', 'jump_start', 'food_last', 'directions', 'who_made_you', 'restaurant_suggestion', 'book_hotel', 'current_location', 'calendar', 'what_are_your_hobbies', 'order_checks', 'pay_bill', 'credit_score']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['pin_change', 'fun_fact', 'mpg', 'shopping_list', 'routing', 'meaning_of_life', 'next_holiday', 'pay_bill', 'reminder', 'timer', 'repeat', 'goodbye', 'todo_list', 'account_blocked', 'international_visa', 'carry_on']
+=====================
+skip this batch
+[28,    10] loss_total: 3.255 loss_supervised_contrasive:  3.080 loss_intent :3.511 
+skip_time: 330
+total : 1279
+no positive pairs !
+len batch class o/p : 16
+['change_language', 'ingredient_substitution', 'cancel_reservation', 'schedule_meeting', 'w2', 'spending_history', 'vaccines', 'reminder_update', 'replacement_card_duration', 'min_payment', 'new_card', 'traffic', 'text', 'travel_suggestion', 'insurance', 'travel_alert']
+=====================
+skip this batch
+[28,    20] loss_total: 4.163 loss_supervised_contrasive:  7.018 loss_intent :8.018 
+skip_time: 331
+total : 1289
+no positive pairs !
+len batch class o/p : 16
+['accept_reservations', 'what_can_i_ask_you', 'report_fraud', 'change_accent', 'card_declined', 'next_song', 'date', 'car_rental', 'mpg', 'transactions', 'cancel_reservation', 'insurance', 'what_is_your_name', 'freeze_account', 'cancel', 'restaurant_reviews']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['pay_bill', 'change_ai_name', 'reminder', 'tire_change', 'tell_joke', 'change_accent', 'card_declined', 'jump_start', 'schedule_maintenance', 'income', 'schedule_meeting', 'translate', 'play_music', 'what_is_your_name', 'reminder_update', 'smart_home']
+=====================
+skip this batch
+[28,    30] loss_total: 2.895 loss_supervised_contrasive:  9.713 loss_intent :12.019 
+skip_time: 333
+total : 1299
+no positive pairs !
+len batch class o/p : 16
+['lost_luggage', 'calendar_update', 'bill_balance', 'credit_limit', 'insurance_change', 'todo_list', 'schedule_maintenance', 'user_name', 'sync_device', 'food_last', 'recipe', 'make_call', 'change_language', 'find_phone', 'what_are_your_hobbies', 'play_music']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['credit_score', 'book_hotel', 'shopping_list', 'pto_used', 'traffic', 'how_old_are_you', 'recipe', 'account_blocked', 'rollover_401k', 'share_location', 'roll_dice', 'improve_credit_score', 'calories', 'expiration_date', 'new_card', 'ingredients_list']
+=====================
+skip this batch
+[28,    40] loss_total: 4.178 loss_supervised_contrasive:  13.691 loss_intent :16.015 
+skip_time: 335
+total : 1309
+no positive pairs !
+len batch class o/p : 16
+['w2', 'spending_history', 'gas_type', 'where_are_you_from', 'recipe', 'calories', 'nutrition_info', 'travel_alert', 'improve_credit_score', 'bill_due', 'change_user_name', 'restaurant_suggestion', 'smart_home', 'report_fraud', 'maybe', 'international_visa']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['ingredient_substitution', 'mpg', 'smart_home', 'reminder_update', 'meal_suggestion', 'date', 'tire_pressure', 'expiration_date', 'goodbye', 'distance', 'change_volume', 'insurance', 'improve_credit_score', 'who_do_you_work_for', 'credit_limit_change', 'book_hotel']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['repeat', 'goodbye', 'accept_reservations', 'thank_you', 'are_you_a_bot', 'expiration_date', 'flight_status', 'calendar_update', 'pin_change', 'greeting', 'exchange_rate', 'last_maintenance', 'tell_joke', 'translate', 'flip_coin', 'weather']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['accept_reservations', 'share_location', 'meal_suggestion', 'traffic', 'timezone', 'rewards_balance', 'reminder', 'tire_change', 'change_user_name', 'replacement_card_duration', 'calories', 'w2', 'user_name', 'reminder_update', 'how_busy', 'taxes']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_speed', 'credit_limit_change', 'flight_status', 'change_accent', 'freeze_account', 'how_old_are_you', 'travel_suggestion', 'how_busy', 'confirm_reservation', 'book_flight', 'travel_alert', 'alarm', 'transfer', 'cancel_reservation', 'apr', 'direct_deposit']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['play_music', 'schedule_maintenance', 'change_user_name', 'balance', 'insurance_change', 'bill_balance', 'travel_notification', 'share_location', 'car_rental', 'last_maintenance', 'time', 'no', 'change_speed', 'expiration_date', 'user_name', 'measurement_conversion']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['food_last', 'smart_home', 'weather', 'fun_fact', 'change_volume', 'international_fees', 'maybe', 'next_song', 'carry_on', 'book_flight', 'what_is_your_name', 'rollover_401k', 'exchange_rate', 'traffic', 'roll_dice', 'shopping_list']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meal_suggestion', 'min_payment', 'gas_type', 'greeting', 'calendar_update', 'where_are_you_from', 'transactions', 'rollover_401k', 'no', 'calculator', 'make_call', 'replacement_card_duration', 'traffic', 'next_song', 'order', 'find_phone']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['meal_suggestion', 'schedule_meeting', 'update_playlist', 'who_made_you', 'order', 'report_lost_card', 'tire_pressure', 'pto_used', 'credit_limit_change', 'transactions', 'uber', 'redeem_rewards', 'food_last', 'cook_time', 'apr', 'shopping_list_update']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['credit_score', 'todo_list', 'expiration_date', 'meal_suggestion', 'payday', 'weather', 'report_fraud', 'redeem_rewards', 'oil_change_how', 'pin_change', 'yes', 'how_busy', 'min_payment', 'rewards_balance', 'who_do_you_work_for', 'calculator']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['pay_bill', 'credit_limit', 'confirm_reservation', 'time', 'update_playlist', 'shopping_list', 'ingredients_list', 'travel_alert', 'change_volume', 'goodbye', 'user_name', 'order_status', 'maybe', 'payday', 'transactions', 'definition']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['change_user_name', 'pin_change', 'date', 'improve_credit_score', 'what_is_your_name', 'update_playlist', 'pto_request_status', 'payday', 'cook_time', 'min_payment', 'report_fraud', 'spending_history', 'thank_you', 'car_rental', 'are_you_a_bot', 'flight_status']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['translate', 'travel_alert', 'jump_start', 'book_flight', 'account_blocked', 'spending_history', 'find_phone', 'cook_time', 'calendar_update', 'what_are_your_hobbies', 'date', 'pto_request_status', 'report_lost_card', 'text', 'change_language', 'rollover_401k']
+=====================
+skip this batch
+[29,    20] loss_total: 5.779 loss_supervised_contrasive:  5.529 loss_intent :5.002 
+skip_time: 348
+total : 1336
+no positive pairs !
+len batch class o/p : 16
+['goodbye', 'reset_settings', 'schedule_maintenance', 'pto_balance', 'tire_change', 'last_maintenance', 'pto_request', 'carry_on', 'no', 'time', 'credit_limit_change', 'definition', 'reminder_update', 'change_volume', 'next_holiday', 'shopping_list']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['calculator', 'tell_joke', 'alarm', 'jump_start', 'taxes', 'distance', 'timer', 'interest_rate', 'restaurant_suggestion', 'pto_balance', 'bill_due', 'calories', 'who_do_you_work_for', 'report_fraud', 'redeem_rewards', 'goodbye']
+=====================
+skip this batch
+[29,    30] loss_total: 2.799 loss_supervised_contrasive:  8.128 loss_intent :8.997 
+skip_time: 350
+total : 1346
+no positive pairs !
+len batch class o/p : 16
+['freeze_account', 'w2', 'repeat', 'tire_change', 'pin_change', 'distance', 'calculator', 'spending_history', 'travel_notification', 'restaurant_reservation', 'interest_rate', 'how_old_are_you', 'bill_balance', 'damaged_card', 'lost_luggage', 'measurement_conversion']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['flip_coin', 'recipe', 'calendar_update', 'credit_score', 'change_accent', 'card_declined', 'pto_request_status', 'change_language', 'transfer', 'cook_time', 'who_do_you_work_for', 'roll_dice', 'interest_rate', 'mpg', 'meaning_of_life', 'exchange_rate']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['measurement_conversion', 'transfer', 'todo_list_update', 'insurance', 'car_rental', 'reminder', 'text', 'interest_rate', 'tire_pressure', 'fun_fact', 'next_song', 'oil_change_how', 'international_visa', 'replacement_card_duration', 'repeat', 'book_hotel']
+=====================
+skip this batch
+[29,    40] loss_total: 3.351 loss_supervised_contrasive:  11.305 loss_intent :12.486 
+skip_time: 353
+total : 1356
+no positive pairs !
+len batch class o/p : 16
+['where_are_you_from', 'reset_settings', 'plug_type', 'restaurant_reviews', 'todo_list', 'how_busy', 'cancel', 'what_can_i_ask_you', 'car_rental', 'lost_luggage', 'smart_home', 'schedule_maintenance', 'tell_joke', 'damaged_card', 'replacement_card_duration', 'alarm']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['pto_balance', 'flip_coin', 'shopping_list_update', 'food_last', 'date', 'timezone', 'transactions', 'thank_you', 'where_are_you_from', 'lost_luggage', 'who_do_you_work_for', 'do_you_have_pets', 'travel_suggestion', 'order_status', 'how_busy', 'oil_change_when']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['schedule_meeting', 'order_status', 'sync_device', 'share_location', 'card_declined', 'where_are_you_from', 'what_are_your_hobbies', 'restaurant_reviews', 'freeze_account', 'order_checks', 'confirm_reservation', 'next_song', 'text', 'recipe', 'gas', 'international_visa']
+=====================
+skip this batch
+[30,    10] loss_total: 4.065 loss_supervised_contrasive:  3.839 loss_intent :4.512 
+skip_time: 356
+total : 1373
+no positive pairs !
+len batch class o/p : 16
+['w2', 'freeze_account', 'car_rental', 'oil_change_how', 'change_accent', 'timezone', 'change_language', 'maybe', 'ingredient_substitution', 'flight_status', 'spelling', 'rewards_balance', 'pay_bill', 'bill_due', 'distance', 'apr']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['make_call', 'user_name', 'lost_luggage', 'application_status', 'update_playlist', 'what_are_your_hobbies', 'pto_balance', 'ingredients_list', 'current_location', 'pay_bill', 'schedule_maintenance', 'meal_suggestion', 'smart_home', 'flight_status', 'goodbye', 'confirm_reservation']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['redeem_rewards', 'whisper_mode', 'do_you_have_pets', 'next_holiday', 'thank_you', 'change_volume', 'calendar', 'restaurant_suggestion', 'shopping_list_update', 'interest_rate', 'date', 'food_last', 'insurance_change', 'income', 'international_visa', 'recipe']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['find_phone', 'recipe', 'expiration_date', 'who_made_you', 'exchange_rate', 'payday', 'schedule_meeting', 'pto_request_status', 'oil_change_how', 'income', 'spelling', 'what_can_i_ask_you', 'direct_deposit', 'jump_start', 'smart_home', 'change_speed']
+=====================
+skip this batch
+[30,    20] loss_total: 2.331 loss_supervised_contrasive:  6.020 loss_intent :7.508 
+skip_time: 360
+total : 1383
+no positive pairs !
+len batch class o/p : 16
+['tell_joke', 'taxes', 'definition', 'replacement_card_duration', 'last_maintenance', 'meaning_of_life', 'change_volume', 'shopping_list', 'vaccines', 'nutrition_info', 'todo_list_update', 'direct_deposit', 'distance', 'mpg', 'maybe', 'confirm_reservation']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['todo_list', 'order', 'user_name', 'bill_due', 'jump_start', 'calculator', 'play_music', 'transactions', 'goodbye', 'smart_home', 'who_do_you_work_for', 'improve_credit_score', 'report_fraud', 'change_accent', 'fun_fact', 'vaccines']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['spelling', 'translate', 'cancel', 'no', 'what_is_your_name', 'mpg', 'ingredients_list', 'book_hotel', 'order_status', 'vaccines', 'shopping_list', 'accept_reservations', 'how_old_are_you', 'application_status', 'transactions', 'greeting']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['timezone', 'shopping_list', 'income', 'yes', 'replacement_card_duration', 'rollover_401k', 'change_ai_name', 'rewards_balance', 'meal_suggestion', 'application_status', 'travel_notification', 'gas', 'credit_limit_change', 'no', 'goodbye', 'apr']
+=====================
+skip this batch
+no positive pairs !
+len batch class o/p : 16
+['credit_score', 'what_is_your_name', 'redeem_rewards', 'travel_alert', 'change_accent', 'pto_request', 'roll_dice', 'flight_status', 'smart_home', 'ingredients_list', 'timer', 'share_location', 'plug_type', 'greeting', 'insurance', 'min_payment']
+=====================
+skip this batch
+[30,    40] loss_total: 7.287 loss_supervised_contrasive:  12.933 loss_intent :15.000 
+skip_time: 365
+total : 1403
+no positive pairs !
+len batch class o/p : 16
+['timer', 'rollover_401k', 'how_busy', 'time', 'ingredients_list', 'oil_change_how', 'find_phone', 'whisper_mode', 'tire_pressure', 'pay_bill', 'calendar', 'meaning_of_life', 'alarm', 'fun_fact', 'min_payment', 'nutrition_info']
+=====================
+skip this batch
+deleate logger for one combination
+../../models/Load=True_roberta-base_B=16_lr=5e-06_19_12_2021_03:57.pth
+Finished Training
+Saving Done !

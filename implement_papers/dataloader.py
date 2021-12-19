@@ -149,7 +149,7 @@ class CustomTextDataset(Dataset):
             self.exist_classes.append(self.labels[idx])
             self.ids_maps.append(idx)
 
-             
+
             if self.count_batch == self.max_count - 1:
                 self.count_batch = +1 
                 #print("self.count_batch :",self.count_batch)
@@ -162,7 +162,6 @@ class CustomTextDataset(Dataset):
                 #print("change batch size !",self.batch_size)
                 #print("LAST batching !")
 
-                    
             if self.count == self.batch_size:
 
                 unique_labels_keys = list(set(self.exist_classes))
@@ -182,9 +181,6 @@ class CustomTextDataset(Dataset):
 
                 #print("tables of each labels :",unique_labels)
 
-                # Todo :
-                # 1. batching align between in Custom and dataloader 
-                # 2. control repeated label of last batch   
              
                 
                 for index, key  in enumerate(unique_labels):
@@ -410,8 +406,6 @@ class combine:
             self.exp_name = 'oos'
             self.oos_exp = oos_exp
 
-            # Todo: can read 
-            # /oos/train or test and valid 
             
 
      
