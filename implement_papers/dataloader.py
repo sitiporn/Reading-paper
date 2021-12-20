@@ -316,9 +316,11 @@ def create_supervised_pair(h,labels,debug:bool=False):
     
     """
     # params
-    h_i = []
-    h_j = []
+    h_i = [] # pos pairs
+    h_j = [] # neg pairs
     skips = []
+
+
     T = 0 # the numbers of pairs sample
     
     for idx, label in enumerate(labels): 
@@ -327,22 +329,39 @@ def create_supervised_pair(h,labels,debug:bool=False):
             continue
 
         mask = label == np.array(labels)
+        # dont include current sample 
         mask[idx] = False 
         
         # check is they have pos pair 
         if np.count_nonzero(mask) >= 1:
             
             idxs_arr = np.arange(len(labels))
-            # each h_i and h_j :  (seq_len, hidden_dim)
+            # each h_i and h_j :  (sample, hidden_dim)
             
-
+            # (hidden_dim)
             h_i_tensor = h[idx,:] # got 1 dim 
+            # (1,hidden_dim)
             h_i_tensor = h_i_tensor[None,:] # got 2 dim 
-            # preparing to broadcast batch 
+            
+            # preparing to broadcast up to # repeated labels
             h_i_tensor = h_i_tensor.repeat(np.count_nonzero(mask),1)
+
             
             #print("h_j idx :",h[mask,:,:].shape)
             # (seq_len,hidden_dim) , (#pairs, hidden_dim)
+            if debug:
+                if np.count_nonzero(mask) >= 2:
+                    print("----")
+                    print("masking label debug :",np.array(labels)[mask])
+                    print("current labels ",np.array(labels)[idx])
+                    print("---")
+
+                print("repeat for broadcast :",h_i_tensor.shape)
+                print("before append h_i and h_j")
+                print(h_i_tensor.shape)
+                print(h[mask,:].shape)
+
+
             h_i.append(h_i_tensor)
             h_j.append(h[mask,:])
 
@@ -353,26 +372,35 @@ def create_supervised_pair(h,labels,debug:bool=False):
 
             T+= np.count_nonzero(mask)
             
-            if debug == True:
+            if debug:
                 
-                #if np.count_nonzero(mask) >= 2:
                 print("idx:",idx)
                 print("current skips :",idxs_arr[mask])
                 print("current labels :",label)
 
                 label_arr = np.array(labels)
 
+                 
                 print("pair class :",label_arr[mask])
                 print("mask:", mask)
                 print("count:",len(mask))
-                print("numbers of pairs:",np.count_nonzero(mask))
+                print("numbers of pairs one label :",np.count_nonzero(mask))
            
+    # after ending loop 
+    if debug: 
 
+        print("the number of pairs for entire batch:",T) 
+        print("pairs see from labels : ",len(labels)-len(set(labels)))
+        print("All skippings :",skips)
+        print(labels)
+
+        print("---------------------------------------------")
     
     if h_i:
         
         h_i = torch.cat(h_i,dim=0)
         h_j = torch.cat(h_j,dim=0) 
+
 
         return T, h_i, h_j
     else:

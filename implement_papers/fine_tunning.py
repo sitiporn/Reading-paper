@@ -178,7 +178,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         
 
         # Todo: debug pos and neg pairs        
-        T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
+        T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=True)
         # (batch_size, seq_len, vocab_size) 
         logits = outputs.logits
          
@@ -230,7 +230,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
             running_loss = 0.0
             logger.close()
             model = embedding.get_model()   
-    
+     
 
     
 del logger    
