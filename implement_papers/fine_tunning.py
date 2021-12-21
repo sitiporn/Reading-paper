@@ -24,8 +24,8 @@ from dataloader import combine
 from dataloader import create_supervised_pair
 from loss import supervised_contrasive_loss 
 from loss import get_label_dist
-from loss import intent_classification_loss
 from loss import norm_vect 
+from loss import intent_loss
 import yaml 
 import ruamel.yaml
 import json
@@ -177,8 +177,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         h = h[:,0,:]
         
 
-        # Todo: debug pos and neg pairs        
-        T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=True)
+        T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
         # (batch_size, seq_len, vocab_size) 
         logits = outputs.logits
          
@@ -205,12 +204,13 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         3. Cosine similarity + softmax  just norm method |w| and |q| 
 
         """
-        loss_intent = outputs.loss  
+        loss_intent = intent_loss(outputs.logits)#outputs.loss  
         
         loss_stage2 = loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
         
         
         loss_stage2.backward()
+        #print(embedding.get_grad())
         optimizer.step()
 
         # collect for visualize 
@@ -230,7 +230,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
             running_loss = 0.0
             logger.close()
             model = embedding.get_model()   
-     
+    break 
 
     
 del logger    

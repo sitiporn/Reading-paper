@@ -107,6 +107,7 @@ class SimCSE(nn.Module):
         self.hidden_state_flag = hidden_state_flag
         self.labels = None  
         self.mask_arr = None 
+        self.grads = []
          
     def parameters(self):
         return self.model.parameters()
@@ -147,6 +148,17 @@ class SimCSE(nn.Module):
                     
             print("the number of freezing layers",count_layer) 
 
+    def get_grad(self):
+        
+        self.grads = []
+
+        for param in self.model.parameters():
+
+            self.grads.append(param.grad)
+
+        #self.grads = torch.cat(self.grads)
+
+        return self.grads 
 
     def eval(self):
         
@@ -354,24 +366,34 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
    
     loss_stage2   
     """
-    
-    sim = Similarity(temp)
+    sim = Similarity() 
+    #sim = Similarity(temp)
     
     if callback != None:
        
        h_i = norm_vect(h_i)
        h_j = norm_vect(h_j)
        h_n = norm_vect(h_n)
+       print("norm vect")
        
       
     
     pos_sim = torch.exp(sim(h_i,h_j))
 
+    print("positive sim ",sim(h_i,h_j))
+    
+    # for compute loss 
     neg_sim  = []
+
+    # use to find similarity
+    neg_similar = []
     
     for idx in range(h_i.shape[0]):
 
         res = sim(h_i[idx].repeat(h_n.shape[0],1,1),h_n)
+        res_similar = sim(h_i[idx].repeat(h_n.shape[0],1,1),h_n)
+        print("neg similar :",res_similar)
+
 
         #print("neg_sim max_min :",res.max(), res.min())
         
@@ -443,9 +465,44 @@ def get_label_dist(samples, train_examples,train=False):
      
     return label_distribution, label_map
 
-def intent_classification_loss(label_ids, logits, label_distribution, coeff, device)->Union[ndarray, Tensor]:
-   
+def intent_loss(logits,N:int=16):
+
     """
+    intent = − 1 (1/N)* sum over log P(Cj|ui) 
+    P(Cj|ui)  -  probability of sentence i-th to be j-th class
+    shape : (batch_size, config.num_labels) 
+
+    """
+    # last dim among the class 
+    soft = nn.Softmax(dim=-1)
+    # get prob 
+    prob = soft(logits)
+
+    print("prob max",prob.max())
+    print("prob min",prob.min())
+
+    # vectorize prob with log  
+    log_prob = torch.log(prob)
+   
+    # sum over batch 
+    log_prob = torch.sum(log_prob,dim=0) 
+
+    #
+    print("log_prob sum over batch:",log_prob.shape)
+
+     
+
+    # sum over class 
+    
+    log_prob = torch.sum(log_prob,dim=-1) / N
+    
+
+    return -log_prob  
+
+
+"""
+def intent_klv_loss(label_ids, logits, label_distribution, coeff, device)->Union[ndarray, Tensor]:
+   
     i - ith sentence
     j - intent classes
     C - the number of class
@@ -458,7 +515,6 @@ def intent_classification_loss(label_ids, logits, label_distribution, coeff, dev
     inputs_embeds - (batch_size, sequence_length, hidden_size)  
     logits - (batch_size, num_class) 
    
-    """
     # label smoothing
      
     #print("label_ids :",label_ids.shape)
@@ -488,7 +544,7 @@ def intent_classification_loss(label_ids, logits, label_distribution, coeff, dev
 
     return loss 
 
-    
+"""    
     
 
 
