@@ -424,6 +424,7 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
             print("after broad h_i to h_n",h_i_broad.shape)
             print("h_n shape :",h_n.shape)
         
+        
         res = sim(h_i_broad,h_n)
 
 
