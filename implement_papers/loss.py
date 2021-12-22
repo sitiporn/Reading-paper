@@ -30,7 +30,7 @@ class Similarity(nn.Module):
         else: 
 
             self.temp = 1.0
-
+        # among feature last dim 
         self.cos = nn.CosineSimilarity(dim=-1)
 
     def forward(self, x, y):
@@ -366,21 +366,49 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
    
     loss_stage2   
     """
-    sim = Similarity() 
-    #sim = Similarity(temp)
-    
+    sim = Similarity(temp)
+    if debug:
+        print("----------")
+        """
+        print(": before norm vect :")
+        print("h_i :",h_i[:2,:2]) 
+        print("h_j :",h_j[:2,:2])
+        print("h_n :",h_n[:2,:2])
+        print("sim pos :",sim(h_i,h_j)[:2])
+        """
+    # tested norm without norm sim are the same  
     if callback != None:
        
-       h_i = norm_vect(h_i)
-       h_j = norm_vect(h_j)
-       h_n = norm_vect(h_n)
-       print("norm vect")
-       
+       h_i = callback(h_i)
+       h_j = callback(h_j)
+       h_n = callback(h_n)
+       """
+       if debug:
+           print("norm vect")
+           print("h_i :",h_i[:2,:2]) 
+           print("h_j :",h_j[:2,:2])
+           print("h_n :",h_n[:2,:2])
+           print("sim norm pos:",sim(h_i,h_j)[:2])
+        """ 
       
-    
+    # exp(sim(a,b)/ temp)
     pos_sim = torch.exp(sim(h_i,h_j))
+    
 
-    print("positive sim ",sim(h_i,h_j))
+    """
+    :Proof contrasive loss:
+    0. masking h_i and h_j pair compute are correct
+    1. with or without norm the sim are the same on positive pairs 
+    2.   
+
+    Todo:
+
+    1. check norm with sim 
+    2. check bottom factor h_i and h_n: all in the batch 
+    3. check sum procedure :  over N bottom and over j and over i 
+
+    """
+
     
     # for compute loss 
     neg_sim  = []
@@ -391,8 +419,8 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
     for idx in range(h_i.shape[0]):
 
         res = sim(h_i[idx].repeat(h_n.shape[0],1,1),h_n)
-        res_similar = sim(h_i[idx].repeat(h_n.shape[0],1,1),h_n)
-        print("neg similar :",res_similar)
+        #res_similar = sim(h_i[idx].repeat(h_n.shape[0],1,1),h_n)
+        #print("neg similar :",res_similar)
 
 
         #print("neg_sim max_min :",res.max(), res.min())
@@ -423,6 +451,7 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
     if debug:
         print("len(neg) :",len(neg_sim))
         print("loss_s_cl:", loss_s_cl)
+        print("")
 
     
 
@@ -443,8 +472,6 @@ def get_label_dist(samples, train_examples,train=False):
     # bugs key errors cancel when run from funtuning 
     # label_map['cancel'] = 149 
     #print("label_map:",label_map)
-    
-
     label_distribution = torch.FloatTensor(len(label_map)).zero_()
     
     for i in range(len(train_examples)):
@@ -465,7 +492,7 @@ def get_label_dist(samples, train_examples,train=False):
      
     return label_distribution, label_map
 
-def intent_loss(logits,N:int=16):
+def intent_loss(logits,N:int=16,debug:bool=False):
 
     """
     intent = − 1 (1/N)* sum over log P(Cj|ui) 
@@ -478,8 +505,9 @@ def intent_loss(logits,N:int=16):
     # get prob 
     prob = soft(logits)
 
-    print("prob max",prob.max())
-    print("prob min",prob.min())
+    if debug:
+        print("prob max",prob.max())
+        print("prob min",prob.min())
 
     # vectorize prob with log  
     log_prob = torch.log(prob)
@@ -488,7 +516,8 @@ def intent_loss(logits,N:int=16):
     log_prob = torch.sum(log_prob,dim=0) 
 
     #
-    print("log_prob sum over batch:",log_prob.shape)
+    if debug:
+        print("log_prob sum over batch:",log_prob.shape)
 
      
 

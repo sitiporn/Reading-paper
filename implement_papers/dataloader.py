@@ -320,6 +320,11 @@ def create_supervised_pair(h,labels,debug:bool=False):
     h_j = [] # neg pairs
     skips = []
 
+    # proof done 
+    # masking correct
+    # pair of concat correct
+
+
 
     T = 0 # the numbers of pairs sample
     
@@ -355,13 +360,15 @@ def create_supervised_pair(h,labels,debug:bool=False):
                     print("masking label debug :",np.array(labels)[mask])
                     print("current labels ",np.array(labels)[idx])
                     print("---")
-
+                
+                print(">>>>>>>>>>>>>")
                 print("repeat for broadcast :",h_i_tensor.shape)
                 print("before append h_i and h_j")
-                print(h_i_tensor.shape)
-                print(h[mask,:].shape)
+                print("h_i : ",h_i_tensor.shape)
+                print("h_j : ",h[mask,:].shape)
 
 
+            # proof masking are correct they select the same class 
             h_i.append(h_i_tensor)
             h_j.append(h[mask,:])
 
@@ -398,8 +405,14 @@ def create_supervised_pair(h,labels,debug:bool=False):
     
     if h_i:
         
+       
         h_i = torch.cat(h_i,dim=0)
         h_j = torch.cat(h_j,dim=0) 
+
+        if debug:
+            print("concatenate got h_i :",h_i.shape)
+            print("concatenate got h_j : ",h_j.shape)
+            print("<<<<<<<<<<<<<<<<<<<<<")
 
 
         return T, h_i, h_j

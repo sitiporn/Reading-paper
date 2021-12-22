@@ -177,7 +177,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         h = h[:,0,:]
         
 
-        T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
+        T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=True)
         # (batch_size, seq_len, vocab_size) 
         logits = outputs.logits
          
@@ -189,7 +189,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
             continue
    
         # Todo: debug supervised contrasive loss 
-        loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params"]["temp"],debug=False) 
+        loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params"]["temp"],callback=norm_vect,debug=True) 
 
         """
         #label_ids, _  = embedding.get_label()
@@ -230,7 +230,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
             running_loss = 0.0
             logger.close()
             model = embedding.get_model()   
-    break 
+    #break 
 
     
 del logger    
