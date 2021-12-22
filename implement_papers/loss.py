@@ -397,15 +397,15 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
 
     """
     :Proof contrasive loss:
-    0. masking h_i and h_j pair compute are correct
+    0. masking h_i and h_j pair compute are correct -> done 
     1. with or without norm the sim are the same on positive pairs 
     2.   
 
     Todo:
 
     1. check norm with sim 
-    2. check bottom factor h_i and h_n: all in the batch 
-    3. check sum procedure :  over N bottom and over j and over i 
+    2. check bottom factor h_i and h_n: all in the batch  did they braodcast correct
+    3. check sum procedure :  over N bottom and over j and over i -> contrasive loss 
 
     """
 
@@ -413,26 +413,34 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
     # for compute loss 
     neg_sim  = []
 
-    # use to find similarity
-    neg_similar = []
     
     for idx in range(h_i.shape[0]):
-
-        res = sim(h_i[idx].repeat(h_n.shape[0],1,1),h_n)
-        #res_similar = sim(h_i[idx].repeat(h_n.shape[0],1,1),h_n)
-        #print("neg similar :",res_similar)
-
-
-        #print("neg_sim max_min :",res.max(), res.min())
+        
+        # broadcast each idx to h_n (all in batch)
+        h_i_broad = h_i[idx].repeat(h_n.shape[0],1)
         
         if debug:
-            print("res.shape :",res.shape)
-       
+            print("h_i before broad :",h_i[idx].shape)
+            print("after broad h_i to h_n",h_i_broad.shape)
+            print("h_n shape :",h_n.shape)
+        
+        res = sim(h_i_broad,h_n)
+
+
+
+        
+        if debug:
+            print("sim(h_i,h_n) shape :",res.shape)
+            print("neg_sim max_min :",res.max(), res.min())
+         
+        # sum over batch
         res = torch.sum(torch.exp(res)) 
    
         if debug:
-            print("after summing res.shape :",res.shape)
+            print("after summing bottom factor :",res.shape)
 
+
+        # to use with each pair i and j 
         neg_sim.append(res)
 
     neg_sim = torch.Tensor(neg_sim)
@@ -523,10 +531,10 @@ def intent_loss(logits,N:int=16,debug:bool=False):
 
     # sum over class 
     
-    log_prob = torch.sum(log_prob,dim=-1) / N
+    loss_intent = -torch.sum(log_prob,dim=-1) / N
     
 
-    return -log_prob  
+    return loss_intent 
 
 
 """
