@@ -24,7 +24,7 @@ from dataloader import combine
 from dataloader import create_supervised_pair
 from loss import supervised_contrasive_loss 
 from loss import get_label_dist
-from loss import intent_classification_loss
+#from loss import intent_classification_loss
 from loss import norm_vect 
 import yaml 
 import json
@@ -59,7 +59,9 @@ with open('config/test.yaml') as file:
 # 'roberta-base_B=16_lr=5e-06_27_11_2021_07:20.pth'
 #'roberta-base_B=16_lr=0.001_27_11_2021_17:06.pth'
 
-select_model = "Load=True_roberta-base_B=16_lr=5e-06_18_12_2021_10:05.pth"
+select_model = 'Load=True_roberta-base_B=16_lr=5e-07_22_12_2021_13:07.pth'
+ 
+#"Load=True_roberta-base_B=16_lr=5e-06_18_12_2021_10:05.pth"
 #"Load=True_roberta-base_B=16_lr=5e-06_18_12_2021_09:57.pth"
 
 #'Load=True_roberta-base_B=16_lr=5e-06_13_12_2021_14:55.pth'
@@ -119,10 +121,15 @@ test_loader = DataLoader(test_data,batch_size=yaml_data["testing_params"]["batch
 print("Test of Dataloader !")
 label_distribution, label_maps = get_label_dist(sampled_tasks,test_examples,train=False)
 
-
+print("label maps :",label_maps)
 
 correct = 0
 total = 0 
+""""
+bugs :
+
+- mapping class(text) to label_ids is of model when we tune and test are not the same ids
+"""
 
 with torch.no_grad():
     for (idx, batch) in enumerate(test_loader): 
@@ -141,12 +148,21 @@ with torch.no_grad():
                 total += labels.size(0)
                 labels = labels.to(yaml_data["testing_params"]["device"])
                 correct += (predicted == labels).sum().item()
+            
+            if debug:
+                print(">>>>>>>>>>")
+                print("labels: ",labels)
+                print("class :",batch['Class'])
+                print("<<<<<<<<<<")
 
-            print("Predicted:",predicted)
-            print("label :",labels)
-            print("Correct :",correct)
-            print("Total :",total)
+                print("Predicted:",predicted)
+                print("Correct :",correct)
+                print("Total :",total)
 
+                break
+
+"""
 print('Accuracy of the network : %d %%' % (
     100 * correct / total))
 
+"""

@@ -26,18 +26,40 @@ from loss import supervised_contrasive_loss
 from loss import get_label_dist
 from loss import norm_vect 
 from loss import intent_loss
-import yaml 
-import ruamel.yaml
-import json
-import re 
+from read_config import read_file_config 
+
+
+# Get config
+# search hyperparameters
+
+temp = [0.1, 0.3, 0.5]
+lamda = [0.01,0.03,0.05]
+
+path_test = 'config/test.yaml' 
+path_finetuning = 'config/config3.yaml'
+
+# read config 
+
+yaml_data = read_file_config(path=path_finetuning)
+yaml_test = read_file_config(path=path_test) 
 
 
 # get time 
 now = datetime.now()
-dt_str = now.strftime("%d_%m_%Y_%H:%M")
+t_str = now.strftime("%d_%m_%Y_%H:%M")
 
+print("Test config :",yaml_test)
+
+print("---------------------------------------------")
+
+print("Fine Tunning config ",yaml_data)
+
+
+
+
+"""
 # config using yaml file
-with open('config/config.yaml') as file:
+with open('config/config3.yaml') as file:
 
     yaml_data = yaml.safe_load(file)
     
@@ -58,12 +80,28 @@ with open('config/config.yaml') as file:
 
     yaml_data = yaml.load(jAll, Loader=loader) 
 
-# search hyperparameters
+with open('config/test.yaml') as file:
 
-temp = [0.1, 0.3, 0.5]
-lamda = [0.01,0.03,0.05]
+    yaml_test = yaml.safe_load(file)
+    
+    jAll = json.dumps(yaml_test)
 
-# daclare some variable
+    loader = yaml.SafeLoader
+
+    loader.add_implicit_resolver(
+    u'tag:yaml.org,2002:float',
+    re.compile(u'''^(?:
+     [-+]?(?:[0-9][0-9_]*)\\.[0-9_]*(?:[eE][-+]?[0-9]+)?
+    |[-+]?(?:[0-9][0-9_]*)(?:[eE][-+]?[0-9]+)
+    |\\.[0-9_]+(?:[eE][-+][0-9]+)?
+    |[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\\.[0-9_]*
+    |[-+]?\\.(?:inf|Inf|INF)
+    |\\.(?:nan|NaN|NAN))$''', re.X),
+    list(u'-+0123456789.'))
+
+    yaml_test = yaml.load(jAll, Loader=loader) 
+
+"""
 
 labels = []
 samples = []
@@ -79,7 +117,7 @@ load_weight=True
 
 select_model = 'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
 
-
+"""
 # create dummy model 
 embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
 
@@ -189,22 +227,25 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
             continue
    
         # Todo: debug supervised contrasive loss 
-        loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params"]["temp"],callback=norm_vect,debug=True) 
+        loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params"]["temp"],debug=False) 
 
-        """
         #label_ids, _  = embedding.get_label()
           
        
         #loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=yaml_data["training_params"]["smoothness"], device=yaml_data["training_params"]["device"])
-        """
-        """
+        
         Todo: classifier
+
+        add on : 
+        - make prediction:
+          - p = Softmax(Mq) : the Mq -> sort of projection of Query to every class  
+
         1. p = Softmax(W @ f(x) + b) w_init = [mu1,mu2,mu3] and b = 0 
         2. Entropy regularization : average of H(p), for all quries 
         3. Cosine similarity + softmax  just norm method |w| and |q| 
 
-        """
-        loss_intent = intent_loss(outputs.logits)#outputs.loss  
+        loss_intent = outputs.loss  #intent_loss(outputs.logits)
+
         
         loss_stage2 = loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
         
@@ -212,7 +253,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         loss_stage2.backward()
         #print(embedding.get_grad())
         optimizer.step()
-
+        break
         # collect for visualize 
         running_loss += loss_stage2.item()
         running_loss_intent += loss_intent.item() 
@@ -234,7 +275,7 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
 
     
 del logger    
-print("deleate logger for one combination")
+print("delete logger for one combination")
 
 PATH_to_save = f'../../models/Load={load_weight}_{yaml_data["model_params"]["model"]}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
 
@@ -243,3 +284,4 @@ print(PATH_to_save)
 print('Finished Training')
 torch.save(model.state_dict(),PATH_to_save)
 print("Saving Done !")
+"""

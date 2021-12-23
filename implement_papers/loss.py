@@ -217,6 +217,9 @@ class SimCSE(nn.Module):
                 # convert list to tensor
                 self.labels = torch.tensor(self.labels).unsqueeze(0)
                 #print(self.labels.shape)
+                print("labels id :",self.labels)
+                print("class text :",label)
+
         else:
 
             self.labels = inputs['input_ids'].detach().clone()
@@ -411,7 +414,7 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
 
     
     # for compute loss 
-    neg_sim  = []
+    bot_sim  = []
 
     
     for idx in range(h_i.shape[0]):
@@ -424,7 +427,7 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
             print("after broad h_i to h_n",h_i_broad.shape)
             print("h_n shape :",h_n.shape)
         
-        
+       # sim(hi,hn)/t 
         res = sim(h_i_broad,h_n)
 
 
@@ -442,23 +445,24 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
 
 
         # to use with each pair i and j 
-        neg_sim.append(res)
+        bot_sim.append(res)
 
-    neg_sim = torch.Tensor(neg_sim)
-    neg_sim = neg_sim.reshape(-1,1)
+    bot_sim = torch.Tensor(bot_sim)
+
+    #neg_sim = neg_sim.reshape(-1,1)
 
 
     if debug:
-        print("neg_sim.shape :",neg_sim.shape)
+        print("bot_sim :",bot_sim.shape)
         print("pos_sim.shape :",pos_sim.shape)     
     
 
 
-    loss_s_cl = torch.log(torch.sum(pos_sim/neg_sim))
+    loss_s_cl = torch.log(torch.sum(pos_sim/bot_sim))
     loss_s_cl = -loss_s_cl / T   
 
     if debug:
-        print("len(neg) :",len(neg_sim))
+        print("len(neg) :",len(bot_sim))
         print("loss_s_cl:", loss_s_cl)
         print("")
 
