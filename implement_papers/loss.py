@@ -179,10 +179,10 @@ class SimCSE(nn.Module):
     def encode(self,sentence:Union[str, List[str]],label:Union[str,List[str]]=None,label_maps = None,batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False,masking:bool=True,train:bool=True)-> Union[ndarray, Tensor]:
        
 
-        if train == True:
+        if train: 
             
             self.model.train()
-            #print("Training mode:")
+            print("Training mode:")
 
         else:
             self.model.eval()
