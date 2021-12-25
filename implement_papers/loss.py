@@ -182,7 +182,7 @@ class SimCSE(nn.Module):
         if train: 
             
             self.model.train()
-            print("Training mode:")
+            #print("Training mode:")
 
         else:
             self.model.eval()
@@ -217,8 +217,6 @@ class SimCSE(nn.Module):
                 # convert list to tensor
                 self.labels = torch.tensor(self.labels).unsqueeze(0)
                 #print(self.labels.shape)
-                print("labels id :",self.labels)
-                print("class text :",label)
 
         else:
 
@@ -413,9 +411,10 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
     """
 
     
-    # for compute loss 
+    # for collect compute  sum_batch(exp(sim(hi,hn)/t)) 
     bot_sim  = []
 
+    
     
     for idx in range(h_i.shape[0]):
         
@@ -456,7 +455,9 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
         print("bot_sim :",bot_sim.shape)
         print("pos_sim.shape :",pos_sim.shape)     
     
-
+    dummy =  pos_sim/bot_sim
+       
+    #print("computation before compute :",dummy.shape)
 
     loss_s_cl = torch.log(torch.sum(pos_sim/bot_sim))
     loss_s_cl = -loss_s_cl / T   

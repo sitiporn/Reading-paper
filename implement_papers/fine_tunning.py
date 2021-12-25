@@ -40,7 +40,7 @@ test_samples = []
 
 # config
 
-debug = True
+debug = False 
 
 running_time = 0.0 
 freeze_num = 8  
@@ -136,7 +136,6 @@ train_loader = DataLoader(train_data,batch_size=yaml_data["training_params"]["ba
 print("Train Loader Done !")
 test_loader =  DataLoader(test_data,batch_size=yaml_test["testing_params"]["batch_size"],shuffle=False,num_workers=2)
 print("Test Loader Done !")
-
 
 
 
