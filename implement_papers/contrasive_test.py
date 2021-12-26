@@ -38,10 +38,16 @@ got the same loss
 
 """
 
-def compute_sim(h,labels): 
+def compute_sim(h,labels:list,temp:float): 
    
+    T = 0 # the number of pairs
     skips = [] 
+    loss_s_cl = [] 
+    sim = Similarity(temp=temp)
+    # idexign all samples
     idxs = np.arange(len(labels))
+
+    
 
     print("idxs samples :",idxs)
     # masking each i  
@@ -57,6 +63,7 @@ def compute_sim(h,labels):
         label_np = np.array(labels)
 
 
+        # create mask for each i
         mask = label_np[idx] == label_np
 
         mask[idx] = False
@@ -64,24 +71,66 @@ def compute_sim(h,labels):
 
 
         if np.count_nonzero(mask)>=1:
+            
             print(">>>>") 
             print("idx :",idx)
             print("current label :",label_np[idx])
             print("mask :",mask)
 
             print("current skiping :",idxs[mask])
+
+            h_i = h[idx,:]
+            h_j = h[mask,:] 
+
+            T += np.count_nonzero(mask)
+            print("# pairs cumulative :",T)
+            h_i_broad = h_i.repeat(np.count_nonzero(mask),1) 
+
+            print("after broadcast :",h_i_broad.shape)
+            print("h_j :",h_j.shape)
+
+            res_i = torch.exp(sim(h_i,h_j))
+            
+            print("res_i :",res_i.shape)
+
+            res_i = torch.sum(res_i,dim=0)
+
+
             for val in idxs[mask]:
 
                 if val not in skips:
                     skips.append(val)
             
             print("label i pairs :",label_np[mask])
+
+            h_i_bot =   h_i.repeat(h.shape[0],1)
+        
+            print("broadcast bot:",h_i_bot.shape)
+            print("h_n :",h.shape)
+
+            bot = torch.exp(sim(h_i_bot,h))
+            print("compute bot before sum:",bot.shape)
+
+            bot = torch.sum(bot,dim=0)
+            print("bottom :",bot.shape)
+
+            loss_i  = torch.log(res_i / bot)
+
+            loss_i = torch.sum(loss_i,dim=0)
+
+            loss_s_cl.append(loss_i)
+
+
             print(">>>")
 
-
+    # convert list of tensor 
+    contrasive_loss = torch.sum(torch.Tensor(loss_s_cl),dim=0)* (-1/T)
+    # combine all loss_i
     print("all skips :",skips)
 
+    #
 
+    return contrasive_loss 
 
 
 
@@ -113,11 +162,11 @@ loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params
 print("#pairs :",T)
 print("h_i:",h_i.shape)
 print("h_j:",h_j.shape)
-print("foward with function :",loss_s_cl)
 
 
 print("------------------")
-print("in func :",compute_sim(h,labels=labels))
+print("compare func :",compute_sim(h,labels=labels,temp=yaml_data["training_params"]["temp"]))
+print("original func :",loss_s_cl)
 
 
 

@@ -134,11 +134,14 @@ class SimCSE(nn.Module):
         count_layer = 0
         if freeze_layers_count:
         # freeze embeddings of the model
+            print("freeze embeddings :")
             for param in self.model.roberta.embeddings.parameters():
 
                 param.requires_grad = False 
 
             if freeze_layers_count != -1:
+
+                print("freeze layers")
 
                 for layer in self.model.roberta.encoder.layer[:freeze_layers_count]:
 
@@ -187,7 +190,7 @@ class SimCSE(nn.Module):
         else:
             self.model.eval()
 
-            print("validation mode mode:")
+            #print("validation mode mode:")
 
         single_sentence = False
 
@@ -394,9 +397,25 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
       
     # exp(sim(a,b)/ temp)
     pos_sim = torch.exp(sim(h_i,h_j))
+    """
+    expression of sim pos_pair
+    Let say: 
+    
+    i=0:   h_i : (h_j2,h_j3,h_jn) -> shape: (3,768) 
+           each i: res_i : exp(sim(hi,hn)/t) ->  (#pairs) eg. (3)
+
+    i=3:   h_i : (h_j5,h_j6) -> shape:  (2,768) 
+           each i: res_i : exp(sim(hi,hn)/t) -> (#pairs) eg. (2)
+
+    concatenate : (5,768) -> exp(sim(h_i,h_j)/t) -> sim_val(#pairs)
+    concatenate : (5,768) -> bot(#pairs) 
+
+    res = (-1/T) * torch.sum(torch.log(sim_val/bot))
+    """
     
 
     """
+    
     :Proof contrasive loss:
     0. masking h_i and h_j pair compute are correct -> done 
     1. with or without norm the sim are the same on positive pairs 
@@ -421,23 +440,23 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
         # broadcast each idx to h_n (all in batch)
         h_i_broad = h_i[idx].repeat(h_n.shape[0],1)
         
+
         if debug:
             print("h_i before broad :",h_i[idx].shape)
             print("after broad h_i to h_n",h_i_broad.shape)
             print("h_n shape :",h_n.shape)
         
        # sim(hi,hn)/t 
-        res = sim(h_i_broad,h_n)
 
+        #res = sim(h_i_broad,h_n)
 
-
+        # sum over batch
+        res = torch.sum(torch.exp(sim(h_i_broad,h_n))) 
         
         if debug:
             print("sim(h_i,h_n) shape :",res.shape)
             print("neg_sim max_min :",res.max(), res.min())
          
-        # sum over batch
-        res = torch.sum(torch.exp(res)) 
    
         if debug:
             print("after summing bottom factor :",res.shape)
@@ -455,16 +474,30 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
         print("bot_sim :",bot_sim.shape)
         print("pos_sim.shape :",pos_sim.shape)     
     
-    dummy =  pos_sim/bot_sim
        
     #print("computation before compute :",dummy.shape)
 
-    loss_s_cl = torch.log(torch.sum(pos_sim/bot_sim))
+    # bug found !!!!!! 
+    # before 
+    if debug:
+        print("bot sim :",bot_sim.shape)
+        print("pos sim :",pos_sim.shape)
+        print("loss_s_cl before take log :",loss_s_cl.shape) 
+    
+    loss_s_cl = torch.log((pos_sim/bot_sim))
+    
+    
+    loss_s_cl  = torch.sum(loss_s_cl)
+
+    if debug:
+        print("after take log: ",loss_s_cl)
+    
     loss_s_cl = -loss_s_cl / T   
+
 
     if debug:
         print("len(neg) :",len(bot_sim))
-        print("loss_s_cl:", loss_s_cl)
+        print("before return loss_s_cl:", loss_s_cl)
         print("")
 
     

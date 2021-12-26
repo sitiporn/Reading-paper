@@ -21,15 +21,17 @@ file structure
 
 class Log:
 
-    def __init__(self,load_weight:bool,lamb:float,temp:float,experiment_name:str=None,model_name:str=None,batch_size:int=64,lr=1e-5):
+    def __init__(self,load_weight:bool,num_freeze:int,lamb:float,temp:float,experiment_name:str=None,model_name:str=None,comment:str='',batch_size:int=64,lr=1e-5):
        
         # Todo
         #params
         self.exp_name = experiment_name 
         self.model_name = model_name
+        self.num_freeze = num_freeze
+        self.comment = comment
         now = datetime.now()
         self.dt_str = now.strftime("%d_%m_%Y_%H:%M") 
-        self.name = f"Load={load_weight}_{self.model_name}_{self.dt_str}_B={batch_size}_lr _{lr}_lambda={lamb}_temp={temp}"
+        self.name = f"Load={load_weight}_{self.model_name}_freeze={self.num_freeze}_{self.dt_str}_B={batch_size}_lr _{lr}_lambda={lamb}_temp={temp}_{self.comment}"
        
         print("name on tensorboard:",self.name)
         # eg. exp_name -> pretrain models

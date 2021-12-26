@@ -27,6 +27,7 @@ from loss import get_label_dist
 from loss import norm_vect 
 from loss import intent_loss
 from read_config import read_file_config 
+from contrasive_test import compute_sim
 import pprint 
 
 
@@ -41,10 +42,11 @@ test_samples = []
 # config
 
 debug = False 
+# J1,J2,JT
+comment = 'J2'
 
 running_time = 0.0 
-freeze_num = 8  
-
+freeze_num = 4  
 temp = [0.1, 0.3, 0.5]
 lamda = [0.01,0.03,0.05]
 
@@ -144,7 +146,7 @@ print("temperature :",yaml_data["training_params"]["temp"])
  
         
 # Tensorboard
-logger = Log(load_weight=load_weight,lamb=yaml_data["training_params"]["lamda"],temp=yaml_data["training_params"]["temp"],experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["training_params"]["batch_size"],lr=yaml_data["training_params"]["lr"])
+logger = Log(load_weight=load_weight,num_freeze=freeze_num,lamb=yaml_data["training_params"]["lamda"],temp=yaml_data["training_params"]["temp"],experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["training_params"]["batch_size"],lr=yaml_data["training_params"]["lr"],comment=comment)
 
 
 
@@ -200,6 +202,8 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
         # Todo: debug supervised contrasive loss 
         loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params"]["temp"],debug=False) 
 
+        #loss_s_cl = compute_sim(h,labels=batch['Class'],temp=yaml_data["training_params"]["temp"])
+
         #label_ids, _  = embedding.get_label()
           
        
@@ -218,9 +222,10 @@ for epoch in range(yaml_data["training_params"]["n_epochs"]):
 
         loss_intent = outputs.loss  #intent_loss(outputs.logits)
 
-        
+        # JT = J1 + J2 
+
         loss_stage2 = loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
-        
+        #
         
         loss_stage2.backward()
         #print(embedding.get_grad())
@@ -278,14 +283,17 @@ with torch.no_grad():
                 print("<<<<<<<<<<")
 
                 print("Predicted:",predicted)
-                print("Correct :",correct)
-                print("Total :",total)
+            
+
+            print("Correct :",correct)
+            print("Total :",total)
 
                 #break
 
-
-PATH_to_save = f'../../models/Load={load_weight}_{yaml_data["model_params"]["model"]}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
+print("%Acc :",(correct/total)*100)
+PATH_to_save = f'../../models/Load={load_weight}_{yaml_data["model_params"]["model"]}_freeze={freeze_num}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
 
 print(PATH_to_save)
+print("correct :")
 torch.save(model.state_dict(),PATH_to_save)
 print("Saving Done !")
