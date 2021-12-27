@@ -52,20 +52,22 @@ def compute_sim(h,labels:list,temp:float):
     print("idxs samples :",idxs)
     # masking each i  
 
+    # loop through all samples in the batch
     for idx in range(len(labels)):
 
         # select yi = yj
-
         if idx in skips:
             continue
         
 
+        # prepare for masking 
         label_np = np.array(labels)
 
 
         # create mask for each i
         mask = label_np[idx] == label_np
 
+        # exclude itself
         mask[idx] = False
 
 
@@ -79,21 +81,35 @@ def compute_sim(h,labels:list,temp:float):
 
             print("current skiping :",idxs[mask])
 
+            # select sample i 
             h_i = h[idx,:]
+            # select  all pairs that have the same class  
             h_j = h[mask,:] 
 
+            # accumulate the number of pairs
             T += np.count_nonzero(mask)
             print("# pairs cumulative :",T)
+
+            # repeat the sample of to same classs found 
+            # (#pairs_of_j,768)
             h_i_broad = h_i.repeat(np.count_nonzero(mask),1) 
-
-            print("after broadcast :",h_i_broad.shape)
-            print("h_j :",h_j.shape)
-
+       
+            # vectorize expo and sim compute 
+            # in the batch that the same class as sample_i
+            # res_i : exp(sim(h_i,h_j)/t)
             res_i = torch.exp(sim(h_i,h_j))
             
-            print("res_i :",res_i.shape)
+            # bot_i : current i with all h in the batch
+            h_i_bot = h_i.repeat(h.shape[0],1)
+            
+            bot = torch.exp(sim(h_i_bot,h))
+            bot = torch.sum(bot,dim=0)
 
-            res_i = torch.sum(res_i,dim=0)
+            log_i = torch.log(res_i/bot)
+            # res_i : shape(#pairs of sample_i)
+            print("res_i :",log_i.shape)
+            
+            loss_i  = torch.sum(log_i,dim=0)
 
 
             for val in idxs[mask]:
@@ -101,22 +117,6 @@ def compute_sim(h,labels:list,temp:float):
                 if val not in skips:
                     skips.append(val)
             
-            print("label i pairs :",label_np[mask])
-
-            h_i_bot =   h_i.repeat(h.shape[0],1)
-        
-            print("broadcast bot:",h_i_bot.shape)
-            print("h_n :",h.shape)
-
-            bot = torch.exp(sim(h_i_bot,h))
-            print("compute bot before sum:",bot.shape)
-
-            bot = torch.sum(bot,dim=0)
-            print("bottom :",bot.shape)
-
-            loss_i  = torch.log(res_i / bot)
-
-            loss_i = torch.sum(loss_i,dim=0)
 
             loss_s_cl.append(loss_i)
 

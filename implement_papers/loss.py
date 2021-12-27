@@ -386,15 +386,7 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
        h_i = callback(h_i)
        h_j = callback(h_j)
        h_n = callback(h_n)
-       """
-       if debug:
-           print("norm vect")
-           print("h_i :",h_i[:2,:2]) 
-           print("h_j :",h_j[:2,:2])
-           print("h_n :",h_n[:2,:2])
-           print("sim norm pos:",sim(h_i,h_j)[:2])
-        """ 
-      
+           
     # exp(sim(a,b)/ temp)
     pos_sim = torch.exp(sim(h_i,h_j))
     """
@@ -477,8 +469,6 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
        
     #print("computation before compute :",dummy.shape)
 
-    # bug found !!!!!! 
-    # before 
     if debug:
         print("bot sim :",bot_sim.shape)
         print("pos sim :",pos_sim.shape)

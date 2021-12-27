@@ -43,12 +43,12 @@ test_samples = []
 
 debug = False 
 # J1,J2,JT
-comment = 'J2'
+comment = 'JT'
 
 running_time = 0.0 
-freeze_num = 4  
-temp = [0.1, 0.3, 0.5]
-lamda = [0.01,0.03,0.05]
+freeze_num = [4,5]  
+temp = [0.1] #, 0.3, 0.5]
+lamda = [0.01] #,0.03,0.05]
 
 path_test = 'config/test.yaml' 
 path_finetuning = 'config/config3.yaml'
@@ -63,10 +63,6 @@ select_model = 'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
 yaml_data = read_file_config(path=path_finetuning)
 yaml_test = read_file_config(path=path_test) 
 
-now = datetime.now()  # get time 
-dt_str = now.strftime("%d_%m_%Y_%H:%M")
-
-
 pp = pprint.PrettyPrinter(indent=4)
 
 print(": read yaml fine tunning :")
@@ -78,14 +74,6 @@ pp.pprint(yaml_test)
 
 # collector variables
 
-# create dummy model 
-embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
-
-embedding.load_model(select_model=select_model,strict=False)
-print("Loading Pretain Model done!")
-
-embedding.freeze_layers(freeze_layers_count=freeze_num)
-print("Freeze Backboned layers",freeze_num)
 
 
 # get dataset  
@@ -141,159 +129,178 @@ print("Test Loader Done !")
 
 
 
-print("lamda :",yaml_data["training_params"]["lamda"])
-print("temperature :",yaml_data["training_params"]["temp"])
- 
-        
-# Tensorboard
-logger = Log(load_weight=load_weight,num_freeze=freeze_num,lamb=yaml_data["training_params"]["lamda"],temp=yaml_data["training_params"]["temp"],experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["training_params"]["batch_size"],lr=yaml_data["training_params"]["lr"],comment=comment)
+
+for freeze_i in freeze_num:  
+    for lam in lamda: 
+        for tmp in temp: 
+
+
+            now = datetime.now()  # get time 
+            dt_str = now.strftime("%d_%m_%Y_%H:%M")
+
+
+            # create dummy model 
+            embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
+
+            embedding.load_model(select_model=select_model,strict=False)
+            print("Loading Pretain Model done!")
+
+            embedding.freeze_layers(freeze_layers_count=freeze_i)
+            print("Freeze Backboned layers",freeze_i)
+            print("lamda :",lam) #yaml_data["training_params"]["lamda"])
+            print("temperature :",tmp) #yaml_data["training_params"]["temp"])
+             
+                    
+            # Tensorboard
+            logger = Log(load_weight=load_weight,num_freeze=freeze_i,lamb=lam,temp=tmp,experiment_name=yaml_data["model_params"]["exp_name"],model_name=yaml_data["model_params"]["model"],batch_size=yaml_data["training_params"]["batch_size"],lr=yaml_data["training_params"]["lr"],comment=comment)
 
 
 
 
-# create optimizer
-optimizer= AdamW(embedding.parameters(), lr=yaml_data["training_params"]["lr"])
+            # create optimizer
+            optimizer= AdamW(embedding.parameters(), lr=yaml_data["training_params"]["lr"])
 
-total = 0
-skip_time = 0 
+            total = 0
+            skip_time = 0 
 
+            for epoch in range(yaml_data["training_params"]["n_epochs"]):
 
-for epoch in range(yaml_data["training_params"]["n_epochs"]):
+                running_loss = 0.0
+                running_loss_s_cl = 0.0
+                running_loss_intent = 0.0 
 
-    running_loss = 0.0
-    running_loss_s_cl = 0.0
-    running_loss_intent = 0.0 
-
-    for (idx, batch) in enumerate(train_loader): 
-    
-
-        optimizer.zero_grad()
-
-        total +=1
-         
-        
-        # (batch_size, seq_len, hidhen_dim) 
-
-        if len(set(batch['Class'])) == len(batch['Class']):
-            
-            print("no positive pairs !")
-            print("len batch class o/p :",len(set(batch['Class'])))
-            print(batch['Class'])
-            print("=====================")
-      
-        h, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map,masking=False)
-        
-        # https://stackoverflow.com/questions/63040954/how-to-extract-and-use-bert-encodings-of-sentences-for-text-similarity-among-sen 
-        # use value of CLS token 
-        h = h[:,0,:]
-        
-
-        T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
-        # (batch_size, seq_len, vocab_size) 
-        logits = outputs.logits
-         
-                        
-     
-        if h_i is None:
-            print("skip this batch")
-            skip_time +=1
-            continue
-   
-        # Todo: debug supervised contrasive loss 
-        loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,yaml_data["training_params"]["temp"],debug=False) 
-
-        #loss_s_cl = compute_sim(h,labels=batch['Class'],temp=yaml_data["training_params"]["temp"])
-
-        #label_ids, _  = embedding.get_label()
-          
-       
-        #loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=yaml_data["training_params"]["smoothness"], device=yaml_data["training_params"]["device"])
-        """
-        Todo: classifier
-
-        add on : 
-        - make prediction:
-          - p = Softmax(Mq) : the Mq -> sort of projection of Query to every class  
-
-        1. p = Softmax(W @ f(x) + b) w_init = [mu1,mu2,mu3] and b = 0 
-        2. Entropy regularization : average of H(p), for all quries 
-        3. Cosine similarity + softmax  just norm method |w| and |q| 
-        """
-
-        loss_intent = outputs.loss  #intent_loss(outputs.logits)
-
-        # JT = J1 + J2 
-
-        loss_stage2 = loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
-        #
-        
-        loss_stage2.backward()
-        #print(embedding.get_grad())
-        optimizer.step()
-        # collect for visualize 
-        running_loss += loss_stage2.item()
-        running_loss_intent += loss_intent.item() 
-        running_loss_s_cl += loss_s_cl.item()
-        
-        if idx % yaml_data["training_params"]["running_times"] ==  yaml_data["training_params"]["running_times"]-1: # print every 50 mini-batches
-            running_time += 1
-            logger.logging('Loss/Train',running_loss,running_time)
-            print('[%d, %5d] loss_total: %.3f loss_supervised_contrasive:  %.3f loss_intent :%.3f ' %(epoch+1,idx+1,running_loss/yaml_data["training_params"]["running_times"] ,running_loss_s_cl/yaml_data["training_params"]["running_times"] ,running_loss_intent/yaml_data["training_params"]["running_times"]))
-            
-            print("skip_time:",skip_time)
-            print("total :",total)
-
-            #print('[%d, %5d] loss_total: %.3f' %(epoch+1,idx+1,running_loss/running_times))
-            running_loss = 0.0
-            logger.close()
-            model = embedding.get_model()   
-            
-            #break
-
-    #break 
-
-    
-del logger    
-
-print("delete logger for one combination")
-print('Finished Training')
-
-with torch.no_grad():
-    for (idx, batch) in enumerate(test_loader): 
-        
-            _, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map,masking=False,train=False)
-
-            logits = outputs.logits
-            logits_soft = torch.softmax(logits,dim=-1)
-
-            _, predicted = torch.max(logits_soft,dim=-1)
-
-            if label_map is not None: 
+                for (idx, batch) in enumerate(train_loader): 
                 
-                labels = [label_map[stringtoId] for stringtoId in (batch['Class'])]
-                labels = torch.tensor(labels).unsqueeze(0)               
-                total += labels.size(0)
-                labels = labels.to(yaml_test["testing_params"]["device"])
-                correct += (predicted == labels).sum().item()
-            
-            if debug:
-                print(">>>>>>>>>>")
-                print("labels: ",labels)
-                print("class :",batch['Class'])
-                print("<<<<<<<<<<")
 
-                print("Predicted:",predicted)
-            
+                    optimizer.zero_grad()
 
-            print("Correct :",correct)
-            print("Total :",total)
+                    total +=1
+                     
+                    
+                    # (batch_size, seq_len, hidhen_dim) 
 
-                #break
+                    if len(set(batch['Class'])) == len(batch['Class']):
+                        
+                        print("no positive pairs !")
+                        print("len batch class o/p :",len(set(batch['Class'])))
+                        print(batch['Class'])
+                        print("=====================")
+                  
+                    h, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map,masking=False)
+                    
+                    # https://stackoverflow.com/questions/63040954/how-to-extract-and-use-bert-encodings-of-sentences-for-text-similarity-among-sen 
+                    # use value of CLS token 
+                    h = h[:,0,:]
+                    
 
-print("%Acc :",(correct/total)*100)
-PATH_to_save = f'../../models/Load={load_weight}_{yaml_data["model_params"]["model"]}_freeze={freeze_num}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
+                    T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
+                    # (batch_size, seq_len, vocab_size) 
+                    logits = outputs.logits
+                     
+                                    
+                 
+                    if h_i is None:
+                        print("skip this batch")
+                        skip_time +=1
+                        continue
+               
+                    # Todo: debug supervised contrasive loss 
+                    loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,temp=tmp,debug=False) 
 
-print(PATH_to_save)
-print("correct :")
-torch.save(model.state_dict(),PATH_to_save)
-print("Saving Done !")
+                    #loss_s_cl = compute_sim(h,labels=batch['Class'],temp=yaml_data["training_params"]["temp"])
+
+                    #label_ids, _  = embedding.get_label()
+                      
+                   
+                    #loss_intent = intent_classification_loss(label_ids, logits, label_distribution, coeff=yaml_data["training_params"]["smoothness"], device=yaml_data["training_params"]["device"])
+                    """
+                    Todo: classifier
+
+                    add on : 
+                    - make prediction:
+                      - p = Softmax(Mq) : the Mq -> sort of projection of Query to every class  
+
+                    1. p = Softmax(W @ f(x) + b) w_init = [mu1,mu2,mu3] and b = 0 
+                    2. Entropy regularization : average of H(p), for all quries 
+                    3. Cosine similarity + softmax  just norm method |w| and |q| 
+                    """
+
+                    loss_intent = outputs.loss  #intent_loss(outputs.logits)
+
+                    # JT = J1 + J2 
+
+                    loss_stage2 = loss_s_cl + (lam * loss_intent)
+                     #(yaml_data["training_params"]["lamda"] * loss_intent)
+                    
+                    
+                    loss_stage2.backward()
+                    #print(embedding.get_grad())
+                    optimizer.step()
+                    # collect for visualize 
+                    running_loss += loss_stage2.item()
+                    running_loss_intent += loss_intent.item() 
+                    running_loss_s_cl += loss_s_cl.item()
+                    
+                    if idx % yaml_data["training_params"]["running_times"] ==  yaml_data["training_params"]["running_times"]-1: # print every 50 mini-batches
+                        running_time += 1
+                        logger.logging('Loss/Train',running_loss,running_time)
+                        print('[%d, %5d] loss_total: %.3f loss_supervised_contrasive:  %.3f loss_intent :%.3f ' %(epoch+1,idx+1,running_loss/yaml_data["training_params"]["running_times"] ,running_loss_s_cl/yaml_data["training_params"]["running_times"] ,running_loss_intent/yaml_data["training_params"]["running_times"]))
+                        
+                        print("skip_time:",skip_time)
+                        print("total :",total)
+
+                        #print('[%d, %5d] loss_total: %.3f' %(epoch+1,idx+1,running_loss/running_times))
+                        running_loss = 0.0
+                        logger.close()
+                        model = embedding.get_model()   
+                        
+                        #break
+
+                #break 
+
+                
+            del logger    
+            """
+            print("delete logger for one combination")
+            print('Finished Training')
+
+            with torch.no_grad():
+                for (idx, batch) in enumerate(test_loader): 
+                    
+                        _, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map,masking=False,train=False)
+
+                        logits = outputs.logits
+                        logits_soft = torch.softmax(logits,dim=-1)
+
+                        _, predicted = torch.max(logits_soft,dim=-1)
+
+                        if label_map is not None: 
+                            
+                            labels = [label_map[stringtoId] for stringtoId in (batch['Class'])]
+                            labels = torch.tensor(labels).unsqueeze(0)               
+                            total += labels.size(0)
+                            labels = labels.to(yaml_test["testing_params"]["device"])
+                            correct += (predicted == labels).sum().item()
+                        
+                        if debug:
+                            print(">>>>>>>>>>")
+                            print("labels: ",labels)
+                            print("class :",batch['Class'])
+                            print("<<<<<<<<<<")
+
+                            print("Predicted:",predicted)
+                        
+
+                        print("Correct :",correct)
+                        print("Total :",total)
+
+                            #break
+
+            print("%Acc :",(correct/total)*100)
+            PATH_to_save = f'../../models/Load={load_weight}_{yaml_data["model_params"]["model"]}_freeze={freeze_num}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
+
+            print(PATH_to_save)
+            print("correct :")
+            torch.save(model.state_dict(),PATH_to_save)
+            print("Saving Done !")
+            """
