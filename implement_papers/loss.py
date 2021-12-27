@@ -411,7 +411,6 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
         print("pos_sim.shape :",pos_sim.shape)     
     
        
-    #print("computation before compute :",dummy.shape)
 
     if debug:
         print("bot sim :",bot_sim.shape)
