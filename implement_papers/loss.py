@@ -353,14 +353,7 @@ def norm_vect(vectors):
 
 def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Union[ndarray, Tensor]:
     """
-    5- shot 
-    10 - shot
-   
     T - number of pairs from the same classes in batch
-   
-    each batch
-    i - class i
-    T = sum_i(N_i-1)
     
     pos_pair - two utterances from the same class
     
@@ -368,18 +361,9 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
 
     neg_pair - two utterances across different class  
    
-    loss_stage2   
     """
     sim = Similarity(temp)
-    if debug:
-        print("----------")
-        """
-        print(": before norm vect :")
-        print("h_i :",h_i[:2,:2]) 
-        print("h_j :",h_j[:2,:2])
-        print("h_n :",h_n[:2,:2])
-        print("sim pos :",sim(h_i,h_j)[:2])
-        """
+    
     # tested norm without norm sim are the same  
     if callback != None:
        
@@ -389,44 +373,10 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
            
     # exp(sim(a,b)/ temp)
     pos_sim = torch.exp(sim(h_i,h_j))
-    """
-    expression of sim pos_pair
-    Let say: 
-    
-    i=0:   h_i : (h_j2,h_j3,h_jn) -> shape: (3,768) 
-           each i: res_i : exp(sim(hi,hn)/t) ->  (#pairs) eg. (3)
-
-    i=3:   h_i : (h_j5,h_j6) -> shape:  (2,768) 
-           each i: res_i : exp(sim(hi,hn)/t) -> (#pairs) eg. (2)
-
-    concatenate : (5,768) -> exp(sim(h_i,h_j)/t) -> sim_val(#pairs)
-    concatenate : (5,768) -> bot(#pairs) 
-
-    res = (-1/T) * torch.sum(torch.log(sim_val/bot))
-    """
-    
-
-    """
-    
-    :Proof contrasive loss:
-    0. masking h_i and h_j pair compute are correct -> done 
-    1. with or without norm the sim are the same on positive pairs 
-    2.   
-
-    Todo:
-
-    1. check norm with sim 
-    2. check bottom factor h_i and h_n: all in the batch  did they braodcast correct
-    3. check sum procedure :  over N bottom and over j and over i -> contrasive loss 
-
-    """
-
     
     # for collect compute  sum_batch(exp(sim(hi,hn)/t)) 
     bot_sim  = []
 
-    
-    
     for idx in range(h_i.shape[0]):
         
         # broadcast each idx to h_n (all in batch)
@@ -438,9 +388,6 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
             print("after broad h_i to h_n",h_i_broad.shape)
             print("h_n shape :",h_n.shape)
         
-       # sim(hi,hn)/t 
-
-        #res = sim(h_i_broad,h_n)
 
         # sum over batch
         res = torch.sum(torch.exp(sim(h_i_broad,h_n))) 
@@ -459,9 +406,6 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
 
     bot_sim = torch.Tensor(bot_sim)
 
-    #neg_sim = neg_sim.reshape(-1,1)
-
-
     if debug:
         print("bot_sim :",bot_sim.shape)
         print("pos_sim.shape :",pos_sim.shape)     
@@ -474,6 +418,7 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
         print("pos sim :",pos_sim.shape)
         print("loss_s_cl before take log :",loss_s_cl.shape) 
     
+
     loss_s_cl = torch.log((pos_sim/bot_sim))
     
     
@@ -484,15 +429,7 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
     
     loss_s_cl = -loss_s_cl / T   
 
-
-    if debug:
-        print("len(neg) :",len(bot_sim))
-        print("before return loss_s_cl:", loss_s_cl)
-        print("")
-
     
-
-   
     return loss_s_cl 
 
 
