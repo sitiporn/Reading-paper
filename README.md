@@ -135,22 +135,7 @@ pip3 install tensorboard
 tensorboard dev upload --logdir runs
 ```
 
- 3. Usage tensorboard
-    ```python
-     from torch.utils.tensorboard import SummaryWriter
-     
-     #Writer will output to ./runs/ directory by default
-     #can add comment eg. SummaryWriter(comment="LR_0.1_BATCH_16")
-     writer = SummaryWriter()  
-     # tag of graph    
-     # y-axis value <- running_loss
-     # x-axis value <- running_time
-
-     writer.add_scalar('Loss/train', running_loss,running_time)
-
-     writer.close()
- 
-     ```
+```
 ### Build container on exist image
 
 1. build container
