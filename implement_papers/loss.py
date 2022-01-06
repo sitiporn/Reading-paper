@@ -395,7 +395,8 @@ def supervised_contrasive_loss(h_i:Tensor,h_j:Tensor,h_n:Tensor,T:int,temp,idx_y
     """
     sim = Similarity(temp)
     
-    # tested norm without norm sim are the same  
+
+
     if callback != None:
        
        h_i = callback(h_i)
@@ -403,15 +404,15 @@ def supervised_contrasive_loss(h_i:Tensor,h_j:Tensor,h_n:Tensor,T:int,temp,idx_y
        h_n = callback(h_n)
            
     # exp(sim(a,b)/ temp)
-    pos_sim = torch.exp(sim(h_i,h_j))
      
+    pos_sim = torch.exp(sim(h_i,h_j))
      
     # for collect compute  sum_batch(exp(sim(hi,hn)/t)) 
     bot_sim  = []
 
     # masking bottom
     # same batch size shape
-    mask = np.arange(h_n.shape[0])
+    #mask = np.arange(h_n.shape[0])
 
     """
     print("idxes yi=yj :",idx_yij)
@@ -419,27 +420,16 @@ def supervised_contrasive_loss(h_i:Tensor,h_j:Tensor,h_n:Tensor,T:int,temp,idx_y
     print("mask :",mask)
     print("# hi:  ",h_i.shape[0])
     """
-
-    # To do get idx of pos_pairs from list of all sample in batch 
-
-
-    #print("shape mask:",mask.shape)
-
     for idx in range(h_i.shape[0]):
        
-        # to skip current sample from list all sample in batch
-       # print("idx :",idx)
-       # print("idx_yij :",idx_yij)
-       # print("h_i shape :",h_i.shape)
 
-        mask = mask != idx_yij[idx]
+        #mask = mask != idx_yij[idx]
 
-
-        h_n_neg = h_n[mask,:]
+        #h_n_neg = h_n[mask,:]
         # create h_i equal h_n_neg.shape[0] copies
 
         # select current sample from list pos pairs
-        h_i_broad = h_i[idx].repeat(h_n_neg.shape[0],1)
+        h_i_broad = h_i[idx].repeat(h_n.shape[0],1)
         
 
         if debug:
@@ -449,7 +439,7 @@ def supervised_contrasive_loss(h_i:Tensor,h_j:Tensor,h_n:Tensor,T:int,temp,idx_y
         
 
         # sum over batch
-        res = torch.sum(torch.exp(sim(h_i_broad,h_n_neg))) 
+        res = torch.sum(torch.exp(sim(h_i_broad,h_n))) 
         
         if debug:
             print("sim(h_i,h_n) shape :",res.shape)

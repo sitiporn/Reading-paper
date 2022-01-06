@@ -41,15 +41,15 @@ test_samples = []
 # config
 
 debug = False 
-exp_name = 'train_5'
+exp_name = 'train_10'
 # J1,J2,JT
 
 comment = 'JT'+ exp_name
 
 running_time = 0.0 
-freeze_num = [4] #[4,5]  
+freeze_num = [9] #[4,5]  
 temp =  [0.1]   # [0.1, 0.3, 0.5]
-lamda = [0.01]    #[0.01,0.03,0.05]
+lamda = [0.5]    #[0.01,0.03,0.05]
 
 path_test = 'config/test.yaml' 
 path_finetuning = 'config/config3.yaml'
@@ -243,7 +243,7 @@ for freeze_i in freeze_num:
                     optimizer.step()
                     # collect for visualize 
                     running_loss += loss_stage2.item()
-                    running_loss_intent += loss_intent.item() 
+                    running_loss_intent += ( loss_intent.item())
                     running_loss_s_cl += loss_s_cl.item()
                     
                     if idx % yaml_data["training_params"]["running_times"] ==  yaml_data["training_params"]["running_times"]-1: # print every 50 mini-batches

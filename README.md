@@ -7,10 +7,9 @@
     - task 1: pretrain of encoders for understanding utterances and contrastive utteraces tasks without labels 
     - task 2: fine-tunning tasks (eg. few shot) train on KL-div predict probabilty and contrastive utteraces with labels 
 
-### Urgent Plan
+### weight
    - Pretrain(self-supervised)
-        - [ ]  1.training Pretrain validate each epochs
-          - from scartch
+         - from scartch
             - roberta-base_epoch14_B=16_lr=5e-06_24_11_2021_11:34.pth  
               - Suck on language understanding task cannot predict mask token
               - on Similarity -> pending
@@ -21,28 +20,11 @@
               - on language understanding  (of last epochs validation 31 %) ,( after training session use validation set 41 %)
               - on similarity 
           
-     
-            
-        - [ ]  2.test RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
-        - [ ]  3.Load Pretrain and train on dataset of this papers validate each epochs
-        - [ ]  4.test from (3.) RobertaCasualLm on test set on both validation and test set to on similarity, predict <mask> token
-        - [ ]  5.compare the validation acc growing both training option and choose the best one.
-        - [ ]  6.if things go well, the sim of positive pairs should be 0.8 - 0.9 and negative pairs should be negative  and also predict token_ids quite high precision -> to proof pretrain models is not sucked -> go to fine tune state 
-  
    - Fine Tune
      - roberta-base_B=16_lr=5e-06_27_11_2021_07:20.pth (config.yaml)
      - roberta-base_B=16_lr=0.001_27_11_2021_17:06.pth
      - roberta-base_B=32_lr=5e-06_01_12_2021_11:48.pth
    
-   - Furthermore work
-     - [ ] downloading baseline model to proof that dataset is able to discriminate  on CLINIC150, BANKINK77, HWU64
-     - [ ] fill-in validation acc on Pretrain dataset and fine-tunning dataset on CLINIC150, BANKINK77, HWU64
-     - [ ] and test acc of every datasets
-
-### Assumption on theory 
-    - on tasks 1 whether we should use weights from task 0 or not is depend on utteraces understanding on tasks 1 performance if they cannot predict hidden masks we should use weight from task 0 if performance still ok no need to do so 
-    - unfreeze all layers to train on tasks 1 as we have a lot of samples  
-    - on task 2 train only classifier head as we have few samples  
 
 ### Discussion 
 
@@ -80,12 +62,6 @@
      -  label smoothing to the intent classification loss Zhang et al. (2020a).
 
     
-### Bug To fix
-
-   check gradient of each layer of encoder if loss not decrease
-   check J1 : Supervised contrasive loss 
-   check J2 : Predict probabilty looss
-
 ### Bug report 
    - [x] use [CLS] to represent the whole seq and calculate sim without normalize vectors 
       - the sim same sen around 0.9 and diff 0.7
