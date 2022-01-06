@@ -5,7 +5,6 @@ from torch.utils.tensorboard import SummaryWriter
 from pytorch_pretrained_bert import BertTokenizer, BertModel, BertForMaskedLM
 import numpy as np
 from datetime import datetime
-from utils import loss
 from dataloader import IntentExample
 from dataloader import load_intent_examples
 from dataloader import sample
@@ -21,6 +20,8 @@ from transformers import AdamW
 from torch.autograd import Variable
 from logger import Log
 from dataloader import combine
+from utils import disk_cache
+from typing import List, Dict, Tuple, Type, Union
 
 # get time 
 now = datetime.now()
@@ -43,70 +44,77 @@ running_times = 10
 lr=5e-6
 model_name= "roberta-base" 
 prior_weight = False 
+
 train_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/train/'
 
 valid_file_path = '../../datasets/Few-Shot-Intent-Detection/Datasets/CLINC150/valid/'
 
 
 # Tensorboard
-logger = Log(load_weight=prior_weight,lamb=1.0,temp=temperature,experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr)
+logger = Log(load_weight=prior_weight,num_freeze=0,lamb=1.0,temp=temperature,experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr,)
 
-# combine all dataset
-data = combine(exp_name='train') 
-valid = combine(exp_name='valid')
-print("Combine dataset done !:",len(data.get_examples()))
-print("Combine validation !:",len(valid.get_examples()))
+def load_dataset()->Tuple[DataLoader,DataLoader,SimCSE]:
 
-# load all datasets 
-train_examples = data.get_examples()
-valid_examples = valid.get_examples()
-"""
-structure of this data  [trials] 
-trail -> [dict1,dict2,...,dict#intents]
-every dict -> {'task':'lable name','examples':[text1,text2,..,textN]}
-"""
-sampled_tasks = [sample(N, train_examples) for i in range(T)]
-valid_tasks = [sample(N,valid_examples) for i in range(T)]
+    # combine all dataset
+    data = combine(exp_name='train') 
+    valid = combine(exp_name='valid')
+    print("Combine dataset done !:",len(data.get_examples()))
+    print("Combine validation !:",len(valid.get_examples()))
 
-print("len of examples",len(sampled_tasks[0]))
-print("len of validation",len(valid_tasks[0]))
+    # load all datasets 
+    train_examples = data.get_examples()
+    valid_examples = valid.get_examples()
+    """
+    structure of this data  [trials] 
+    trail -> [dict1,dict2,...,dict#intents]
+    every dict -> {'task':'lable name','examples':[text1,text2,..,textN]}
+    """
+    sampled_tasks = [sample(N, train_examples) for i in range(T)]
+    valid_tasks = [sample(N,valid_examples) for i in range(T)]
 
-
-embedding = SimCSE(device='cuda:1',pretrain=prior_weight,model_name=model_name) 
-sim = Similarity(temperature)
-
-train_loader = SenLoader(sampled_tasks)
-valid_loader = SenLoader(valid_tasks)
-
-data  = train_loader.get_data()
-valid_data = valid_loader.get_data()
+    print("len of examples",len(sampled_tasks[0]))
+    print("len of validation",len(valid_tasks[0]))
 
 
-# get samples and label from data
-for i in range(len(data)):
-   samples.append(data[i].text_a)
-   labels.append(data[i].label)
+    embedding = SimCSE(device='cuda:1',pretrain=prior_weight,model_name=model_name) 
+    sim = Similarity(temperature)
+
+    train_loader = SenLoader(sampled_tasks)
+    valid_loader = SenLoader(valid_tasks)
+
+    data  = train_loader.get_data()
+    valid_data = valid_loader.get_data()
 
 
-for j in range(len(valid_data)):
-   valid_samples.append(valid_data[j].text_a)
-   valid_labels.append(valid_data[j].label)
+    # get samples and label from data
+    for i in range(len(data)):
+       samples.append(data[i].text_a)
+       labels.append(data[i].label)
 
-optimizer= AdamW(embedding.parameters(), lr=lr)
-print(": train data :")
-train_data = CustomTextDataset(labels=labels,text=samples,batch_size=batch_size)
 
-print(": validation data :")
-valid_data = CustomTextDataset(valid_labels,valid_samples,batch_size=batch_size)
+    for j in range(len(valid_data)):
+       valid_samples.append(valid_data[j].text_a)
+       valid_labels.append(valid_data[j].label)
 
-train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True,num_workers=8)
+    print(": train data :")
+    train_data = CustomTextDataset(labels=labels,text=samples,batch_size=batch_size)
 
-valid_loader = DataLoader(valid_data,batch_size=batch_size,num_workers=8)
+    print(": validation data :")
+    valid_data = CustomTextDataset(valid_labels,valid_samples,batch_size=batch_size)
 
-print("DataLoader Done !")
+    train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True,num_workers=8)
+
+    valid_loader = DataLoader(valid_data,batch_size=batch_size,num_workers=8)
+
+    print("DataLoader Done !")
+
+    return train_loader, valid_loader, embedding
 
 
 running_time = 0
+train_loader, valid_loader, embedding =  disk_cache(load_dataset,f"load_everything.pkl")
+optimizer = AdamW(embedding.parameters(), lr=lr)
+
 
 for epoch in range(epochs):
     
@@ -121,20 +129,23 @@ for epoch in range(epochs):
         # foward 2 times
         # get h_i
         h, _ = embedding.encode(sentence=batch['Text'])
+
         # get h_bar with random mask 0.10 among sentence in the batch
         h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True)
 
 
+
+        """ 
         hj_bar = create_pair_sample(h_bar,debug=False)    
         hj_bar = [torch.as_tensor(tensor) for tensor in hj_bar]
         hj_bar = torch.stack(hj_bar)
-        
         h_3d = h.unsqueeze(1)
+        """ 
         # print(hj_bar.shape,h_bar3d.shape)
         # print(len(hj_bar),len(hj_bar[0]),len(hj_bar[0][0]))
         # change it to be to taking grad
-        
-        _, _, loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size,compute_loss=True) 
+
+        _, _, loss_cl = contrasive_loss(h,h_bar,temperature,batch_size,compute_loss=True,debug=False) 
         loss_lml = outputs.loss
 
         # loss of pretrain model 
@@ -159,54 +170,57 @@ for epoch in range(epochs):
 
             model = embedding.get_model()  
 
+
+
+    """
     print(f"validation on epoch = {epoch}") 
+
     valid_loss = 0.0      
     correct = 0
     total = 0
 
     for (idx, batch) in enumerate(valid_loader):
-        
-        # foward 2 times  
-        h, _ = embedding.encode(sentence=batch['Text'],train=False)
-        h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True,train=False)
-        
+            
+            # foward 2 times  
+            h, _ = embedding.encode(sentence=batch['Text'],train=False)
+            h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True,train=False)
+            
 
-       
-        hj_bar = create_pair_sample(h_bar,debug=False)    
-        hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
-        hj_bar = torch.stack(hj_bar)
-        
-        h_3d = h.unsqueeze(1)
-        # print(hj_bar.shape,h_bar3d.shape)
-        # print(len(hj_bar),len(hj_bar[0]),len(hj_bar[0][0]))
-        # change it to be to taking grad
-        
-        _, _, loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size,compute_loss=True) 
-        loss_lml = outputs.loss
+            hj_bar = create_pair_sample(h_bar,debug=False)    
+            hj_bar = [ torch.as_tensor(tensor) for tensor in hj_bar]
+            hj_bar = torch.stack(hj_bar)
+            
+            h_3d = h.unsqueeze(1)
+            # print(hj_bar.shape,h_bar3d.shape)
+            # print(len(hj_bar),len(hj_bar[0]),len(hj_bar[0][0]))
+            # change it to be to taking grad
+            
+            _, _, loss_cl = contrasive_loss(h,h_bar,hj_bar,h_3d,temperature,batch_size,compute_loss=True) 
+            loss_lml = outputs.loss
 
-        #(batch_size,seq_len,vocab_size) 
-        prediction = outputs.logits 
-       
+            #(batch_size,seq_len,vocab_size) 
+            prediction = outputs.logits 
+           
 
-        labels, mask_arr  = embedding.get_label()
+            labels, mask_arr  = embedding.get_label()
 
-        prediction = prediction[mask_arr]
-        labels = labels[mask_arr]
-       
-        
-        prediction = torch.softmax(prediction,dim=-1)
-        prediction = torch.max(prediction,dim=-1)[1]
+            prediction = prediction[mask_arr]
+            labels = labels[mask_arr]
+           
+            
+            prediction = torch.softmax(prediction,dim=-1)
+            prediction = torch.max(prediction,dim=-1)[1]
 
-       
-        correct += (prediction==labels).sum().item()          
-        
-        print("prediction:",prediction)
-        print("labels :",labels)
-        total += labels.size(0)
-        print("correct :",correct)
-        print("total :",total)
+           
+            correct += (prediction==labels).sum().item()          
+            
+            print("prediction:",prediction)
+            print("labels :",labels)
+            total += labels.size(0)
+            print("correct :",correct)
+            print("total :",total)
 
-        valid_loss = loss_cl + (lamda*loss_lml)
+            valid_loss = loss_cl + (lamda*loss_lml)
 
 
     valid_acc =  100 * (correct/total)   
@@ -217,18 +231,15 @@ for epoch in range(epochs):
     print("Logging each epochs:")
          
 
-      
-#   for data, labels in validloader:
+    """  
+    # for data, labels in validloader:
     PATH_to_save = f'../../models/Load={prior_weight}_{model_name}_epoch{epoch}_B={batch_size}_lr={lr}_{dt_str}.pth' 
     torch.save(model.state_dict(),PATH_to_save)    
     print("save !:",PATH_to_save)
 
-
 print('Finished Training')
 torch.save(model.state_dict(),PATH_to_save)
 print("Saving Done !")
-
-
         
 
 

@@ -91,7 +91,6 @@ class SenLoader(Dataset):
         self.sample_task = sentence
 
     def get_data(self,trial:int=0):
-
         for idx in range(self.T):
 
             tasks = self.sample_task[idx]
@@ -319,12 +318,11 @@ def create_supervised_pair(h,labels,debug:bool=False):
     h_i = [] # pos pairs
     h_j = [] # neg pairs
     skips = []
+    idx_i = [] # index yi = yj
 
     # proof done 
     # masking correct
     # pair of concat correct
-
-
 
     T = 0 # the numbers of pairs sample
     
@@ -334,12 +332,14 @@ def create_supervised_pair(h,labels,debug:bool=False):
             continue
 
         mask = label == np.array(labels)
+        
         # dont include current sample 
         mask[idx] = False 
         
         # check is they have pos pair 
         if np.count_nonzero(mask) >= 1:
             
+
             idxs_arr = np.arange(len(labels))
             # each h_i and h_j :  (sample, hidden_dim)
             
@@ -377,6 +377,10 @@ def create_supervised_pair(h,labels,debug:bool=False):
                 skips.append(val)
             # add pair numbers of samples 
 
+            # copy sample i to #of pairs
+            for i in range(np.count_nonzero(mask)):
+                idx_i.append(idx)
+
             T+= np.count_nonzero(mask)
             
             if debug:
@@ -393,32 +397,31 @@ def create_supervised_pair(h,labels,debug:bool=False):
                 print("count:",len(mask))
                 print("numbers of pairs one label :",np.count_nonzero(mask))
            
-    # after ending loop 
-    if debug: 
-
-        print("the number of pairs for entire batch:",T) 
-        print("pairs see from labels : ",len(labels)-len(set(labels)))
-        print("All skippings :",skips)
-        print(labels)
-
-        print("---------------------------------------------")
     
     if h_i:
-        
-       
+    # after ending loop 
         h_i = torch.cat(h_i,dim=0)
-        h_j = torch.cat(h_j,dim=0) 
+        h_j = torch.cat(h_j,dim=0)    
+    
+        
+        """
+        print("all the sample i :",idx_i)
+        print("skips :",skips)
+        print("h_i shape :",h_i.shape)
+        print("the number of pairs :",T)
+        """
+    
+        if debug: 
 
-        if debug:
-            print("concatenate got h_i :",h_i.shape)
-            print("concatenate got h_j : ",h_j.shape)
-            print("<<<<<<<<<<<<<<<<<<<<<")
+            print("the number of pairs for entire batch:",T) 
+            print("pairs see from labels : ",len(labels)-len(set(labels)))
+    
 
 
-        return T, h_i, h_j
+        return T, h_i, h_j, idx_i
     else:
 
-        return T, None, None
+        return T, None, None, None
         
 class combine:
 

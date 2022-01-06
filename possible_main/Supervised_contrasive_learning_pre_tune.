@@ -1,0 +1,33 @@
+# SUPERVISED CONTRASTIVE LEARNING FOR PRE-TRAINED LANGUAGE MODEL FINE-TUNING
+
+
+what is problem they are trying to solve  ? 
+
+  sub-optimal generalization 
+
+
+what are their idea ?
+---
+ 
+  assumption : good generalization requires capturing the similairities example in one class and contrast them with other classes 
+
+
+
+
+
+list of methedology 
+---
+
+  temperature ~ control the separation of class; yi,c
+  Nyi ~ the number of total sample in batch that have the same label 
+  
+  Φ(·) ∈ Rd ~ that output l2 norm final hidden layer before softmax projection
+
+  yi,c denotes the label
+
+  yi_hat,c denotes the model output the prob of ith sample belonging to the class c
+
+  Φ(xi) ∈ Rd uses the embedding of [CLS] token as the representation for example xi (Devlin et al., 2019; Liu et al., 2019)
+
+
+

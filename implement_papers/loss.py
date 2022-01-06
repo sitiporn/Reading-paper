@@ -295,34 +295,65 @@ class SimCSE(nn.Module):
 
         return embeddings, outputs
 
-def contrasive_loss(h,h_bar,hj_bar,h_3d,temp,N,compute_loss:bool=False):
+def contrasive_loss(h:Tensor,h_bar:Tensor,temp,N:int,compute_loss:bool=False,debug:bool=False):
 
-    if compute_loss:
-
-        sim = Similarity(temp=temp)
-        pos_sim = torch.exp(sim(h,h_bar))
-        neg_sim = torch.exp(sim(h_3d,hj_bar))
-        # sum of each neg samples of each *sum over j
-        neg_sim = torch.sum(neg_sim,dim=1) 
-        
-        cost = -1 * torch.log(pos_sim / neg_sim)
- 
-        """
+    """
         hj_bar : eg. i = 1 : ([a,a,a],[b', c', a']) sum along N for each i 
         hj_bar shape: (batch_size,batch_size-1,embed_size) 
         hi_3d : (batch_size,batch_size-1,embed_size) 
 
         h_neg_bar = [[b',c',a'],[a',c',a'],[a',b',a'],[a',b',c']] 
 
-        """
+    """
+    if compute_loss:
 
-        return  pos_sim, neg_sim, torch.sum(cost)/N
+        sim = Similarity(temp=temp)
+    
+        # https://stackoverflow.com/questions/63040954/how-to-extract-and-use-bert-encodings-of-sentences-for-text-similarity-among-sen 
+        # use value of CLS token 
+        # (batch_size,embed_dim)
+
+        h = h[:,0,:] 
+        h_bar = h_bar[:,0,:]
+        bot = [] 
+
+        for idx in range(h.shape[0]):
+
+            # copy hi  (batch_size,embed_dim)
+            hi_copy =  h[idx].repeat(h.shape[0],1)
+            sum_j = torch.sum(torch.exp(sim(hi_copy,h_bar)))
+            
+            if debug:
+                print("hi_copy :",hi_copy[:5,:4])
+                print("hi :",h[idx,:4])
+
+            bot.append(sum_j)
+            
+        # convert list to tensors 
+        bot = torch.tensor(bot)
+         
+        # num_pairs equal to N
+        pos_sim = torch.exp(sim(h,h_bar))
+
+        if debug:
+            print("h_i :",h.shape)
+            print("h_bar :",h_bar.shape)
+            print("pos :",pos_sim.shape)
+            print("bot :",bot.shape)
+
+        cost = -1 * torch.log(pos_sim / bot)
+ 
+
+        return  pos_sim, bot, torch.sum(cost)/N
+
          
     else:
         sim = Similarity()
+        
         pos_sim = sim(h,h_bar)
         neg_sim = sim(h_3d,hj_bar)
-        
+
+
         return pos_sim, neg_sim, None
          
 
@@ -351,7 +382,7 @@ def norm_vect(vectors):
 
 
 
-def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Union[ndarray, Tensor]:
+def supervised_contrasive_loss(h_i:Tensor,h_j:Tensor,h_n:Tensor,T:int,temp,idx_yij:List,callback=None,debug=False)->Union[ndarray, Tensor]:
     """
     T - number of pairs from the same classes in batch
     
@@ -373,14 +404,42 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
            
     # exp(sim(a,b)/ temp)
     pos_sim = torch.exp(sim(h_i,h_j))
-    
+     
+     
     # for collect compute  sum_batch(exp(sim(hi,hn)/t)) 
     bot_sim  = []
 
+    # masking bottom
+    # same batch size shape
+    mask = np.arange(h_n.shape[0])
+
+    """
+    print("idxes yi=yj :",idx_yij)
+    print("len yij",len(idx_yij))
+    print("mask :",mask)
+    print("# hi:  ",h_i.shape[0])
+    """
+
+    # To do get idx of pos_pairs from list of all sample in batch 
+
+
+    #print("shape mask:",mask.shape)
+
     for idx in range(h_i.shape[0]):
-        
-        # broadcast each idx to h_n (all in batch)
-        h_i_broad = h_i[idx].repeat(h_n.shape[0],1)
+       
+        # to skip current sample from list all sample in batch
+       # print("idx :",idx)
+       # print("idx_yij :",idx_yij)
+       # print("h_i shape :",h_i.shape)
+
+        mask = mask != idx_yij[idx]
+
+
+        h_n_neg = h_n[mask,:]
+        # create h_i equal h_n_neg.shape[0] copies
+
+        # select current sample from list pos pairs
+        h_i_broad = h_i[idx].repeat(h_n_neg.shape[0],1)
         
 
         if debug:
@@ -390,7 +449,7 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
         
 
         # sum over batch
-        res = torch.sum(torch.exp(sim(h_i_broad,h_n))) 
+        res = torch.sum(torch.exp(sim(h_i_broad,h_n_neg))) 
         
         if debug:
             print("sim(h_i,h_n) shape :",res.shape)
@@ -415,21 +474,20 @@ def supervised_contrasive_loss(h_i,h_j,h_n,T,temp,callback=None,debug=False)->Un
     if debug:
         print("bot sim :",bot_sim.shape)
         print("pos sim :",pos_sim.shape)
-        print("loss_s_cl before take log :",loss_s_cl.shape) 
     
 
-    loss_s_cl = torch.log((pos_sim/bot_sim))
+    loss = torch.log((pos_sim/bot_sim))
     
     
-    loss_s_cl  = torch.sum(loss_s_cl)
+    loss = torch.sum(loss)
 
     if debug:
-        print("after take log: ",loss_s_cl)
+        print("after take log: ",loss)
     
-    loss_s_cl = -loss_s_cl / T   
+    loss = -loss / T   
 
     
-    return loss_s_cl 
+    return loss
 
 
 def get_label_dist(samples, train_examples,train=False):
@@ -475,7 +533,7 @@ def intent_loss(logits,N:int=16,debug:bool=False):
     """
     # last dim among the class 
     soft = nn.Softmax(dim=-1)
-    # get prob 
+    # get prob from normalized by softmax 
     prob = soft(logits)
 
     if debug:
@@ -495,7 +553,6 @@ def intent_loss(logits,N:int=16,debug:bool=False):
      
 
     # sum over class 
-    
     loss_intent = -torch.sum(log_prob,dim=-1) / N
     
 

@@ -5,7 +5,6 @@ from torch.utils.tensorboard import SummaryWriter
 from pytorch_pretrained_bert import BertTokenizer, BertModel, BertForMaskedLM
 import numpy as np
 from datetime import datetime
-from utils import loss
 from dataloader import IntentExample
 from dataloader import load_intent_examples
 from dataloader import sample
@@ -27,7 +26,7 @@ from loss import get_label_dist
 from loss import norm_vect 
 from loss import intent_loss
 from read_config import read_file_config 
-from contrasive_test import compute_sim
+#from contrasive_test import compute_sim
 import pprint 
 
 
@@ -42,13 +41,15 @@ test_samples = []
 # config
 
 debug = False 
+exp_name = 'train_5'
 # J1,J2,JT
-comment = 'JT'
+
+comment = 'JT'+ exp_name
 
 running_time = 0.0 
-freeze_num = [4,5]  
-temp = [0.1] #, 0.3, 0.5]
-lamda = [0.01] #,0.03,0.05]
+freeze_num = [4] #[4,5]  
+temp =  [0.1]   # [0.1, 0.3, 0.5]
+lamda = [0.01]    #[0.01,0.03,0.05]
 
 path_test = 'config/test.yaml' 
 path_finetuning = 'config/config3.yaml'
@@ -56,8 +57,9 @@ path_finetuning = 'config/config3.yaml'
 correct = 0
 total = 0 
 
-load_weight=True # existed of task 0 
-select_model = 'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
+load_weight= True # existed of task 0 
+select_model = 'Load=False_roberta-base_epoch14_B=16_lr=5e-06_05_01_2022_12:43.pth' 
+#'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
 
 
 yaml_data = read_file_config(path=path_finetuning)
@@ -74,10 +76,8 @@ pp.pprint(yaml_test)
 
 # collector variables
 
-
-
 # get dataset  
-data = combine('CLINC150','train_5') 
+data = combine('CLINC150',exp_name=exp_name) 
 test_set = combine('CLINC150','test')
 
 
@@ -99,8 +99,10 @@ label_distribution, label_map = get_label_dist(sampled_tasks,train_examples,trai
 train_loader = SenLoader(sampled_tasks)
 test_loader = SenLoader(sampled_test)
 
+"""
 print(": label map :")
 print(label_map)
+"""
 
 """
 #data = train_loader.get_data()
@@ -175,7 +177,8 @@ for freeze_i in freeze_num:
                     optimizer.zero_grad()
 
                     total +=1
-                     
+                    
+                    #print("batch_size :",len(batch['Class']))
                     
                     # (batch_size, seq_len, hidhen_dim) 
 
@@ -193,7 +196,7 @@ for freeze_i in freeze_num:
                     h = h[:,0,:]
                     
 
-                    T, h_i, h_j = create_supervised_pair(h,batch['Class'],debug=False)
+                    T, h_i, h_j, idx_yij = create_supervised_pair(h,batch['Class'],debug=False)
                     # (batch_size, seq_len, vocab_size) 
                     logits = outputs.logits
                      
@@ -205,7 +208,7 @@ for freeze_i in freeze_num:
                         continue
                
                     # Todo: debug supervised contrasive loss 
-                    loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,temp=tmp,debug=False) 
+                    loss_s_cl = supervised_contrasive_loss(h_i, h_j, h, T,temp=tmp,idx_yij=idx_yij,debug=False) 
 
                     #loss_s_cl = compute_sim(h,labels=batch['Class'],temp=yaml_data["training_params"]["temp"])
 
@@ -225,11 +228,13 @@ for freeze_i in freeze_num:
                     3. Cosine similarity + softmax  just norm method |w| and |q| 
                     """
 
-                    loss_intent = outputs.loss  #intent_loss(outputs.logits)
+                    #loss_intent  = intent_loss(outputs.logits,N=yaml_data["training_params"]["batch_size"])
+                    loss_intent = outputs.loss 
 
                     # JT = J1 + J2 
 
                     loss_stage2 = loss_s_cl + (lam * loss_intent)
+
                      #(yaml_data["training_params"]["lamda"] * loss_intent)
                     
                     
@@ -260,7 +265,7 @@ for freeze_i in freeze_num:
 
                 
             del logger    
-            """
+            
             print("delete logger for one combination")
             print('Finished Training')
 
@@ -279,7 +284,7 @@ for freeze_i in freeze_num:
                             labels = [label_map[stringtoId] for stringtoId in (batch['Class'])]
                             labels = torch.tensor(labels).unsqueeze(0)               
                             total += labels.size(0)
-                            labels = labels.to(yaml_test["testing_params"]["device"])
+                            labels = labels.to(yaml_data["training_params"]["device"])
                             correct += (predicted == labels).sum().item()
                         
                         if debug:
@@ -297,10 +302,21 @@ for freeze_i in freeze_num:
                             #break
 
             print("%Acc :",(correct/total)*100)
-            PATH_to_save = f'../../models/Load={load_weight}_{yaml_data["model_params"]["model"]}_freeze={freeze_num}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
+
+            PATH_to_save = f'../../models/{comment}_Load={load_weight}_{yaml_data["model_params"]["model"]}_freeze={freeze_num}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
 
             print(PATH_to_save)
-            print("correct :")
+            print("correct :",correct)
             torch.save(model.state_dict(),PATH_to_save)
             print("Saving Done !")
+
+
+            """
+            Todo
+
+            1. check CLS  token of pretrain task
+            2. see loss scale of both J1 and J2 of stage2 
+            3. check dataset by exploit weight of base line models 
+            4. why loss of 
+
             """
