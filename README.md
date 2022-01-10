@@ -125,7 +125,6 @@ docker exec -it [container name] bash
 
 ```bash
 ssh root@localhost -p [port]
-
 ```
 
 #### What I have done
