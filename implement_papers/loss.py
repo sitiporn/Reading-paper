@@ -43,7 +43,7 @@ class SimCSE(nn.Module):
     class for embeddings sentence by using BERT 
 
     """
-    def __init__(self,device,pretrain:bool = False,hidden_state_flag:bool = True,classify:bool = False,model_name:str='roberta-base'): 
+    def __init__(self,device,pretrain:bool = False,hidden_state_flag:bool = True,classify:bool = False,model_name:str='roberta-base',path:str): 
         super(SimCSE,self).__init__()
 
 
@@ -73,7 +73,7 @@ class SimCSE(nn.Module):
                 if classify:
                    
                    self.config.num_labels = 150 
-                   self.model = RobertaForSequenceClassification.from_pretrained("roberta-base", config=self.config)
+                   self.model = RobertaForSequenceClassification.from_pretrained("roberta-base")
                    print("Using RobertaForSequenceClassification ...")
 
                 else:
@@ -86,7 +86,10 @@ class SimCSE(nn.Module):
                     self.mask = 50264
                     self.pad = 1  
                         
-            if model_name == 'bert-base':
+            elif model_name == "nli":
+                
+            
+            elif model_name == 'bert-base':
                 self.config = BertConfig() 
                 self.model = BertForMaskedLM(self.config)
                 self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -119,15 +122,25 @@ class SimCSE(nn.Module):
         
         #ref - https://pytorch.org/tutorials/beginner/saving_loading_models.html
         
-        PATH = '../../models/'+ select_model      
+        # Todo 
+        # 1. load weight first by roberta binary classifcation 
+        # 2. then, change the config to same of the number of intents  
+        
+        PATH =  '../../baseline/roberta_nli/pytorch_model.bin'
+
+        print("path:",PATH)
+        #'../../models/'+ select_model      
 
         if strict == True:
             self.model.load_state_dict(torch.load(PATH))
+
             print("Load weight fully match  to model done !")
         else:
 
             self.model.load_state_dict(torch.load(PATH),strict=False)
             print("Load weight patial done !")
+
+        self.model.num_labels = self.config.num_labels
 
     def freeze_layers(self,freeze_layers_count:int):
 

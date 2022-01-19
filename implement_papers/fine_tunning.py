@@ -30,6 +30,7 @@ from read_config import read_file_config
 import pprint 
 
 
+
 # collector
 
 train_labels = []
@@ -130,7 +131,7 @@ test_loader =  DataLoader(test_data,batch_size=yaml_test["testing_params"]["batc
 print("Test Loader Done !")
 
 
-
+"""
 
 for freeze_i in freeze_num:  
     for lam in lamda: 
@@ -310,6 +311,7 @@ for freeze_i in freeze_num:
             torch.save(model.state_dict(),PATH_to_save)
             print("Saving Done !")
 
+"""
 
             """
             Todo
