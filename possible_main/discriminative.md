@@ -6,14 +6,13 @@ Term
 
 Problem of previous work 
 --- 
- *large scale pretrain model stuggle with  out-of-dis
- detection 
+ *large scale pretrain model stuggle with  out-of-dis detection 
  * they strong in-domain predcition 
 
 why intent is important ?
 ---
   it is the core component in taks diaglog systems
-  different system have diff intents so that's the reason why few shot is important
+  "different system have diff intents" so that's the reason why few shot is important
 
 * methods
 ---
@@ -45,7 +44,7 @@ what their idea ?
 3.1 Deep pairwise Maching Function 
 
    - find best macthed utterance from training set E  given u  
-    1. embeded each data into vector space 
+    1. embeded each data into vector space  
     2. use off-shelf distance to perform sim search 
 
   * problem text embeddign dont discriminate OOS examples well enough  
@@ -57,12 +56,12 @@ what their idea ?
 
     step 2.
      
-     S(u,eji) = sigma(W@h + b) 
+     S(u,eji) = sigmoid(W@h + b) 
 
      the idea mapping encoding and matching func into deep self-attenion
 
 
-  * capturing queries and documents in documents retrieval 
+  * capturing queries(u) and documents(eji) in documents retrieval 
 
 
 3.2 Discriminative Training 
@@ -72,6 +71,7 @@ what their idea ?
 
    - Neg considered all any possible pairs accross two any different class
 
+   - S(u,eji) should be closed to 1.0 if u and eji are belong to same classes otherwise 0.0 trained by using binary cross entropy loss 
 
 3.3 Seamless Transfer from NLI 
     
