@@ -20,10 +20,13 @@ Ways of analysing
 
  question  
 ---
- How much each weight to each word when computation next word based on current word
+ * How much each weight to each word when computation next word based on current word
+ * How compute Weight of attetion two directions are important ?
+   > this is because they can show how much likely to be head
+      > by Wk or Uk can tell likely direction 
 
 
- Eqn
+Eqn
 ---
 
  * alpha_ij = exp(qi@kj)/(sum_l(exp(qi@kl))
@@ -34,13 +37,22 @@ Ways of analysing
       
       oi = sum_j(alpha_ij@ Vj)
 
+  * p(i|j) ~ probability of word i being word syntatic head of j 
+     * combine both direction candidate head to dependents as well as dependents to head
+     * wk and uj using standard supervised learning on trainning set
+     * (vi ⊕vj ) concate glove embeddings of two vectors are fixed once learning so only W and U are learned  
+     
+     * produce sensitivity weight for particular head
+
+
+
  key question
 ---
     * how important of other token in sentence when predict next representation of current token  
 
     * they used gradient of loss with respect to each attention weight  
          * from their experiment can be discussed that  oviously started at layers 5 
-    changing attetion whether more or less wouldnt be affected loss or o/p of model as gradient is still low  
+    changing attetion whether more or less wouldnt be affected loss or o/p of model as gradient is still low  which answer to their assumption when atteion head no-op all token would be attend to [SEP]  
 
     * raw of grammar the head can have multiple dependents or can modified by many dependents while one dependent can related to only one head 
         * in example Head they dont follow direction convention of depency grammar      
@@ -48,3 +60,10 @@ Ways of analysing
         
         * in Fig the red represent head which is able to attend to many modifiers    
 
+    * from Fig 5. even BERT are not explicitly trained on tasks like depency parsing but self-supervised can make them  learn this kinds of task well according to the head that do specific function for language  lead to easy to illustrate how sensitivity  of attention weight toward output of the modl
+
+
+ Result
+--- 
+ 
+ * on table 3. attetion glove provide syntatic parsing much more information than vector representations
