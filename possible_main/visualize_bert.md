@@ -3,9 +3,14 @@
 
  Adopt 
 --- 
- what is specific language feature that they can use to help them discriminate intent  
- 
+  * what is specific language feature that they can use to help them discriminate intent  
+  
+  * in related work -> one line of research examine the outputs by given carefully select i/p sentence 
+      * can we change examine the attetion head by chosen the intent exaple carefully both positive and negative pairs  to understand model performance on intent detection datasets by evaluate attetion head on linguistic structures  or dependency parsing 
 
+      *  identify syntatic, positional rare-world-sentive attetion head that effect the each intent   
+
+   
 Ways of analysing 
 --- 
  1) specific i/p and notice o/p 
@@ -62,8 +67,18 @@ Eqn
 
     * from Fig 5. even BERT are not explicitly trained on tasks like depency parsing but self-supervised can make them  learn this kinds of task well according to the head that do specific function for language  lead to easy to illustrate how sensitivity  of attention weight toward output of the modl
 
+    * normally, they encouraged different attetion heads to have different functions but result show that they are closely and redundance so they used attetion dropout in training caused some weight lead to zero 
+
+ finding
+---
+ 
+ model get indirecly supervision from large data set can sensitive produce languge hierachy 
 
  Result
 --- 
  
  * on table 3. attetion glove provide syntatic parsing much more information than vector representations
+ 
+
+
+
