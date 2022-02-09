@@ -1,18 +1,36 @@
 # Emergent linquistic structure in ann trained by self-supervison 
 
 
+ Problem  
+---
+
+ * no anotation syntatic dependencies 
+      for intent detection datasets ? 
+
+
+    * they used syntatic dependencies using wall stree journal(WSJ) portion of Penn Treebank annoted with standford Dependencies as Corpus   
+ 
+ baseline 
+---
+ 
+    * Normally the word that position neg 2 or to left considered to be head  
 
  Question 
 ---
- what is this work is about ?   
+ 1) what is this work is about ?   
    show that how large language pretrain model works
       
       * how ?  
           * can learn linquistic structure and syntatic parsing and be able to aproximately reconstruct linquistic stucture   
+
+      * How often the head word of a coreferent metion most attends to the head   
+      word of one that montion's antecendents
+
   
+ 2) what is combined score 
 
-
-
+      
+  
  Keys
 --- 
  * language understanding require -> structure are not looking explicitly 
@@ -37,9 +55,53 @@
                 * from this eqn we will get the most attended-to of word i from word j  
 
 
-   * then eqn_3 evaluate that attetion head is expressing a particular linguistic realtion by computing how often this particular expression come with the input word     
+   * then eqn_3 evaluate that attetion head is expressing a particular linguistic realation by computing how often this particular expression come with the input word     
           
- Methods
+
+ Experiments
 ---
+ 
+ * tree structure result from word that have exactly one incoming edges from either another word (syntatic head) a type indicate grmammatical relation 
+
+   * l(wi, wj)  -> 1  
+        if wi is the head and wj as dependencies otherwise 0   
+ 
+ * they show prediction fixed-offset baseline  
+       * two position two left of dependencies considered to head  
+
+  * Coferernce  compare two baseline 
+       
+       1) select nearest other mentions as antecendents
+       2) using ruled bassed conference system 
+          1) full string match   
+          2) head word match  
+          3) number/gender/person mattch
+          4) all over mentions
+         
+     
+ Result 
+--- 
+  * Normally each head specialize for one dependencies
+  * syntatic behaviour is not clearly wrong 
+  * according to table 2 relation on Nominal perform better than rule based as Norminal more complicated than other properties like   Prounoun or propernoun 
+
+ Finding Syntax Trees in word represenations  
+---
+* the vectors of word in each layers embedded the tree systax structure
+* tree is discrete structure are not compatible with high dimension like Rd spaces of neural representations
+
+* they use structure probe finding embedding representations is linearly extractable from internal representation     
+   * find single distance metric on Rd defined by sytntax tree of that sentence 
+
+ The stucture probe methods 
+---
+ 
+  * to test whether tree are embedded in vectors representaions or not  it required common ground between  tree and vectors spaces 
   
+  * set of node might be set of word ?   
+
+  * what is undirected tree ? 
+
+
+
 
