@@ -101,7 +101,31 @@
   * set of node might be set of word ?   
 
   * what is undirected tree ? 
+     * it may be space
 
+  * metric dT(i,j) between node i and j    
+         * defined as number of edges in path between node i and j  
+         * given path metrics -> construct tree itself by indicating all i, j with    
+
+         * if dT(i,j) equal to 1 are conntected by an edge  
+
+  * defining distance metrics with tunable parameters 
+        
+        * L2 distance on Rd can be parameterize by a positive semidefinite matrix
+            A subset of S+ dxd
+            
+        * dA(hi,hj)2 = (hi-hj).T @ A @ (hi-hj)
+          a.T @ b = b.T @ a
+          let A = B.T @ B
+
+                dA(hi,hj) = (hi-hj).T @ A @ (hi-hj) -> Rd
+                          = (hi-hj).T @ B.T @ B(hi-hj) 
+                          = (B(hi-hj)).T @ (b(hi-hj) 
+                          = ||B(hi-hj)||2
+
+
+         
+          
 
 
 
