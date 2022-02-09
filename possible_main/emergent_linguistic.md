@@ -123,9 +123,16 @@
                           = (B(hi-hj)).T @ (b(hi-hj) 
                           = ||B(hi-hj)||2
 
-
-         
+   * Fig 7
+      
+     * each word represent by vectors in space  
+     * stucture probe find linear transform of that space under L2 distance best vectors reconstruct tree path beween words
+     
+     * in latent space stucture of tree globally represented by the geometry of the vectors space    
+         if it close in the space is close in tree too 
           
+
+     * tree can be recover by using minimum spanning tree in the latent syntax space 
 
 
 
