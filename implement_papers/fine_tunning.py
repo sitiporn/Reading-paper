@@ -2,7 +2,7 @@ import torch
 import urllib
 import os 
 from torch.utils.tensorboard import SummaryWriter 
-from pytorch_pretrained_bert import BertTokenizer, BertModel, BertForMaskedLM
+#from pytorch_pretrained_bert import BertTokenizer, BertModel, BertForMaskedLM
 import numpy as np
 from datetime import datetime
 from dataloader import IntentExample
@@ -131,8 +131,6 @@ test_loader =  DataLoader(test_data,batch_size=yaml_test["testing_params"]["batc
 print("Test Loader Done !")
 
 
-"""
-
 for freeze_i in freeze_num:  
     for lam in lamda: 
         for tmp in temp: 
@@ -189,7 +187,11 @@ for freeze_i in freeze_num:
                         print("len batch class o/p :",len(set(batch['Class'])))
                         print(batch['Class'])
                         print("=====================")
-                  
+
+                    # change the number of class 
+                    embedding.modify_architecure()
+
+
                     h, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map,masking=False)
                     
                     # https://stackoverflow.com/questions/63040954/how-to-extract-and-use-bert-encodings-of-sentences-for-text-similarity-among-sen 
@@ -311,14 +313,4 @@ for freeze_i in freeze_num:
             torch.save(model.state_dict(),PATH_to_save)
             print("Saving Done !")
 
-"""
 
-            """
-            Todo
-
-            1. check CLS  token of pretrain task
-            2. see loss scale of both J1 and J2 of stage2 
-            3. check dataset by exploit weight of base line models 
-            4. why loss of 
-
-            """

@@ -43,7 +43,7 @@ class SimCSE(nn.Module):
     class for embeddings sentence by using BERT 
 
     """
-    def __init__(self,device,pretrain:bool = False,hidden_state_flag:bool = True,classify:bool = False,model_name:str='roberta-base',path:str): 
+    def __init__(self,device,pretrain:bool = False,hidden_state_flag:bool = True,classify:bool = False,model_name:str='roberta-base',num_class:int=150): 
         super(SimCSE,self).__init__()
 
 
@@ -72,7 +72,7 @@ class SimCSE(nn.Module):
                
                 if classify:
                    
-                   self.config.num_labels = 150 
+                   self.config.num_labels = num_class#150 
                    self.model = RobertaForSequenceClassification.from_pretrained("roberta-base")
                    print("Using RobertaForSequenceClassification ...")
 
@@ -87,6 +87,8 @@ class SimCSE(nn.Module):
                     self.pad = 1  
                         
             elif model_name == "nli":
+                
+                pass
                 
             
             elif model_name == 'bert-base':
@@ -115,6 +117,10 @@ class SimCSE(nn.Module):
     def parameters(self):
         return self.model.parameters()
 
+    def modify_architecure(self):
+        self.model.classifier.out_proj = nn.Linear(in_features=768, out_features=self.config.num_labels, bias=True)
+
+        self.model = self.model.to(self.device)
     def get_model(self):
         return self.model
 
@@ -126,21 +132,25 @@ class SimCSE(nn.Module):
         # 1. load weight first by roberta binary classifcation 
         # 2. then, change the config to same of the number of intents  
         
-        PATH =  '../../baseline/roberta_nli/pytorch_model.bin'
+        #PATH =  '../../baseline/roberta_nli/pytorch_model.bin'
+
+        
+        PATH = '../../models/'+ select_model      
 
         print("path:",PATH)
-        #'../../models/'+ select_model      
-
+        
         if strict == True:
-            self.model.load_state_dict(torch.load(PATH))
+            self.model.load_state_dict(torch.load(PATH,map_location='cpu'))
 
             print("Load weight fully match  to model done !")
         else:
 
-            self.model.load_state_dict(torch.load(PATH),strict=False)
+            self.model.load_state_dict(torch.load(PATH,map_location='cpu'),strict=False)
             print("Load weight patial done !")
 
         self.model.num_labels = self.config.num_labels
+        
+        print("show config :",self.model.config)
 
     def freeze_layers(self,freeze_layers_count:int):
 
@@ -163,6 +173,7 @@ class SimCSE(nn.Module):
                         param.requires_grad = False
                     
             print("the number of freezing layers",count_layer) 
+
 
     def get_grad(self):
         
@@ -225,6 +236,7 @@ class SimCSE(nn.Module):
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
         
 
+        # for classify
         if self.classify: 
             #print("Classify:")
             if label_maps is not None:
@@ -232,10 +244,11 @@ class SimCSE(nn.Module):
                 self.labels = [label_maps[stringtoId] for stringtoId in (label)]
                 # convert list to tensor
                 self.labels = torch.tensor(self.labels).unsqueeze(0)
-                #print(self.labels.shape)
+                print("self.labels.shape :",self.labels.shape)
 
         else:
 
+            # for language modeling task
             self.labels = inputs['input_ids'].detach().clone()
             
 
@@ -272,6 +285,8 @@ class SimCSE(nn.Module):
              
 
         # Encode to get hi the representation of ui  
+        print("inputs :",inputs["input_ids"].shape)
+        print("labels :",self.labels.shape)
         outputs = self.model(**inputs,labels=self.labels,output_hidden_states=self.hidden_state_flag)
 
         # the shape of last hidden -> (batch_size, sequence_length, hidden_size)

@@ -135,4 +135,6 @@
      * tree can be recover by using minimum spanning tree in the latent syntax space 
 
 
-
+Tool for coding 
+---
+ 1.) they used Stanford dependencies as Corpus 
