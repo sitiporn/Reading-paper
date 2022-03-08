@@ -155,11 +155,11 @@ ssh root@localhost -p [port]
 
 ## Tenative plan
 - [ ]  Literature Review  
-- [x]  draft implement
+- [ ]  draft implement
 - [ ]  Prof of concept 
 - [ ]  Submission of Proposal Draft (30 Dec)
 - [ ]  Proposal Defense (15 june)
-- [x]  Data collection 
+- [ ]  Data collection 
 - [ ]  Data Analysis
 - [ ]  progressive Defense ( 20 March)
 - [ ]  Analysis and Review
