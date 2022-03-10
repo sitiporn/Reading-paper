@@ -28,6 +28,7 @@ from loss import intent_loss
 from read_config import read_file_config 
 #from contrasive_test import compute_sim
 import pprint 
+import csv 
 
 
 
@@ -140,6 +141,12 @@ print("Train Loader Done !")
 test_loader =  DataLoader(test_data,batch_size=yaml_test["testing_params"]["batch_size"],shuffle=False,num_workers=2)
 print("Test Loader Done !")
 
+# collect sampleing all pos pair after training
+table = {str(k):0 for k in range(num_classes)}
+file = open("pos_pair.csv","w")   
+
+
+
 
 for freeze_i in freeze_num:  
     for lam in lamda: 
@@ -174,6 +181,7 @@ for freeze_i in freeze_num:
             total = 0
             skip_time = 0 
 
+
             for epoch in range(yaml_data["training_params"]["n_epochs"]):
 
                 running_loss = 0.0
@@ -181,7 +189,6 @@ for freeze_i in freeze_num:
                 running_loss_intent = 0.0
 
                 # collect pair sampling summary for each epoch
-                table = {str(k):0 for k in range(num_classes)}
                
                  
 
@@ -208,7 +215,9 @@ for freeze_i in freeze_num:
 
                             table[str(v)] +=1
                     
-                    print("pos_table :",table)                   #print("batch_size :",len(batch['Class']))
+                    print("pos_table [{},{}] :".format(epoch,idx))
+                    print(table)
+                    #print("batch_size :",len(batch['Class']))
                     
                     # (batch_size, seq_len, hidhen_dim) 
 
@@ -293,9 +302,15 @@ for freeze_i in freeze_num:
                         logger.close()
                         model = embedding.get_model()   
                         
-                        #break
+writer = csv.writer(file)
 
-                #break 
+for k,v in table.items():
+
+    writer.writerow([k,v])
+
+
+file.close()
+
 
                 
 #            del logger    
