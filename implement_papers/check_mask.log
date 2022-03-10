@@ -1,0 +1,85 @@
+name on tensorboard: Load=False_roberta-base_freeze=0_25_02_2022_05:00_B=16_lr _5e-06_lambda=1.0_temp=0.1_
+/usr/local/lib/python3.6/dist-packages/transformers/optimization.py:309: FutureWarning: This implementation of AdamW is deprecated and will be removed in a future version. Use thePyTorch implementation torch.optim.AdamW instead, or set `no_deprecation_warning=True` to disable this warning
+  FutureWarning,
+False
+Before tokenize ['is there a way to recover my password?', 'what mpg does this car get in city', 'i used my card and there was a fee', "put spaghetti on my shopping list cause i'm out of it please", 'i think i ran out of this can you add it to my list', 'not sure what my password is.', 'what type of card can i get?', 'can i withdraw money from another bank and transfer it into my empty account?', 'check inbox for mail from sarah', 'i just acquired a new job but i need help with my 401k rollover', 'can you read my gas level', 'i got a €1 extra fee in my statement', 'i got the incorrect amount of money given to me from my account', 'can you give me a good piece of trivia about the rainforest', 'what currencies do you accept for adding money?', 'do you know any fun facts about australian football']
+inputs.keys() dict_keys(['input_ids', 'attention_mask'])
+Masking step:
+torch.Size([16, 18])
+inputs after masking :
+tensor([[    0,   354,    89,    10, 50264,     7,  5312,   127, 50264,   116,
+             2,     1,     1,     1,     1,     1,     1,     1],
+        [    0, 12196,   475, 18188, 50264,    42,   512,   120,    11,   343,
+             2,     1,     1,     1,     1,     1,     1,     1],
+        [    0,   118,   341,   127,  1886, 50264,    89, 50264, 50264,  4029,
+             2,     1,     1,     1,     1,     1,     1,     1],
+        [    0,  9179, 33362,    15, 50264, 50264,   889, 50264,   939,   437,
+            66,     9,    24,  2540,     2,     1,     1,     1],
+        [    0,   118,   206,   939,  2075,    66,     9,    42,    64,    47,
+          1606, 50264,     7,   127,   889,     2,     1,     1],
+        [    0, 50264, 50264, 50264,   127, 14844,    16,     4,     2,     1,
+             1,     1,     1,     1,     1,     1,     1,     1],
+        [    0, 12196,  1907,     9,  1886,    64, 50264,   120,   116,     2,
+             1,     1,     1,     1,     1,     1,     1,     1],
+        [    0, 50264,   939,  8202,   418,    31,   277,   827,     8,  2937,
+            24, 50264,   127,  5802,  1316,   116,     2,     1],
+        [    0, 15954, 11106,    13,  7107,    31, 50264, 36000,     2,     1,
+             1,     1,     1,     1,     1,     1,     1,     1],
+        [    0,   118,    95,  3566,    10,    92,   633,    53,   939,   240,
+           244,    19,   127, 50264,   330, 50264, 50264,     2],
+        [    0,  7424,    47,  1166,   127,  1123,   672,     2,     1,     1,
+             1,     1,     1,     1,     1,     1,     1,     1],
+        [    0,   118,   300,    10,  4480,   134,  1823,  4029,    11,   127,
+           445,     2,     1,     1,     1,     1,     1,     1],
+        [    0,   118,   300,     5, 17401,  1280,     9,   418,   576,     7,
+           162, 50264,   127, 50264,     2,     1,     1,     1],
+        [    0, 50264,    47, 50264,   162,    10, 50264,  2125,     9, 35317,
+            59,     5,  1895, 28236,     2,     1,     1,     1],
+        [    0, 12196,  7607,   109,    47,  3264, 50264, 50264,   418,   116,
+             2,     1,     1,     1,     1,     1,     1,     1],
+        [    0,  5016, 50264,   216,   143,  1531,  4905,    59, 28410,  7085,
+           811,  1037,     2,     1,     1,     1,     1,     1]],
+       device='cuda:1')
+outputs: 3
+hidden states: torch.Size([16, 18, 768])
+embeddings.shape torch.Size([16, 18, 768])
+inputs after masking :
+tensor([[    0,   354,    89,    10,   169,     7,  5312,   127, 14844,   116,
+             2,     1,     1,     1,     1,     1,     1,     1],
+        [    0, 12196,   475, 18188,   473, 50264,   512,   120,    11,   343,
+             2,     1,     1,     1,     1,     1,     1,     1],
+        [    0,   118,   341,   127,  1886,     8,    89, 50264,    10,  4029,
+             2,     1,     1,     1,     1,     1,     1,     1],
+        [    0,  9179, 33362,    15,   127,  3482,   889,  1303,   939,   437,
+         50264,     9,    24,  2540,     2,     1,     1,     1],
+        [    0,   118,   206,   939,  2075,    66,     9,    42,    64,    47,
+          1606,    24,     7,   127,   889,     2,     1,     1],
+        [    0,  3654,   686, 50264,   127, 14844,    16,     4,     2,     1,
+             1,     1,     1,     1,     1,     1,     1,     1],
+        [    0, 12196,  1907,     9,  1886,    64,   939,   120,   116,     2,
+             1,     1,     1,     1,     1,     1,     1,     1],
+        [    0,  7424,   939, 50264,   418,    31,   277,   827,     8,  2937,
+            24,    88,   127,  5802, 50264,   116,     2,     1],
+        [    0, 15954, 11106,    13,  7107,    31,   579, 36000,     2,     1,
+             1,     1,     1,     1,     1,     1,     1,     1],
+        [    0,   118,    95, 50264,    10,    92,   633,    53,   939,   240,
+           244,    19, 50264, 17936,   330,  3825,  2137,     2],
+        [    0,  7424,    47,  1166,   127, 50264,   672,     2,     1,     1,
+             1,     1,     1,     1,     1,     1,     1,     1],
+        [    0,   118,   300,    10,  4480,   134,  1823,  4029, 50264,   127,
+           445,     2,     1,     1,     1,     1,     1,     1],
+        [    0,   118,   300,     5, 17401,  1280,     9, 50264,   576,     7,
+           162, 50264,   127,  1316,     2,     1,     1,     1],
+        [    0,  7424,    47,   492,   162,    10,   205,  2125,     9, 35317,
+            59,     5,  1895, 28236,     2,     1,     1,     1],
+        [    0, 12196, 50264,   109, 50264,  3264,    13,  1271,   418,   116,
+             2,     1,     1,     1,     1,     1,     1,     1],
+        [    0,  5016,    47,   216, 50264,  1531,  4905,    59, 28410,  7085,
+           811,  1037,     2,     1,     1,     1,     1,     1]],
+       device='cuda:1')
+Traceback (most recent call last):
+  File "train.py", line 171, in <module>
+    optimizer.step()
+  File "/usr/local/lib/python3.6/dist-packages/transformers/optimization.py", line 350, in step
+    state["exp_avg_sq"] = torch.zeros_like(p.data)
+RuntimeError: CUDA out of memory. Tried to allocate 20.00 MiB (GPU 1; 10.76 GiB total capacity; 1.85 GiB already allocated; 19.44 MiB free; 1.98 GiB reserved in total by PyTorch)

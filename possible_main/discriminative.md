@@ -6,7 +6,7 @@ Term
 
 Problem of previous work 
 --- 
- *large scale pretrain model stuggle with  out-of-dis detection 
+ * large scale pretrain model stuggle with  out-of-dis detection 
  * they strong in-domain predcition 
 
 why intent is important ?
@@ -66,7 +66,7 @@ what their idea ?
 
 3.2 Discriminative Training 
 
-   - Pos pairs intent class: (eji, ejl) all possible ordered pairs with int same intents
+   - Pos pairs intent class: (eji, ejl) all possible ordered pairs with in the same intents
     i not equal to l
 
    - Neg considered all any possible pairs accross two any different class
@@ -107,7 +107,7 @@ what their idea ?
 
 2.2 Multi-Class Classification 
 
- - apply threshold-basse stategry to cope with intent classification and OOS detection 
+ - apply threshold-base stategry to cope with intent classification and OOS detection 
   to softmax o/p
  
   * N the number of intents

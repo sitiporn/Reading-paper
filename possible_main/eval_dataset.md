@@ -40,9 +40,12 @@
      when sys get out-of-scope queries 
         it predict in-scope and provide wrong actions  
      which is predict FN
-        
-     i/p (out-of-scope) -> model understand -> identify that in-scopes  (FN)
-     i/p  (in-scope) -> model understand -> identify that out-scopes (FP) 
+    
+    * avoided cases !! 
+    * i/p (out-of-scope) -> model understand -> identify that in-scopes  (FN)
+    
+    * acceptable cases
+       i/p  (in-scope) -> model understand -> identify that out-scopes (FP) 
            L then system just return that can you type again which is better than when model get out-of-scope and provide wrong actions
 
      * Precision - How much positive are correct 

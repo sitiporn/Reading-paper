@@ -42,13 +42,13 @@ test_samples = []
 # config
 
 debug = False 
-exp_name = 'train_10'
+exp_name = 'train_5'
 # J1,J2,JT
 
 comment = 'JT'+ exp_name
 
 running_time = 0.0 
-freeze_num = [9] #[4,5]  
+freeze_num = [12] #[4,5]  
 temp =  [0.1]   # [0.1, 0.3, 0.5]
 lamda = [0.5]    #[0.01,0.03,0.05]
 
@@ -59,7 +59,9 @@ correct = 0
 total = 0 
 
 load_weight= True # existed of task 0 
-select_model = 'Load=False_roberta-base_epoch14_B=16_lr=5e-06_05_01_2022_12:43.pth' 
+select_model = 'Load=False_roberta-base_B=64_lr=5e-06_03_03_2022_14:13.pth'
+#'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
+#'Load=False_roberta-base_epoch14_B=16_lr=5e-06_05_01_2022_12:43.pth' 
 #'roberta-base_epoch14_B=16_lr=5e-06_25_11_2021_12:07.pth'
 
 
@@ -111,6 +113,8 @@ print(label_map)
 #print(embedding.eval())
 """
 
+
+# inputs of custom text dataset  
 for i in range(len(train_examples)):
    train_samples.append(train_examples[i].text)
    train_labels.append(train_examples[i].label)
@@ -119,11 +123,17 @@ for i in range(len(test_examples)):
    test_samples.append(test_examples[i].text)
    test_labels.append(test_examples[i].label)
 
+#get unique class
 
+num_classes = len(np.unique(np.array(train_labels)))
+print("the numbers of classes :",num_classes)
+
+# inputs of dataloader 
 train_data = CustomTextDataset(train_labels,train_samples,batch_size=yaml_data["training_params"]["batch_size"],repeated_label=True)  
 
 test_data = CustomTextDataset(test_labels,test_samples,batch_size=yaml_test["testing_params"]["batch_size"])  
 
+# Dataloader 
 
 train_loader = DataLoader(train_data,batch_size=yaml_data["training_params"]["batch_size"],shuffle=True)
 print("Train Loader Done !")
@@ -141,10 +151,10 @@ for freeze_i in freeze_num:
 
 
             # create dummy model 
+            
             embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
 
             embedding.load_model(select_model=select_model,strict=False)
-            print("Loading Pretain Model done!")
 
             embedding.freeze_layers(freeze_layers_count=freeze_i)
             print("Freeze Backboned layers",freeze_i)
@@ -168,7 +178,12 @@ for freeze_i in freeze_num:
 
                 running_loss = 0.0
                 running_loss_s_cl = 0.0
-                running_loss_intent = 0.0 
+                running_loss_intent = 0.0
+
+                # collect pair sampling summary for each epoch
+                table = {str(k):0 for k in range(num_classes)}
+               
+                 
 
                 for (idx, batch) in enumerate(train_loader): 
                 
@@ -176,8 +191,24 @@ for freeze_i in freeze_num:
                     optimizer.zero_grad()
 
                     total +=1
+
+
+                    print("batch_id :",idx)
+                    label_idx = [label_map[stringtoId] for stringtoId in (batch["Class"])]
+                    print("batch class :",label_idx)
                     
-                    #print("batch_size :",len(batch['Class']))
+                    pair_table = {str(k):0 for k in range(num_classes)}
+
+
+
+                    for v in label_idx:
+                        pair_table[str(v)] +=1 
+                        
+                        if pair_table[str(v)] >=2:
+
+                            table[str(v)] +=1
+                    
+                    print("pos_table :",table)                   #print("batch_size :",len(batch['Class']))
                     
                     # (batch_size, seq_len, hidhen_dim) 
 
@@ -267,50 +298,50 @@ for freeze_i in freeze_num:
                 #break 
 
                 
-            del logger    
+#            del logger    
             
-            print("delete logger for one combination")
-            print('Finished Training')
-
-            with torch.no_grad():
-                for (idx, batch) in enumerate(test_loader): 
-                    
-                        _, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map,masking=False,train=False)
-
-                        logits = outputs.logits
-                        logits_soft = torch.softmax(logits,dim=-1)
-
-                        _, predicted = torch.max(logits_soft,dim=-1)
-
-                        if label_map is not None: 
-                            
-                            labels = [label_map[stringtoId] for stringtoId in (batch['Class'])]
-                            labels = torch.tensor(labels).unsqueeze(0)               
-                            total += labels.size(0)
-                            labels = labels.to(yaml_data["training_params"]["device"])
-                            correct += (predicted == labels).sum().item()
-                        
-                        if debug:
-                            print(">>>>>>>>>>")
-                            print("labels: ",labels)
-                            print("class :",batch['Class'])
-                            print("<<<<<<<<<<")
-
-                            print("Predicted:",predicted)
-                        
-
-                        print("Correct :",correct)
-                        print("Total :",total)
-
-                            #break
-
-            print("%Acc :",(correct/total)*100)
-
-            PATH_to_save = f'../../models/{comment}_Load={load_weight}_{yaml_data["model_params"]["model"]}_freeze={freeze_num}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
-
-            print(PATH_to_save)
-            print("correct :",correct)
-            torch.save(model.state_dict(),PATH_to_save)
-            print("Saving Done !")
-
-
+#            print("delete logger for one combination")
+#            print('Finished Training')
+#
+#            with torch.no_grad():
+#                for (idx, batch) in enumerate(test_loader): 
+#                    
+#                        _, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map,masking=False,train=False)
+#
+#                        logits = outputs.logits
+#                        logits_soft = torch.softmax(logits,dim=-1)
+#
+#                        _, predicted = torch.max(logits_soft,dim=-1)
+#
+#                        if label_map is not None: 
+#                            
+#                            labels = [label_map[stringtoId] for stringtoId in (batch['Class'])]
+#                            labels = torch.tensor(labels).unsqueeze(0)               
+#                            total += labels.size(0)
+#                            labels = labels.to(yaml_data["training_params"]["device"])
+#                            correct += (predicted == labels).sum().item()
+#                        
+#                        if debug:
+#                            print(">>>>>>>>>>")
+#                            print("labels: ",labels)
+#                            print("class :",batch['Class'])
+#                            print("<<<<<<<<<<")
+#
+#                            print("Predicted:",predicted)
+#                        
+#
+#                        print("Correct :",correct)
+#                        print("Total :",total)
+#
+#                            #break
+#
+#            print("%Acc :",(correct/total)*100)
+#
+#            PATH_to_save = f'../../models/{comment}_Load={load_weight}_{yaml_data["model_params"]["model"]}_freeze={freeze_num}_B={yaml_data["training_params"]["batch_size"]}_lr={yaml_data["training_params"]["lr"]}_{dt_str}.pth'
+#
+#            print(PATH_to_save)
+#            print("correct :",correct)
+#            torch.save(model.state_dict(),PATH_to_save)
+#            print("Saving Done !")
+#
+#

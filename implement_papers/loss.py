@@ -15,7 +15,7 @@ from transformers import BertTokenizer, BertForMaskedLM, BertConfig
 from transformers import RobertaConfig, RobertaModel
 from torch import linalg as LA
 from transformers import RobertaTokenizer, RobertaForSequenceClassification, RobertaForMaskedLM
-
+from transformers import AutoTokenizer
 
 class Similarity(nn.Module):
     """
@@ -34,7 +34,7 @@ class Similarity(nn.Module):
         self.cos = nn.CosineSimilarity(dim=-1)
 
     def forward(self, x, y):
-        
+
         return  self.cos(x, y) / self.temp
 
 
@@ -53,8 +53,9 @@ class SimCSE(nn.Module):
         if pretrain == True: 
             self.model = RobertaForMaskedLM.from_pretrained(model_name)
             self.tokenizer = RobertaTokenizer.from_pretrained(model_name)
-            print(":using RobertaForMaskedLM :")
+            print(": using RobertaForMaskedLM :")
             print("Vocab size :",self.tokenizer.vocab_size)
+
             self.start = 0 
             self.end = 2 
             self.mask = 50264
@@ -62,35 +63,59 @@ class SimCSE(nn.Module):
 
         else:
             if model_name == 'roberta-base':
-                 
-                # get tokonizer 
-                self.tokenizer = RobertaTokenizer.from_pretrained(model_name)
-                #self.config = RobertaConfig()
-                 
-                # get config from roberta 
-                self.config = RobertaConfig.from_pretrained("roberta-base", output_hidden_states=True)
+                print("model_name :", model_name)
                
                 if classify:
                    
+                   # get config
+                   self.config =  AutoConfig.from_pretrained("roberta-base")
+
                    self.config.num_labels = num_class#150 
-                   self.model = RobertaForSequenceClassification.from_pretrained("roberta-base")
-                   print("Using RobertaForSequenceClassification ...")
+
+                   # get tokeizenier 
+                   self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+                   # get model 
+                   self.model = AutoModelForSequenceClassification.from_pretrained(model_name,num_labels=self.config.num_labels)
+
+                   print("Downloa/d Pretrain from Auto model ") 
+
+                   print("model weight :",self.model.roberta.encoder.layer[11].output.dense.weight)
+                   
+
+                   self.start = 0 
+                   self.end = 2 
+                   self.mask = 50264
+                   self.pad = 1  
+
+
+                
+
 
                 else:
 
-                    self.model = RobertaForMaskedLM(self.config)
-                    # roberta tokenizer 
-                    # more detail on RobertaConfig()
-                    self.start = 0 
-                    self.end = 2 
-                    self.mask = 50264
-                    self.pad = 1  
-                        
+                   print("= :training RobertaForMaskedLM from scratch: =") 
+                   print("= : loading config to model : = ")
+                     
+                   # get tokonizer 
+                   self.tokenizer =  RobertaTokenizer.from_pretrained(model_name)
+                   
+                   # get config from roberta 
+                   self.config = RobertaConfig.from_pretrained("roberta-base", output_hidden_states=True)
+
+                   self.model = RobertaForMaskedLM(self.config)
+                   # roberta tokenizer 
+                   # more detail on RobertaConfig()
+                   self.start = 0 
+                   self.end = 2 
+                   self.mask = 50264
+                   self.pad = 1  
+
             elif model_name == "nli":
-                
+
                 pass
-                
-            
+
+
             elif model_name == 'bert-base':
                 self.config = BertConfig() 
                 self.model = BertForMaskedLM(self.config)
@@ -101,9 +126,14 @@ class SimCSE(nn.Module):
                 self.end = 102
                 self.mask = 103
                 self.pad = 0
-             
+
             print("Vocab size:",self.config.vocab_size)
-  
+            print("=== : token usage : ===")
+            print("start :",self.start)
+            print("end : ",self.end)
+            print("mask :",self.mask)
+            print("pad : ",self.pad) 
+
 
         self.params = None 
         self.device = device
@@ -113,7 +143,7 @@ class SimCSE(nn.Module):
         self.labels = None  
         self.mask_arr = None 
         self.grads = []
-         
+
     def parameters(self):
         return self.model.parameters()
 
@@ -125,20 +155,20 @@ class SimCSE(nn.Module):
         return self.model
 
     def load_model(self,select_model,strict:bool=True):
-        
+
         #ref - https://pytorch.org/tutorials/beginner/saving_loading_models.html
-        
+
         # Todo 
         # 1. load weight first by roberta binary classifcation 
         # 2. then, change the config to same of the number of intents  
-        
+
         #PATH =  '../../baseline/roberta_nli/pytorch_model.bin'
 
-        
+
         PATH = '../../models/'+ select_model      
 
         print("path:",PATH)
-        
+
         if strict == True:
             self.model.load_state_dict(torch.load(PATH,map_location='cpu'))
 
@@ -149,14 +179,17 @@ class SimCSE(nn.Module):
             print("Load weight patial done !")
 
         self.model.num_labels = self.config.num_labels
-        
-        print("show config :",self.model.config)
+
+        print("show config in labels:",self.model.config.num_labels)
+        print("model weight :",self.model.roberta.encoder.layer[11].output.dense.weight)
+        print("show model :",self.model.classifier.out_proj) 
+        print("show weight fc :",self.model.classifier.out_proj.weight)
 
     def freeze_layers(self,freeze_layers_count:int):
 
         count_layer = 0
         if freeze_layers_count:
-        # freeze embeddings of the model
+            # freeze embeddings of the model
             print("freeze embeddings :")
             for param in self.model.roberta.embeddings.parameters():
 
@@ -205,6 +238,21 @@ class SimCSE(nn.Module):
 
     def encode(self,sentence:Union[str, List[str]],label:Union[str,List[str]]=None,label_maps = None,batch_size : int = 64, keepdim: bool = False,max_length:int = 128,debug:bool =False,masking:bool=True,train:bool=True)-> Union[ndarray, Tensor]:
        
+       # if label is None:
+       #     print("dont give labels :")
+       # if label_maps is None:
+       #     print("labels is None :")
+       # print("hidden_state_flag :",self.hidden_state_flag)
+
+
+       # print("masking : ",masking)
+       # print("batch_size : ",batch_size) 
+       # print("keepdim : ",keepdim)
+       # print("max length :",max_length)
+       # print("masking :",masking)
+       # print("train ",train)
+
+
 
         if train: 
             
@@ -228,8 +276,6 @@ class SimCSE(nn.Module):
         #with torch.no_grad():
         total_batch = len(sentence) // batch_size + (1 if len(sentence) % batch_size > 0 else 0)
 
-        if debug == True:
-            print("Before tokenize",sentence)
 
         inputs = self.tokenizer(sentence,padding=True,truncation=True,return_tensors="pt")
        
@@ -244,7 +290,6 @@ class SimCSE(nn.Module):
                 self.labels = [label_maps[stringtoId] for stringtoId in (label)]
                 # convert list to tensor
                 self.labels = torch.tensor(self.labels).unsqueeze(0)
-                print("self.labels.shape :",self.labels.shape)
 
         else:
 
@@ -258,14 +303,13 @@ class SimCSE(nn.Module):
        
                 
         if debug== True: 
-            print("Input2:",inputs)
+            #print("Input2:",inputs)
             print("inputs.keys()",inputs.keys())
         
         if masking == True:
             
 
-            #print("shape of input_ids:")
-            #print(inputs['input_ids'].shape[1])
+            # input_ids : (batch_size,seq_len)
             rand = torch.rand(inputs['input_ids'].shape).to(self.device)
             # we random arr less than 0.10
             mask_arr = (rand < 0.10) * (inputs['input_ids'] !=self.start) * (inputs['input_ids'] != self.end) * (inputs['input_ids'] != self.pad)
@@ -278,21 +322,29 @@ class SimCSE(nn.Module):
             # mask_arr : (batch_size,seq_len)
             inputs['input_ids'][mask_arr] = self.mask
             self.mask_arr = mask_arr  
-            #print("Masking checking:")
-            #print(self.mask)
-            #print(inputs['input_ids'])
-            #selection = torch.flatten((mask_arr).nonzero()).tolist()
-             
 
+           # print("=== :masking : ===")
+           # print(" input_ids :",inputs['input_ids'][:3,:10])
+           # print("labels language :",self.labels[:3,:10])
+
+
+        else:
+           # print("=== : without masking : ===")
+           # print(" input_ids :",inputs['input_ids'][:3,:10])
+           # print("labels language :",self.labels[:3,:10])
+           pass
+        
+            
+            
         # Encode to get hi the representation of ui  
-        print("inputs :",inputs["input_ids"].shape)
-        print("labels :",self.labels.shape)
         outputs = self.model(**inputs,labels=self.labels,output_hidden_states=self.hidden_state_flag)
 
-        # the shape of last hidden -> (batch_size, sequence_length, hidden_size)
-        
+        # the shape of last hidden : (batch_size, sequence_length, hidden_size)
+            
+
         hidden_state = outputs.hidden_states 
-        hidden_state = hidden_state[12]
+        
+        hidden_state = hidden_state[-1]
        
         # (batch_size, sequence_length, hidden_size)
         embeddings = hidden_state
@@ -302,18 +354,16 @@ class SimCSE(nn.Module):
 
             print("outputs:",len(outputs))
             
-            print("hidden states:",embeddings.shape)
              
                    
        
-        if debug== True: 
-            print("embeddings.shape",embeddings.shape) 
-        
-        #print(self.model.eval())
         
         embedding_list.append(embeddings.cpu()) 
-            
+        
+
         embeddings = torch.cat(embedding_list, 0)
+
+
         
         if single_sentence and not keepdim:
             embeddings = embeddings[0]
@@ -333,6 +383,14 @@ def contrasive_loss(h:Tensor,h_bar:Tensor,temp,N:int,compute_loss:bool=False,deb
         h_neg_bar = [[b',c',a'],[a',c',a'],[a',b',a'],[a',b',c']] 
 
     """
+
+    if debug:
+        print("temp :",temp)
+        print("N :",N)
+        print("compute_loss :",compute_loss)
+        print("debug :",debug)
+
+
     if compute_loss:
 
         sim = Similarity(temp=temp)
@@ -341,38 +399,69 @@ def contrasive_loss(h:Tensor,h_bar:Tensor,temp,N:int,compute_loss:bool=False,deb
         # use value of CLS token 
         # (batch_size,embed_dim)
 
+        # typically representation 
         h = h[:,0,:] 
+
+        # represenations are masked 
         h_bar = h_bar[:,0,:]
+
         bot = [] 
+
+        # create pos pairs
 
         for idx in range(h.shape[0]):
 
             # copy hi  (batch_size,embed_dim)
             hi_copy =  h[idx].repeat(h.shape[0],1)
-            sum_j = torch.sum(torch.exp(sim(hi_copy,h_bar)))
-            
-            if debug:
-                print("hi_copy :",hi_copy[:5,:4])
-                print("hi :",h[idx,:4])
 
+
+            # take expo of similarity between hi and hj_bar : all sample in the batch masked by random 10 percentage
+
+            sum_j = torch.sum(torch.exp(sim(hi_copy,h_bar)))
             bot.append(sum_j)
             
+            if debug:
+               pass
+               # print(" hi_copy :",hi_copy.shape)
+               # print(" h_bar  :",h_bar.shape)
+               # print("sim(hi_copy,h_bar) :",sim(hi_copy,h_bar).shape)
+               # print("== : simimilarity :==",sim(hi_copy,h_bar))
+               # print(" max :",sim(hi_copy,h_bar).max())
+               # print(" min :",sim(hi_copy,h_bar).min())
+               # 
+               # print("torch.exp(sim(hi_copy,h_bar)) :",torch.exp(sim(hi_copy,h_bar)))
+
+            
+
         # convert list to tensors 
         bot = torch.tensor(bot)
-         
+
+
         # num_pairs equal to N
         pos_sim = torch.exp(sim(h,h_bar))
+
+
+        prob = pos_sim / bot
+        log_prob = torch.log(prob)
+        cost =  -torch.sum(log_prob) / N  
+
 
         if debug:
             print("h_i :",h.shape)
             print("h_bar :",h_bar.shape)
-            print("pos :",pos_sim.shape)
+            print("pos_sim :",pos_sim.shape)
             print("bot :",bot.shape)
+            print("bot : ",bot)
+            print("prob :",prob)
+            print("log_prob :",log_prob)
+            print("cost :",cost)
 
-        cost = -1 * torch.log(pos_sim / bot)
- 
 
-        return  pos_sim, bot, torch.sum(cost)/N
+
+
+        return  pos_sim, bot, cost 
+    
+    #-1 * (torch.sum(cost)/N )) 
 
          
     else:
@@ -577,51 +666,6 @@ def intent_loss(logits,N:int=16,debug:bool=False):
     return loss_intent 
 
 
-"""
-def intent_klv_loss(label_ids, logits, label_distribution, coeff, device)->Union[ndarray, Tensor]:
-   
-    i - ith sentence
-    j - intent classes
-    C - the number of class
-    N - the number of intents
-    
-    p(c|u) = softmax(W h + b) ∈ R
-    
-    P(Cj|ui)  -  probability of sentence i-th to be j-th class
-
-    inputs_embeds - (batch_size, sequence_length, hidden_size)  
-    logits - (batch_size, num_class) 
-   
-    # label smoothing
-     
-    #print("label_ids :",label_ids.shape)
-    #print("logits:",logits.shape)
-    #print("label_distribution",label_distribution.shape)
-
-    label_ids = label_ids.cpu()
-    target_distribution = torch.FloatTensor(logits.size()).zero_()
-    #print("label_ids.size :",label_ids.size())
-    #print("target_distribution.shape: ",target_distribution.shape)    
-    
-    # loop through batch_size  
-    for i in range(label_ids.size(0)):
-        # shape - (batch_size, seq_len, vocab_size)
-        target_distribution[i, label_ids[i]] = 1.0
-    
-    # label_distribution - (1,K) - K #class
-    # target_distribution - (batch_size, vocab_size)
-    # y_ls = (1 - α) * y_hot + α / K
-    target_distribution = coeff * label_distribution.unsqueeze(0) + (1.0 - coeff) * target_distribution
-    target_distribution = target_distribution.to(device)
-    
-    #print("target_distribution :",target_distribution.shape)
-    # KL-div loss
-    prediction = torch.log(torch.softmax(logits, dim=1))
-    loss = F.kl_div(prediction, target_distribution, reduction='mean')
-
-    return loss 
-
-"""    
     
 
 
