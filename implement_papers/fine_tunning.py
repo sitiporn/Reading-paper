@@ -143,7 +143,7 @@ print("Test Loader Done !")
 
 # collect sampleing all pos pair after training
 table = {str(k):0 for k in range(num_classes)}
-file = open("pos_pair.csv","w")   
+#file = open("pos_pair.csv","w")   
 
 
 
@@ -215,9 +215,8 @@ for freeze_i in freeze_num:
 
                             table[str(v)] +=1
                     
-                    print("pos_table [{},{}] :".format(epoch,idx))
-                    print(table)
-                    #print("batch_size :",len(batch['Class']))
+                    #print("pos_table [{},{}] :".format(epoch,idx))
+                    
                     
                     # (batch_size, seq_len, hidhen_dim) 
 
@@ -302,14 +301,6 @@ for freeze_i in freeze_num:
                         logger.close()
                         model = embedding.get_model()   
                         
-writer = csv.writer(file)
-
-for k,v in table.items():
-
-    writer.writerow([k,v])
-
-
-file.close()
 
 
                 
