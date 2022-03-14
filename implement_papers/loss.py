@@ -78,7 +78,7 @@ class SimCSE(nn.Module):
                    # get model 
                    self.model = AutoModelForSequenceClassification.from_pretrained(model_name,num_labels=self.config.num_labels)
 
-                   print("Downloa/d Pretrain from Auto model ") 
+                   print("Download Pretrain from Auto model") 
 
                    print("model weight :",self.model.roberta.encoder.layer[11].output.dense.weight)
                    
@@ -149,8 +149,8 @@ class SimCSE(nn.Module):
 
     def modify_architecure(self):
         self.model.classifier.out_proj = nn.Linear(in_features=768, out_features=self.config.num_labels, bias=True)
-
         self.model = self.model.to(self.device)
+
     def get_model(self):
         return self.model
 

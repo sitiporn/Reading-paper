@@ -130,7 +130,7 @@ num_classes = len(np.unique(np.array(train_labels)))
 print("the numbers of classes :",num_classes)
 
 # inputs of dataloader 
-train_data = CustomTextDataset(train_labels,train_samples,batch_size=yaml_data["training_params"]["batch_size"],repeated_label=True)  
+train_data = CustomTextDataset(train_labels,train_samples,batch_size=yaml_data["training_params"]["batch_size"],repeated_label=False)  
 
 test_data = CustomTextDataset(test_labels,test_samples,batch_size=yaml_test["testing_params"]["batch_size"])  
 
@@ -143,7 +143,8 @@ print("Test Loader Done !")
 
 # collect sampleing all pos pair after training
 table = {str(k):0 for k in range(num_classes)}
-#file = open("pos_pair.csv","w")   
+
+file = open("pos_pair_without_repeated.csv","w")   
 
 
 
@@ -301,8 +302,13 @@ for freeze_i in freeze_num:
                         logger.close()
                         model = embedding.get_model()   
                         
+#create the csv file  writer 
+writer = csv.writer(file)
 
+for k, v in table.items():
+    writer.writerow([k,v])
 
+file.close
                 
 #            del logger    
             
