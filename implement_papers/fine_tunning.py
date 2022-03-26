@@ -303,12 +303,12 @@ for freeze_i in freeze_num:
                         model = embedding.get_model()   
                         
 #create the csv file  writer 
-writer = csv.writer(file)
-
-for k, v in table.items():
-    writer.writerow([k,v])
-
-file.close
+#writer = csv.writer(file)
+#
+#for k, v in table.items():
+#    writer.writerow([k,v])
+#
+#file.close
                 
 #            del logger    
             
