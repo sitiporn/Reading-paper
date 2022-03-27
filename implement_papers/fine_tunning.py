@@ -49,7 +49,7 @@ exp_name = 'train_5'
 comment = 'JT'+ exp_name
 
 running_time = 0.0 
-freeze_num = [12] #[4,5]  
+freeze_num = [9] #[4,5]  
 temp =  [0.1]   # [0.1, 0.3, 0.5]
 lamda = [0.5]    #[0.01,0.03,0.05]
 
@@ -81,8 +81,10 @@ pp.pprint(yaml_test)
 # collector variables
 
 # get dataset  
-data = combine('CLINC150',exp_name=exp_name) 
-test_set = combine('CLINC150','test')
+data_name = 'HWU64'
+
+data = combine(dataset_name=data_name,exp_name=exp_name) 
+test_set = combine(data_name,'test')
 
 
 # load all datasets 
@@ -130,7 +132,7 @@ num_classes = len(np.unique(np.array(train_labels)))
 print("the numbers of classes :",num_classes)
 
 # inputs of dataloader 
-train_data = CustomTextDataset(train_labels,train_samples,batch_size=yaml_data["training_params"]["batch_size"],repeated_label=False)  
+train_data = CustomTextDataset(train_labels,train_samples,batch_size=yaml_data["training_params"]["batch_size"],repeated_label=True)  
 
 test_data = CustomTextDataset(test_labels,test_samples,batch_size=yaml_test["testing_params"]["batch_size"])  
 
@@ -146,9 +148,6 @@ table = {str(k):0 for k in range(num_classes)}
 
 file = open("pos_pair_without_repeated.csv","w")   
 
-
-
-
 for freeze_i in freeze_num:  
     for lam in lamda: 
         for tmp in temp: 
@@ -160,7 +159,7 @@ for freeze_i in freeze_num:
 
             # create dummy model 
             
-            embedding = SimCSE(device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
+            embedding = SimCSE(num_class=num_classes,device=yaml_data["training_params"]["device"],classify=yaml_data["model_params"]["classify"],model_name=yaml_data["model_params"]["model"]) 
 
             embedding.load_model(select_model=select_model,strict=False)
 
@@ -168,6 +167,9 @@ for freeze_i in freeze_num:
             print("Freeze Backboned layers",freeze_i)
             print("lamda :",lam) #yaml_data["training_params"]["lamda"])
             print("temperature :",tmp) #yaml_data["training_params"]["temp"])
+            # change the number of class 
+            embedding.modify_architecure()
+
              
                     
             # Tensorboard
@@ -201,9 +203,9 @@ for freeze_i in freeze_num:
                     total +=1
 
 
-                    print("batch_id :",idx)
+                    #print("batch_id :",idx)
                     label_idx = [label_map[stringtoId] for stringtoId in (batch["Class"])]
-                    print("batch class :",label_idx)
+                    #print("batch class :",label_idx)
                     
                     pair_table = {str(k):0 for k in range(num_classes)}
 
@@ -228,11 +230,9 @@ for freeze_i in freeze_num:
                         print(batch['Class'])
                         print("=====================")
 
-                    # change the number of class 
-                    embedding.modify_architecure()
 
 
-                    h, outputs = embedding.encode(batch['Text'],batch['Class'],label_maps=label_map,masking=False)
+                    h, outputs = embedding.encode(sentence=batch['Text'],label=batch['Class'],label_maps=label_map,batch_size=yaml_data["training_params"]["batch_size"],masking=False)
                     
                     # https://stackoverflow.com/questions/63040954/how-to-extract-and-use-bert-encodings-of-sentences-for-text-similarity-among-sen 
                     # use value of CLS token 
@@ -276,7 +276,7 @@ for freeze_i in freeze_num:
 
                     # JT = J1 + J2 
 
-                    loss_stage2 = loss_s_cl + (lam * loss_intent)
+                    loss_stage2 = loss_s_cl + (yaml_data["training_params"]["lamda"] * loss_intent)
 
                      #(yaml_data["training_params"]["lamda"] * loss_intent)
                     
@@ -286,7 +286,7 @@ for freeze_i in freeze_num:
                     optimizer.step()
                     # collect for visualize 
                     running_loss += loss_stage2.item()
-                    running_loss_intent += ( loss_intent.item())
+                    running_loss_intent += ( loss_intent.item()* yaml_data["training_params"]["lamda"])
                     running_loss_s_cl += loss_s_cl.item()
                     
                     if idx % yaml_data["training_params"]["running_times"] ==  yaml_data["training_params"]["running_times"]-1: # print every 50 mini-batches
@@ -302,6 +302,7 @@ for freeze_i in freeze_num:
                         logger.close()
                         model = embedding.get_model()   
                         
+
 #create the csv file  writer 
 #writer = csv.writer(file)
 #

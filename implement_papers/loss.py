@@ -43,7 +43,7 @@ class SimCSE(nn.Module):
     class for embeddings sentence by using BERT 
 
     """
-    def __init__(self,device,pretrain:bool = False,hidden_state_flag:bool = True,classify:bool = False,model_name:str='roberta-base',num_class:int=150): 
+    def __init__(self,device,num_class:int,pretrain:bool = False,hidden_state_flag:bool = True,classify:bool = False,model_name:str='roberta-base'): 
         super(SimCSE,self).__init__()
 
 
@@ -149,6 +149,8 @@ class SimCSE(nn.Module):
 
     def modify_architecure(self):
         self.model.classifier.out_proj = nn.Linear(in_features=768, out_features=self.config.num_labels, bias=True)
+        print("architecture :",self.model.classifier.out_proj)
+
         self.model = self.model.to(self.device)
 
     def get_model(self):
