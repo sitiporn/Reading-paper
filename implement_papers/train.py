@@ -20,6 +20,7 @@ from loss import contrasive_loss
 from transformers import AdamW
 from torch.autograd import Variable
 from datetime import datetime
+import torch.optim as optim
 
 
 #get time 
@@ -35,7 +36,7 @@ N = 100  # number of samples per class (100 full-shot)
 T = 1 # number of Trials
 
 temperature = 0.1
-batch_size = 64 
+batch_size = 1#64 
 
 labels = []
 samples = []
@@ -54,11 +55,12 @@ prior_weight = False
 
 PATH_to_save = f'../../models/Load={prior_weight}_{model_name}_B={batch_size}_lr={lr}_{dt_str}.pth'
 
-print("Path to save :",PATH_to_save)
+print("Path to save :", PATH_to_save)
 
 # Tensorboard
-logger = Log(load_weight=prior_weight,num_freeze=0,lamb=1.0,temp=temperature,experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr,)
+logger = Log(load_weight=prior_weight,num_freeze=0,lamb=1.0,temp=temperature,experiment_name='Pretrain',model_name=model_name,batch_size=batch_size,lr=lr)
 # load datasets 
+
 train_examples = load_intent_examples(train_file_path)
 """
 structure of this data  [trials] 
@@ -67,25 +69,30 @@ every dict -> {'task':'lable name','examples':[text1,text2,..,textN]}
 """
 sampled_tasks = [sample(N, train_examples) for i in range(T)]
 
-embedding = SimCSE('cuda:1') 
 sim = Similarity(temperature)
 train_loader = SenLoader(sampled_tasks)
-data  = train_loader.get_data()
+data = train_loader.get_data()
 
 for i in range(len(data)):
-   samples.append(data[i].text_a)
-   labels.append(data[i].label)
+    samples.append(data[i].text_a)
+    labels.append(data[i].label)
 
-optimizer= AdamW(embedding.parameters(), lr=lr)
-train_data = CustomTextDataset(labels,samples,batch_size=batch_size)  
-train_loader = DataLoader(train_data,batch_size=batch_size,shuffle=True)
+num_classes = len(np.unique(np.array(labels)))
+print("=== the numbers of classes == :", num_classes)
+
+
+embedding = SimCSE(device='cuda:0', num_class=num_classes, pretrain=False)
+
+optimizer= optim.Adam(embedding.parameters(), lr = lr)
+train_data = CustomTextDataset(labels, samples, batch_size=batch_size)
+train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 
 """
- Todo : Programming:  Training 
+ Todo : Programming:  Training
   1) combined all datasets of intents
-  2) drop sentence that less than one sentences 
+  2) drop sentence that less than one sentences
   3) Trainnig BERT from scatch -> pretrain
-  4) create mask language loss  
+  4) create mask language loss
 """
 running_time = 0
 
@@ -106,7 +113,7 @@ for epoch in range(epochs):
         h, _ = embedding.encode(batch['Text'],debug=False,masking=False)
         
         # get h_bar with random mask 0.10 among sentence in the batch
-        h_bar, outputs = embedding.encode(batch['Text'],debug=False,masking=True)
+        h_bar, outputs = embedding.encode(batch['Text'], debug=False, masking=True)
 
         
         _,_, loss_cl = contrasive_loss(h=h,h_bar=h_bar,temp=temperature,N=batch_size,compute_loss=True,debug=False) 
