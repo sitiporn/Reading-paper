@@ -80,6 +80,7 @@
 ## Result
   - https://docs.google.com/spreadsheets/d/1eGla8CvHOVMP_I3NML3YlgwF-GE9hDUb-k4FgmJeDrE/edit#gid=975089668                                                                     
 ## Usage
+   Port : 2231:22 -p 2030:8888
 
 ### Run Background                                                 
 ```bash
