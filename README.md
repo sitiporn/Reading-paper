@@ -2,11 +2,6 @@
 
   This will cover reading and implementing the several state of art papaers in NLP field 
 
-### terms 
-    - task 0: pretrain of encoders for language understanding 
-    - task 1: pretrain of encoders for understanding utterances and contrastive utteraces tasks without labels 
-    - task 2: fine-tunning tasks (eg. few shot) train on KL-div predict probabilty and contrastive utteraces with labels 
-
 ### weight
    - Pretrain(self-supervised)
          - from scartch
@@ -128,50 +123,3 @@ docker exec -it [container name] bash
 ssh root@localhost -p [port]
 ```
 
-#### What I have done
-   - [x] Pre-train Process
-     - [x] Preprocess 
-       - [x] combined intent datasets without test sets in the contrastive pre-training
-       - [x] remove utterances with less than five tokens
-       - [x] create positive and negative pairs 
-    
-      - [x]  Traning bert base on Container
-      - [x]  Training roberta base on Container
-      - [x]  push trainning history to tensorboard
-
-       
-     - [x] create loss stage 1
-       - [x] self supervised contrastive loss
-       - [x] mask language modeling loss 
-
-   - [ ] Fine Tunning 
-     - [x] Convert example to feature  to get label distribution and train feature
-     - [x] label smoothing 
-     - [x] Intent Predict probabilty loss
-     - [x] Create positive and negative pairs 
-     - [x] Create Supervised Contrasive learning loss
-     - [x] Create Intent Classification loss
-     - [ ] Training 5 shot and 10 shot
-   
-
-## Tenative plan
-- [ ]  Literature Review  
-- [ ]  draft implement
-- [ ]  Prof of concept 
-- [ ]  Submission of Proposal Draft (30 Dec)
-- [ ]  Proposal Defense (15 june)
-- [ ]  Data collection 
-- [ ]  Data Analysis
-- [ ]  progressive Defense ( 20 March)
-- [ ]  Analysis and Review
-- [ ]  Thesis Draft Submssion 
-- [ ]  Final Defense ( 1 May)
-- [ ]  Publication (NeurIPS MAY 21) ?
-
-## Time Left (Final Defense 1 April)
- -  days 
- -  month and 0 days
-
-
-### example of readme 
-  - ref - https://www.makeareadme.com/
